@@ -211,7 +211,7 @@ export default function BlogDetailsPage() {
         <SlideUp delay={0.2}>
           <div className="prose prose-zinc dark:prose-invert max-w-none">
             <ReactMarkdown>
-              {blog.content}
+              {blog.content.replace(/^#\s+[^\n]+\n+/, '')}
             </ReactMarkdown>
           </div>
         </SlideUp>
