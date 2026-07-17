@@ -8,14 +8,14 @@ export function AboutHero() {
         <SlideUp>
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
             <Sparkles className="size-4" />
-            Meet Forge
+            Meet Idea AI
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl max-w-3xl mx-auto">
             Your AI software architect
           </h1>
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             IdeaDen was built to eliminate the blank canvas problem. Instead of
-            spending hours planning project architecture, let Forge generate a
+            spending hours planning project architecture, let Idea AI generate a
             complete project idea in seconds.
           </p>
         </SlideUp>

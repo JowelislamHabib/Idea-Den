@@ -14,20 +14,19 @@ export function HeroSection() {
         <SlideUp>
           <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-4 py-1.5 text-sm font-medium text-muted-foreground mb-8 backdrop-blur">
             <Sparkles className="size-4 text-primary" />
-            Powered by Forge AI
+            Powered by Idea AI
           </div>
         </SlideUp>
 
         <SlideUp delay={0.1}>
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl max-w-4xl mx-auto leading-[1.1]">
-            From idea to architecture.{" "}
-            <span className="text-primary">From thought to article.</span>
+            Generate Project Ideas & <span className="text-primary">AI Blog Articles</span>
           </h1>
         </SlideUp>
 
         <SlideUp delay={0.2}>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            IdeaDen transforms your thoughts into reality. Generate structured project blueprints with full database schemas, or craft engaging, SEO-optimized blog articles — all powered by Forge AI.
+            IdeaDen is your AI-powered ideation engine. Generate structured project ideas, or use our AI Blog generator featuring custom prompt templates and adjustable output lengths to craft the perfect article.
           </p>
         </SlideUp>
 

@@ -7,12 +7,12 @@ const steps = [
     step: "01",
     title: "Describe Your Goal",
     description:
-      "Choose to build a software project or write a blog. Enter your preferred stack, target tone, or SEO keywords.",
+      "Choose to build a software project idea or write a blog. Enter your preferred stack, or pick a custom prompt template and adjustable output length.",
   },
   {
     icon: Cpu,
     step: "02",
-    title: "Forge Generates",
+    title: "Idea AI Generates",
     description:
       "Our AI engine processes your input and drafts your output instantly using advanced reasoning models.",
   },
@@ -32,7 +32,7 @@ export function HowItWorksSection() {
         <SlideUp>
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              How Forge works
+              How Idea AI works
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
               Three steps from blank page to a complete blueprint or article.

@@ -1,5 +1,6 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
+// Force Next.js Rebuild 4
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { StacksSection } from "@/components/home/StacksSection";
 import { StatsSection } from "@/components/home/StatsSection";

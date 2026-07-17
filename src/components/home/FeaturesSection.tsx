@@ -4,9 +4,9 @@ import { SlideUp } from "@/components/ui/motion-wrapper";
 const features = [
   {
     icon: Brain,
-    title: "AI-Powered Generation",
+    title: "AI Project Ideas",
     description:
-      "Forge analyzes your requirements and generates complete architectures or engaging articles instantly.",
+      "Idea AI analyzes your requirements and generates complete project ideas and architectures instantly.",
   },
   {
     icon: Layers,
@@ -16,21 +16,21 @@ const features = [
   },
   {
     icon: FileText,
-    title: "SEO-Optimized Blogs",
+    title: "AI Blog Generation",
     description:
-      "Generate highly readable, structured content with tailored tones ready to rank on search engines.",
+      "Generate highly readable articles using custom prompt templates tailored to your exact tone and format.",
+  },
+  {
+    icon: Sparkles,
+    title: "Adjustable Lengths",
+    description:
+      "Control exactly how much content you need. Generate short posts or long-form thought leadership articles.",
   },
   {
     icon: Clock,
     title: "Instant Results",
     description:
       "No iterations or back-and-forth. One prompt delivers a complete, structured output in seconds.",
-  },
-  {
-    icon: Sparkles,
-    title: "Context Aware",
-    description:
-      "Whether it's your preferred tech stack or a specific target audience, Forge adapts to your exact needs.",
   },
   {
     icon: Zap,
@@ -47,7 +47,7 @@ export function FeaturesSection() {
         <SlideUp>
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Why developers choose IdeaDen
+              Why users choose IdeaDen
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
               Skip the blank canvas. Get a structured starting point for your

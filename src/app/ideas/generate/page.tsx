@@ -101,7 +101,7 @@ export default function GeneratePage() {
       <div className="min-h-[60vh] flex items-center justify-center py-16">
         <AuthRequired
           title="Sign in to generate project ideas"
-          description="Create an account to start building project architectures with Forge."
+          description="Create an account to start building project architectures with Idea AI."
           redirectUrl="/ideas/generate"
         />
       </div>

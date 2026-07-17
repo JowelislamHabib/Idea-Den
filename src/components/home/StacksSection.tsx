@@ -22,10 +22,10 @@ export function StacksSection() {
         <SlideUp>
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Built for modern tech stacks & professional content
+              Built for modern tech stacks & custom templates
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Forge understands a wide range of frameworks and databases for your projects, and seamlessly matches target tones for your articles.
+              Idea AI understands a wide range of frameworks for your projects, and seamlessly adapts to your custom prompt templates for articles.
             </p>
           </div>
         </SlideUp>

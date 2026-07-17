@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 
 const highlights = [
   {
-    type: "Project Blueprint",
+    type: "Project Idea",
     title: "E-Commerce Platform",
     domain: "Web Application",
     tags: ["Next.js", "Stripe", "MongoDB"],
@@ -14,11 +14,11 @@ const highlights = [
     type: "Blog Article",
     title: "The Future of AI in Web Dev",
     domain: "Thought Leadership",
-    tags: ["Professional Tone", "SEO Optimized"],
-    meta: "1500 words",
+    tags: ["Custom Tone", "1500 words"],
+    meta: "Long Form",
   },
   {
-    type: "Project Blueprint",
+    type: "Project Idea",
     title: "Real-Time Chat App",
     domain: "Web Application",
     tags: ["React", "Socket.io", "Express"],
@@ -29,7 +29,7 @@ const highlights = [
     title: "Building REST APIs with FastAPI",
     domain: "How-To Guide",
     tags: ["Educational", "Code Snippets"],
-    meta: "1000 words",
+    meta: "Short Form",
   }
 ];
 
@@ -43,7 +43,7 @@ export function HighlightsSection() {
               Sample generations
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              See what Forge generates. From structured technical blueprints to engaging, SEO-optimized markdown articles.
+              See what Idea AI generates. From structured project ideas to engaging articles driven by custom prompt templates.
             </p>
           </div>
         </SlideUp>

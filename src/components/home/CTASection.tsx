@@ -13,7 +13,7 @@ export function CTASection() {
           </h2>
           <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto mb-10">
             Join users who use IdeaDen to turn ideas into structured
-            project blueprints and highly engaging articles in seconds.
+            project blueprints and generate articles using custom templates in seconds.
           </p>
           <Link
             href="/ideas/generate"

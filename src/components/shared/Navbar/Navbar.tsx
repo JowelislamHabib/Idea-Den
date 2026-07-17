@@ -82,12 +82,12 @@ export default function Navbar() {
                 Explore <ChevronDown size={14} />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem>
                   <Link href="/explore" className="cursor-pointer w-full">
                     Ideas
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem>
                   <Link href="/explore/blogs" className="cursor-pointer w-full">
                     Blogs
                   </Link>
@@ -109,13 +109,19 @@ export default function Navbar() {
                     Generate <ChevronDown size={14} />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem asChild>
-                      <Link href="/ideas/generate" className="cursor-pointer w-full">
+                    <DropdownMenuItem>
+                      <Link
+                        href="/ideas/generate"
+                        className="cursor-pointer w-full"
+                      >
                         Project Idea
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/blogs/generate" className="cursor-pointer w-full">
+                    <DropdownMenuItem>
+                      <Link
+                        href="/blogs/generate"
+                        className="cursor-pointer w-full"
+                      >
                         Blog Article
                       </Link>
                     </DropdownMenuItem>
@@ -174,7 +180,11 @@ export default function Navbar() {
                     </span>
                     <ChevronDown size={14} className="text-muted-foreground" />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" sideOffset={8} className="w-52">
+                  <DropdownMenuContent
+                    align="end"
+                    sideOffset={8}
+                    className="w-52"
+                  >
                     <DropdownMenuGroup>
                       <DropdownMenuLabel className="font-normal p-3">
                         <div className="text-sm font-semibold">{user.name}</div>
@@ -185,27 +195,51 @@ export default function Navbar() {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem className="cursor-pointer" asChild>
-                        <Link href="/dashboard/ideas" className="flex items-center w-full">
-                          <FileText size={16} className="mr-2.5 text-muted-foreground" />
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Link
+                          href="/dashboard/ideas"
+                          className="flex items-center w-full"
+                        >
+                          <FileText
+                            size={16}
+                            className="mr-2.5 text-muted-foreground"
+                          />
                           My Ideas
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer" asChild>
-                        <Link href="/dashboard/blogs" className="flex items-center w-full">
-                          <FileText size={16} className="mr-2.5 text-muted-foreground" />
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Link
+                          href="/dashboard/blogs"
+                          className="flex items-center w-full"
+                        >
+                          <FileText
+                            size={16}
+                            className="mr-2.5 text-muted-foreground"
+                          />
                           My Blogs
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer" asChild>
-                        <Link href="/dashboard" className="flex items-center w-full">
-                          <BarChart3 size={16} className="mr-2.5 text-muted-foreground" />
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Link
+                          href="/dashboard"
+                          className="flex items-center w-full"
+                        >
+                          <BarChart3
+                            size={16}
+                            className="mr-2.5 text-muted-foreground"
+                          />
                           Dashboard
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer" asChild>
-                        <Link href="/profile" className="flex items-center w-full">
-                          <LayoutDashboard size={16} className="mr-2.5 text-muted-foreground" />
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Link
+                          href="/profile"
+                          className="flex items-center w-full"
+                        >
+                          <LayoutDashboard
+                            size={16}
+                            className="mr-2.5 text-muted-foreground"
+                          />
                           Profile
                         </Link>
                       </DropdownMenuItem>
@@ -223,7 +257,11 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" className="rounded-lg font-semibold">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-lg font-semibold"
+                >
                   <Link href={`/login${callbackQuery}`}>Sign in</Link>
                 </Button>
                 <Button size="sm" className="rounded-lg font-semibold">
@@ -264,7 +302,9 @@ export default function Navbar() {
               </Link>
 
               <div className="space-y-1">
-                <div className="px-4 py-1.5 text-sm font-bold text-foreground">Explore</div>
+                <div className="px-4 py-1.5 text-sm font-bold text-foreground">
+                  Explore
+                </div>
                 <Link
                   href="/explore"
                   onClick={() => setMobileOpen(false)}
@@ -292,7 +332,9 @@ export default function Navbar() {
               {user && (
                 <>
                   <div className="space-y-1 mt-2">
-                    <div className="px-4 py-1.5 text-sm font-bold text-foreground">Generate</div>
+                    <div className="px-4 py-1.5 text-sm font-bold text-foreground">
+                      Generate
+                    </div>
                     <Link
                       href="/ideas/generate"
                       onClick={() => setMobileOpen(false)}
@@ -353,7 +395,9 @@ export default function Navbar() {
                     </div>
                     <div className="text-sm">
                       <div className="font-semibold">{user.name}</div>
-                      <div className="text-xs text-muted-foreground">{user.email}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {user.email}
+                      </div>
                     </div>
                   </div>
                   <Button

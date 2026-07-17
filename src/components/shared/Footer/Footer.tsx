@@ -115,7 +115,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Lightbulb className="size-3.5 text-primary" />
-            Built with Forge AI
+            Built with Idea AI
           </div>
         </div>
       </div>

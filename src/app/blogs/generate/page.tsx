@@ -110,7 +110,7 @@ export default function BlogGeneratePage() {
       <div className="min-h-[60vh] flex items-center justify-center py-16">
         <AuthRequired
           title="Sign in to generate blogs"
-          description="Create an account to start writing AI-powered articles with Forge."
+          description="Create an account to start writing AI-powered articles with Idea AI."
           redirectUrl="/blogs/generate"
         />
       </div>
