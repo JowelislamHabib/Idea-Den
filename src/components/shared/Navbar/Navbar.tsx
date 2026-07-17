@@ -108,7 +108,14 @@ export default function Navbar() {
                   className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground shadow hover:bg-primary/90 transition-colors"
                 >
                   <Plus className="size-4" />
-                  New
+                  New Idea
+                </Link>
+                <Link
+                  href="/blogs/generate"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary hover:bg-primary/20 transition-colors"
+                >
+                  <Plus className="size-4" />
+                  New Blog
                 </Link>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="flex items-center gap-2 rounded-lg border border-border/60 px-3 py-2 text-sm font-medium hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -242,6 +249,17 @@ export default function Navbar() {
                     <Link href="/ideas/generate" className="flex items-center">
                       <Plus className="size-4 mr-1.5" />
                       New Idea
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="rounded-lg font-semibold text-primary"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <Link href="/blogs/generate" className="flex items-center">
+                      <Plus className="size-4 mr-1.5" />
+                      New Blog
                     </Link>
                   </Button>
                   <Button

@@ -32,6 +32,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const tabs = [
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { name: "My Ideas", href: "/dashboard/ideas", icon: FileText },
+    { name: "My Blogs", href: "/dashboard/blogs", icon: FileText },
   ];
 
   return (
