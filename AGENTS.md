@@ -43,6 +43,7 @@ Do NOT use `require("dotenv")` + `dotenv.config()` at the top of any module impo
 - **Directories:** UI primitives at `@/components/ui/`. Shared layout: `@/components/shared/`. Feature components: `@/components/{feature}/`.
 - **DB:** Native MongoDB driver only. **No ORMs** (Mongoose, Prisma, etc. are banned).
 - **Route groups:** Auth pages in `(auth)/login`, `(auth)/register`.
+- **Page Layouts:** All page wrappers MUST use the exact same max-width and padding classes as the Navbar/Footer to maintain perfect vertical alignment: `className="mx-auto max-w-6xl px-4 sm:px-6"`. Do NOT use `lg:px-8` or different max-widths (`max-w-2xl`, `max-w-7xl`, etc.) for page containers.
 
 ## Notable
 

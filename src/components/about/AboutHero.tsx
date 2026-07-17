@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react";
 export function AboutHero() {
   return (
     <section className="py-24 bg-muted/20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 text-center">
         <SlideUp>
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
             <Sparkles className="size-4" />

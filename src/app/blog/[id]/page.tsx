@@ -37,7 +37,7 @@ export default function BlogDetailsPage() {
   if (isPending) {
     return (
       <div className="min-h-[60vh] py-12">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 space-y-6">
           <Skeleton className="h-8 w-32" />
           <Skeleton className="h-12 w-3/4" />
           <Skeleton className="h-6 w-1/2" />
@@ -69,7 +69,7 @@ export default function BlogDetailsPage() {
 
   return (
     <div className="min-h-screen py-12 bg-background">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SlideUp>
           <div className="mb-8 flex items-center justify-between">
             <Button

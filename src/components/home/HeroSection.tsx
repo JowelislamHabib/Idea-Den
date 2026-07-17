@@ -10,7 +10,7 @@ export function HeroSection() {
     <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-muted/20">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 text-center">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 py-24 text-center">
         <SlideUp>
           <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-4 py-1.5 text-sm font-medium text-muted-foreground mb-8 backdrop-blur">
             <Sparkles className="size-4 text-primary" />

@@ -133,7 +133,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-[60vh] py-12 bg-muted/20">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SlideUp>
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-foreground">

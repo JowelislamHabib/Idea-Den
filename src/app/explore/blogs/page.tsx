@@ -79,7 +79,7 @@ function ExploreBlogsContent() {
 
   return (
     <div className="min-h-[60vh] py-12 bg-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SlideUp>
           <div className="text-center mb-10">
             <h1 className="text-4xl font-extrabold tracking-tight font-heading text-foreground">
