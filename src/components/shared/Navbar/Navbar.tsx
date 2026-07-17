@@ -8,7 +8,6 @@ import {
   Menu,
   X,
   User,
-  Plus,
   FileText,
   LayoutDashboard,
   BarChart3,
@@ -28,17 +27,6 @@ import { authClient, useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-const publicLinks = [
-  { label: "Home", href: "/" },
-  { label: "Explore", href: "/explore" },
-  { label: "About", href: "/about" },
-];
-
-const protectedLinks = [
-  { label: "Generate", href: "/ideas/generate" },
-  { label: "Dashboard", href: "/dashboard" },
-];
-
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -54,10 +42,6 @@ export default function Navbar() {
   const handleLogout = async () => {
     await authClient.signOut();
   };
-
-  const navLinks = user
-    ? [...publicLinks, ...protectedLinks]
-    : publicLinks;
 
   return (
     <>
@@ -76,24 +60,91 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive =
-                pathname === link.href ||
-                (link.href !== "/" && pathname.startsWith(link.href));
-              return (
+            <Link
+              href="/"
+              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+                pathname === "/"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              Home
+            </Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 outline-none ${
+                  pathname.startsWith("/explore")
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                }`}
+              >
+                Explore <ChevronDown size={14} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <Link href="/explore" className="cursor-pointer w-full">
+                    Ideas
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/explore/blogs" className="cursor-pointer w-full">
+                    Blogs
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {user && (
+              <>
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 outline-none ${
+                      pathname.startsWith("/ideas/generate") ||
+                      pathname.startsWith("/blogs/generate")
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    Generate <ChevronDown size={14} />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                      <Link href="/ideas/generate" className="cursor-pointer w-full">
+                        Project Idea
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/blogs/generate" className="cursor-pointer w-full">
+                        Blog Article
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  href="/dashboard"
                   className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive
+                    pathname.startsWith("/dashboard")
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   }`}
                 >
-                  {link.label}
+                  Dashboard
                 </Link>
-              );
-            })}
+              </>
+            )}
+
+            <Link
+              href="/about"
+              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+                pathname === "/about"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              About
+            </Link>
           </nav>
 
           {/* Desktop Auth */}
@@ -103,20 +154,6 @@ export default function Navbar() {
               <div className="w-20 h-9 rounded-lg bg-muted animate-pulse" />
             ) : user ? (
               <div className="flex items-center gap-2">
-                <Link
-                  href="/ideas/generate"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground shadow hover:bg-primary/90 transition-colors"
-                >
-                  <Plus className="size-4" />
-                  New Idea
-                </Link>
-                <Link
-                  href="/blogs/generate"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary hover:bg-primary/20 transition-colors"
-                >
-                  <Plus className="size-4" />
-                  New Blog
-                </Link>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="flex items-center gap-2 rounded-lg border border-border/60 px-3 py-2 text-sm font-medium hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
                     {user.image ? (
@@ -148,19 +185,25 @@ export default function Navbar() {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer" asChild>
                         <Link href="/dashboard/ideas" className="flex items-center w-full">
                           <FileText size={16} className="mr-2.5 text-muted-foreground" />
                           My Ideas
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer" asChild>
+                        <Link href="/dashboard/blogs" className="flex items-center w-full">
+                          <FileText size={16} className="mr-2.5 text-muted-foreground" />
+                          My Blogs
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer" asChild>
                         <Link href="/dashboard" className="flex items-center w-full">
                           <BarChart3 size={16} className="mr-2.5 text-muted-foreground" />
                           Dashboard
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer" asChild>
                         <Link href="/profile" className="flex items-center w-full">
                           <LayoutDashboard size={16} className="mr-2.5 text-muted-foreground" />
                           Profile
@@ -205,34 +248,106 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="fixed inset-x-0 top-16 z-50 border-b bg-background shadow-lg md:hidden">
-          <div className="mx-auto max-w-6xl px-4 py-4">
-            <nav className="flex flex-col gap-1">
-              {navLinks.map((link) => {
-                const isActive =
-                  pathname === link.href ||
-                  (link.href !== "/" && pathname.startsWith(link.href));
-                return (
+        <div className="fixed inset-x-0 top-16 z-50 border-b bg-background shadow-lg md:hidden h-[calc(100vh-4rem)] overflow-y-auto">
+          <div className="mx-auto max-w-6xl px-4 py-4 pb-12">
+            <nav className="flex flex-col gap-2">
+              <Link
+                href="/"
+                onClick={() => setMobileOpen(false)}
+                className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                  pathname === "/"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                Home
+              </Link>
+
+              <div className="space-y-1">
+                <div className="px-4 py-1.5 text-sm font-bold text-foreground">Explore</div>
+                <Link
+                  href="/explore"
+                  onClick={() => setMobileOpen(false)}
+                  className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
+                    pathname === "/explore"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  Ideas
+                </Link>
+                <Link
+                  href="/explore/blogs"
+                  onClick={() => setMobileOpen(false)}
+                  className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
+                    pathname === "/explore/blogs"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  Blogs
+                </Link>
+              </div>
+
+              {user && (
+                <>
+                  <div className="space-y-1 mt-2">
+                    <div className="px-4 py-1.5 text-sm font-bold text-foreground">Generate</div>
+                    <Link
+                      href="/ideas/generate"
+                      onClick={() => setMobileOpen(false)}
+                      className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
+                        pathname === "/ideas/generate"
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      }`}
+                    >
+                      Project Idea
+                    </Link>
+                    <Link
+                      href="/blogs/generate"
+                      onClick={() => setMobileOpen(false)}
+                      className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
+                        pathname === "/blogs/generate"
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      }`}
+                    >
+                      Blog Article
+                    </Link>
+                  </div>
+
                   <Link
-                    key={link.href}
-                    href={link.href}
+                    href="/dashboard"
                     onClick={() => setMobileOpen(false)}
-                    className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
-                      isActive
+                    className={`mt-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                      pathname.startsWith("/dashboard")
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     }`}
                   >
-                    {link.label}
+                    Dashboard
                   </Link>
-                );
-              })}
+                </>
+              )}
+
+              <Link
+                href="/about"
+                onClick={() => setMobileOpen(false)}
+                className={`mt-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                  pathname === "/about"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                About
+              </Link>
             </nav>
 
-            <div className="mt-4 pt-4 border-t border-border/40">
+            <div className="mt-6 pt-6 border-t border-border/40">
               {user ? (
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-3 px-4 py-2">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3 px-4 py-2 mb-2">
                     <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center">
                       <User size={16} className="text-primary" />
                     </div>
@@ -242,30 +357,8 @@ export default function Navbar() {
                     </div>
                   </div>
                   <Button
-                    size="sm"
-                    className="rounded-lg font-semibold"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <Link href="/ideas/generate" className="flex items-center">
-                      <Plus className="size-4 mr-1.5" />
-                      New Idea
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="rounded-lg font-semibold text-primary"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <Link href="/blogs/generate" className="flex items-center">
-                      <Plus className="size-4 mr-1.5" />
-                      New Blog
-                    </Link>
-                  </Button>
-                  <Button
                     variant="outline"
-                    size="sm"
-                    className="rounded-lg font-semibold text-destructive hover:text-destructive"
+                    className="rounded-lg font-semibold text-destructive hover:text-destructive hover:bg-destructive/10 border-transparent"
                     onClick={() => {
                       handleLogout();
                       setMobileOpen(false);
@@ -278,7 +371,6 @@ export default function Navbar() {
               ) : (
                 <div className="flex flex-col gap-2">
                   <Button
-                    size="sm"
                     className="rounded-lg font-semibold"
                     onClick={() => setMobileOpen(false)}
                   >
@@ -286,7 +378,6 @@ export default function Navbar() {
                   </Button>
                   <Button
                     variant="outline"
-                    size="sm"
                     className="rounded-lg font-semibold"
                     onClick={() => setMobileOpen(false)}
                   >
