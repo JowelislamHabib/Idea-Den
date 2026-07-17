@@ -4,23 +4,33 @@ import { Badge } from "@/components/ui/badge";
 
 const highlights = [
   {
+    type: "Project Blueprint",
     title: "E-Commerce Platform",
     domain: "Web Application",
-    stack: ["Next.js", "Stripe", "MongoDB"],
-    features: 12,
+    tags: ["Next.js", "Stripe", "MongoDB"],
+    meta: "12 features",
   },
   {
-    title: "Health Tracker API",
-    domain: "REST API",
-    stack: ["FastAPI", "PostgreSQL", "Docker"],
-    features: 8,
+    type: "Blog Article",
+    title: "The Future of AI in Web Dev",
+    domain: "Thought Leadership",
+    tags: ["Professional Tone", "SEO Optimized"],
+    meta: "1500 words",
   },
   {
+    type: "Project Blueprint",
     title: "Real-Time Chat App",
     domain: "Web Application",
-    stack: ["React", "Socket.io", "Express"],
-    features: 15,
+    tags: ["React", "Socket.io", "Express"],
+    meta: "15 features",
   },
+  {
+    type: "Blog Article",
+    title: "Building REST APIs with FastAPI",
+    domain: "How-To Guide",
+    tags: ["Educational", "Code Snippets"],
+    meta: "1000 words",
+  }
 ];
 
 export function HighlightsSection() {
@@ -30,31 +40,30 @@ export function HighlightsSection() {
         <SlideUp>
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Sample project ideas
+              Sample generations
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              See what Forge generates. Each project idea includes features,
-              collections, and API routes.
+              See what Forge generates. From structured technical blueprints to engaging, SEO-optimized markdown articles.
             </p>
           </div>
         </SlideUp>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {highlights.map((item, i) => (
             <SlideUp key={item.title} delay={i * 0.1}>
               <Card className="h-full">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <Badge variant="secondary">{item.domain}</Badge>
+                    <Badge variant={item.type === "Blog Article" ? "default" : "secondary"}>{item.domain}</Badge>
                     <span className="text-xs text-muted-foreground">
-                      {item.features} features
+                      {item.meta}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">
+                  <h3 className="text-lg font-semibold text-foreground mb-3 line-clamp-2">
                     {item.title}
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {item.stack.map((tech) => (
+                    {item.tags.map((tech) => (
                       <Badge key={tech} variant="outline" className="text-xs">
                         {tech}
                       </Badge>

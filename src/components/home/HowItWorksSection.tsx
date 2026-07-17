@@ -1,27 +1,27 @@
-import { PenLine, Cpu, FileCode } from "lucide-react";
+import { PenLine, Cpu, Sparkles } from "lucide-react";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 
 const steps = [
   {
     icon: PenLine,
     step: "01",
-    title: "Describe Your Project",
+    title: "Describe Your Goal",
     description:
-      "Enter your project title, target domain, available time, and preferred tech stack.",
+      "Choose to build a software project or write a blog. Enter your preferred stack, target tone, or SEO keywords.",
   },
   {
     icon: Cpu,
     step: "02",
     title: "Forge Generates",
     description:
-      "Our AI architect processes your input and generates a complete project project idea in one pass.",
+      "Our AI engine processes your input and drafts your output instantly using advanced reasoning models.",
   },
   {
-    icon: FileCode,
+    icon: Sparkles,
     step: "03",
-    title: "Get Your Idea",
+    title: "Get Your Output",
     description:
-      "Receive structured features, database collections, API routes, and a full technical specification.",
+      "Receive a structured project architecture or a perfectly formatted, engaging markdown article ready to publish.",
   },
 ];
 
@@ -35,7 +35,7 @@ export function HowItWorksSection() {
               How Forge works
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Three steps from idea to complete project architecture.
+              Three steps from blank page to a complete blueprint or article.
             </p>
           </div>
         </SlideUp>

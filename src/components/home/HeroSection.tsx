@@ -20,26 +20,24 @@ export function HeroSection() {
 
         <SlideUp delay={0.1}>
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl max-w-4xl mx-auto leading-[1.1]">
-            From idea to architecture{" "}
-            <span className="text-primary">in seconds</span>
+            From idea to architecture.{" "}
+            <span className="text-primary">From thought to article.</span>
           </h1>
         </SlideUp>
 
         <SlideUp delay={0.2}>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            IdeaDen transforms your skills and stack preferences into structured
-            project project ideas. Full feature maps, database schemas, and API
-            routes — generated in a single pass by Forge AI.
+            IdeaDen transforms your thoughts into reality. Generate structured project blueprints with full database schemas, or craft engaging, SEO-optimized blog articles — all powered by Forge AI.
           </p>
         </SlideUp>
 
         <SlideUp delay={0.3}>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/ideas/generate" className={buttonVariants({ size: "lg" }) + " font-bold px-8 h-12"}>
-              Start Building <ArrowRight className="ml-2 size-4" />
+              Generate Blueprint <ArrowRight className="ml-2 size-4" />
             </Link>
-            <Link href="/explore" className={buttonVariants({ variant: "outline", size: "lg" }) + " font-semibold px-8 h-12"}>
-              Explore Ideas
+            <Link href="/blogs/generate" className={buttonVariants({ variant: "outline", size: "lg" }) + " font-bold px-8 h-12"}>
+              Write Article <ArrowRight className="ml-2 size-4" />
             </Link>
           </div>
         </SlideUp>

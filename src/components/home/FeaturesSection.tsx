@@ -1,4 +1,4 @@
-import { Zap, Layers, Brain, ShieldCheck, Clock, Code2 } from "lucide-react";
+import { Zap, Layers, Brain, FileText, Clock, Sparkles } from "lucide-react";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 
 const features = [
@@ -6,37 +6,37 @@ const features = [
     icon: Brain,
     title: "AI-Powered Generation",
     description:
-      "Forge analyzes your requirements and generates a complete project architecture in a single pass.",
+      "Forge analyzes your requirements and generates complete architectures or engaging articles instantly.",
   },
   {
     icon: Layers,
-    title: "Full Stack Ideas",
+    title: "Full Stack Blueprints",
     description:
-      "Get feature maps, database schemas, API routes, and component structures — all in one output.",
+      "Get feature maps, database schemas, API routes, and component structures for your software projects.",
+  },
+  {
+    icon: FileText,
+    title: "SEO-Optimized Blogs",
+    description:
+      "Generate highly readable, structured content with tailored tones ready to rank on search engines.",
   },
   {
     icon: Clock,
     title: "Instant Results",
     description:
-      "No iterations or back-and-forth. One prompt delivers a complete, structured project idea.",
+      "No iterations or back-and-forth. One prompt delivers a complete, structured output in seconds.",
   },
   {
-    icon: Code2,
-    title: "Tech Stack Aware",
+    icon: Sparkles,
+    title: "Context Aware",
     description:
-      "Tell Forge your preferred stack and it tailors the architecture to your exact technologies.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Structured Output",
-    description:
-      "Every project idea follows a consistent schema with features, collections, and endpoints.",
+      "Whether it's your preferred tech stack or a specific target audience, Forge adapts to your exact needs.",
   },
   {
     icon: Zap,
     title: "Free to Use",
     description:
-      "Generate unlimited project ideas using the free Gemini API tier. No credit card required.",
+      "Generate daily project ideas and articles using the free Gemini API tier. No credit card required.",
   },
 ];
 
@@ -51,7 +51,7 @@ export function FeaturesSection() {
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
               Skip the blank canvas. Get a structured starting point for your
-              next project.
+              next project or your next post.
             </p>
           </div>
         </SlideUp>

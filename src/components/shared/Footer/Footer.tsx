@@ -67,7 +67,7 @@ export default function Footer() {
               IdeaDen
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-xs">
-              AI-powered software project planning for developers. From idea to architecture in seconds.
+              AI-powered project blueprints and blog articles. From idea to architecture, and thought to post, in seconds.
             </p>
             <div className="flex items-center gap-3">
               {socialLinks.map((link) => {
