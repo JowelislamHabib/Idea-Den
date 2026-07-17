@@ -55,8 +55,8 @@ export default function BlogGeneratePage() {
   const [loadingStep, setLoadingStep] = useState(0);
 
   const { data: quota, isLoading: quotaLoading } = useQuery({
-    queryKey: ["userQuota", session?.user?.id],
-    queryFn: () => apiClient<{ count: number; limit: number; isPro: boolean }>(`/api/ideas/quota?userId=${session?.user?.id}`),
+    queryKey: ["userBlogQuota", session?.user?.id],
+    queryFn: () => apiClient<{ count: number; limit: number; isPro: boolean }>(`/api/blogs/quota?userId=${session?.user?.id}`),
     enabled: !!session?.user?.id,
   });
 
@@ -156,8 +156,6 @@ export default function BlogGeneratePage() {
   };
 
   const isFormValid = topic.trim().length > 0;
-  // Note: Sharing quota limit with ideas for now as requested by user logic (free tier gets 3 generations total or 3 per feature)
-  // Our backend counts them separately, but uses the same limit number (3).
   const isLimitReached = quota && !quota.isPro && quota.count >= quota.limit; 
 
   if (generateMutation.isPending) {
@@ -194,6 +192,19 @@ export default function BlogGeneratePage() {
                 <Sparkles className="size-3.5 mr-1.5" />
                 AI Content Generator
               </Badge>
+              {quotaLoading ? (
+                <div className="h-5 w-32 bg-muted rounded animate-pulse" />
+              ) : quota ? (
+                quota.isPro ? (
+                  <Badge variant="outline" className="text-emerald-500 border-emerald-500/30">
+                    <CheckCircle2 className="size-3 mr-1.5" /> Pro Plan (Unlimited)
+                  </Badge>
+                ) : (
+                  <Badge variant={isLimitReached ? "destructive" : "outline"} className={isLimitReached ? "" : "text-amber-500 border-amber-500/30"}>
+                    {quota.count} / {quota.limit} Blogs Generated Today
+                  </Badge>
+                )
+              ) : null}
             </div>
             <h1 className="font-heading scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
               Write a Blog Article
