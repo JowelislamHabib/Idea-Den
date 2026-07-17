@@ -1,18 +1,14 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api/client";
-import { useSession } from "@/lib/auth-client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { Loader2, ArrowLeft, RefreshCw, Type, Clock } from "lucide-react";
-import Link from "next/link";
+import { ArrowLeft, Type, Clock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { toast } from "sonner";
-import { useState, useEffect } from "react";
 
 interface Blog {
   _id: string;
@@ -28,70 +24,15 @@ interface Blog {
   seoMetaDescription: string;
 }
 
-const LOADING_STATES = [
-  "Rethinking the narrative...",
-  "Structuring new points...",
-  "Drafting fresh content...",
-  "Applying the selected tone...",
-  "Polishing the final article..."
-];
-
 export default function BlogDetailsPage() {
   const { id } = useParams();
-  const { data: session } = useSession();
   const router = useRouter();
-  const queryClient = useQueryClient();
-  
-  const [isRegenerating, setIsRegenerating] = useState(false);
-  const [loadingStep, setLoadingStep] = useState(0);
 
   const { data: blogData, isPending, error } = useQuery({
     queryKey: ["blog", id],
     queryFn: () => apiClient<{ blog: Blog }>(`/api/blogs/${id}`),
     enabled: !!id,
   });
-
-  const generateMutation = useMutation({
-    mutationFn: async (currentBlog: Blog) => {
-      return apiClient<{ success: boolean; blog: { _id: string } }>("/api/blogs/generate", {
-        method: "POST",
-        body: JSON.stringify({
-          topic: currentBlog.topic,
-          template: currentBlog.template,
-          tone: currentBlog.tone,
-          length: currentBlog.length,
-          keywords: currentBlog.keywords,
-          regenerateId: currentBlog._id,
-          userId: session?.user?.id || "",
-          userName: session?.user?.name || "",
-          userEmail: session?.user?.email || "",
-        }),
-      });
-    },
-    onMutate: () => {
-      setIsRegenerating(true);
-    },
-    onSuccess: (data) => {
-      toast.success("Blog regenerated successfully!");
-      queryClient.invalidateQueries({ queryKey: ["blog", id] });
-      setIsRegenerating(false);
-    },
-    onError: (err) => {
-      toast.error(err instanceof Error ? err.message : "Regeneration failed.");
-      setIsRegenerating(false);
-    }
-  });
-
-  useEffect(() => {
-    if (!isRegenerating) {
-      setLoadingStep(0);
-      return;
-    }
-    const interval = setInterval(() => {
-      setLoadingStep((prev) => (prev + 1 < LOADING_STATES.length ? prev + 1 : prev));
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [isRegenerating]);
 
   if (isPending) {
     return (
@@ -125,31 +66,6 @@ export default function BlogDetailsPage() {
   }
 
   const { blog } = blogData;
-  const isOwner = session?.user?.id === blog.ownerId;
-
-  if (isRegenerating) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center py-12 bg-muted/20">
-        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-          <RefreshCw className="size-8 text-primary animate-spin" />
-        </div>
-        <h2 className="text-2xl font-bold tracking-tight font-heading mb-2">
-          Regenerating your article...
-        </h2>
-        <div className="text-muted-foreground h-6 overflow-hidden relative w-64 text-center">
-          {LOADING_STATES.map((state, idx) => (
-            <div
-              key={idx}
-              className="absolute inset-0 transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateY(${(idx - loadingStep) * 100}%)`, opacity: idx === loadingStep ? 1 : 0 }}
-            >
-              {state}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen py-12 bg-background">
@@ -164,18 +80,6 @@ export default function BlogDetailsPage() {
               <ArrowLeft className="mr-2 size-4" />
               Back
             </Button>
-            
-            {isOwner && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => generateMutation.mutate(blog)}
-                disabled={generateMutation.isPending}
-              >
-                <RefreshCw className="mr-2 size-4" />
-                Regenerate
-              </Button>
-            )}
           </div>
         </SlideUp>
 
