@@ -10,7 +10,6 @@ import {
   User,
   Lightbulb,
   PenTool,
-  LayoutDashboard,
   BarChart3,
   ChevronDown,
 } from "lucide-react";
@@ -49,12 +48,21 @@ export default function Navbar() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 outline-none"
-          >
-            <Image src="/ideaden-black.png" alt="IdeaDen" width={150} height={32} className="h-7 w-auto dark:hidden" />
-            <Image src="/ideaden-white.png" alt="IdeaDen" width={150} height={32} className="h-7 w-auto hidden dark:block" />
+          <Link href="/" className="flex items-center gap-2.5 outline-none">
+            <Image
+              src="/ideaden-black.png"
+              alt="IdeaDen"
+              width={150}
+              height={32}
+              className="h-7 w-auto dark:hidden"
+            />
+            <Image
+              src="/ideaden-white.png"
+              alt="IdeaDen"
+              width={150}
+              height={32}
+              className="h-7 w-auto hidden dark:block"
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -80,13 +88,16 @@ export default function Navbar() {
               >
                 Explore <ChevronDown size={14} />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-40 p-2 flex flex-col gap-1">
-                <DropdownMenuItem asChild className="cursor-pointer">
+              <DropdownMenuContent
+                align="start"
+                className="w-40 p-2 flex flex-col gap-1"
+              >
+                <DropdownMenuItem className="cursor-pointer">
                   <Link href="/explore/ideas" className="w-full">
                     Ideas
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild className="cursor-pointer">
+                <DropdownMenuItem className="cursor-pointer">
                   <Link href="/explore/blogs" className="w-full">
                     Blogs
                   </Link>
@@ -106,20 +117,17 @@ export default function Navbar() {
                   >
                     Generate <ChevronDown size={14} />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-48 p-2 flex flex-col gap-1">
-                    <DropdownMenuItem asChild className="cursor-pointer">
-                      <Link
-                        href="/generate/ideas"
-                        className="w-full"
-                      >
+                  <DropdownMenuContent
+                    align="start"
+                    className="w-48 p-2 flex flex-col gap-1"
+                  >
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Link href="/generate/ideas" className="w-full">
                         Project Idea
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="cursor-pointer">
-                      <Link
-                        href="/generate/blogs"
-                        className="w-full"
-                      >
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Link href="/generate/blogs" className="w-full">
                         Blog Article
                       </Link>
                     </DropdownMenuItem>
@@ -193,7 +201,7 @@ export default function Navbar() {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup className="flex flex-col gap-1">
-                      <DropdownMenuItem asChild className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer">
                         <Link
                           href="/dashboard/ideas"
                           className="flex items-center w-full"
@@ -205,7 +213,7 @@ export default function Navbar() {
                           My Ideas
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer">
                         <Link
                           href="/dashboard/blogs"
                           className="flex items-center w-full"
@@ -217,7 +225,7 @@ export default function Navbar() {
                           My Blogs
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer">
                         <Link
                           href="/dashboard"
                           className="flex items-center w-full"
