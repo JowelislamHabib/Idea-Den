@@ -68,7 +68,7 @@ function LoginForm() {
       }
 
       toast.success("Logged in successfully");
-      router.push(callbackUrl);
+      window.location.href = callbackUrl;
       return null;
     },
     null,
@@ -92,7 +92,7 @@ function LoginForm() {
     }
 
     toast.success("Logged in with demo account");
-    router.push(callbackUrl);
+    window.location.href = callbackUrl;
   };
 
   return (

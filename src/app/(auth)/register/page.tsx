@@ -114,7 +114,7 @@ function RegisterForm() {
       }
 
       toast.success("Account created successfully");
-      router.push(callbackUrl);
+      window.location.href = callbackUrl;
       return null;
     },
     null
