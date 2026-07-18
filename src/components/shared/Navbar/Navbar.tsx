@@ -231,18 +231,7 @@ export default function Navbar() {
                           Dashboard
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
-                        <Link
-                          href="/profile"
-                          className="flex items-center w-full"
-                        >
-                          <LayoutDashboard
-                            size={16}
-                            className="mr-2.5 text-muted-foreground"
-                          />
-                          Profile
-                        </Link>
-                      </DropdownMenuItem>
+
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem

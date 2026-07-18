@@ -113,7 +113,7 @@ export default function IdeaDetailPage({
 
   return (
     <div className="min-h-[60vh] py-12 bg-muted/20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SlideUp>
           <Link
             href="/explore/ideas"

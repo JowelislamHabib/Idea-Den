@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Lightbulb } from "lucide-react";
+import { Heart } from "lucide-react";
+import { NewsletterForm } from "./NewsletterForm";
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -19,27 +20,22 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const footerLinks = [
-  {
-    title: "Product",
-    links: [
-      { label: "Explore Ideas", href: "/explore" },
-      { label: "Generate", href: "/ideas/generate" },
-      { label: "Dashboard", href: "/dashboard" },
-    ],
-  },
+const footerGroups = [
   {
     title: "Company",
     links: [
-      { label: "About", href: "/about" },
-      { label: "Contact", href: "/contact" },
+      { label: "About IdeaDen", href: "/about" },
+      { label: "Contact IdeaDen", href: "/contact" },
     ],
   },
   {
-    title: "Legal",
+    title: "Product",
     links: [
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms of Service", href: "#" },
+      { label: "IdeaDen Blueprint Engine", href: "/generate/ideas" },
+      { label: "IdeaDen Blog Writer", href: "/generate/blogs" },
+      { label: "Explore Ideas", href: "/explore/ideas" },
+      { label: "Explore Blogs", href: "/explore/blogs" },
+      { label: "Dashboard", href: "/dashboard" },
     ],
   },
 ];
@@ -52,22 +48,19 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-muted/30">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-          {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
-            <Link
-              href="/"
-              className="flex items-center gap-2 font-bold text-lg mb-4"
-            >
-              <div className="flex size-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-sm font-black shadow-sm">
+    <footer className="border-t border-border/50 bg-background">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="lg:col-span-2">
+            <Link href="/" className="flex items-center gap-2.5 mb-5">
+              <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-sm font-black shadow-sm">
                 ID
               </div>
-              IdeaDen
+              <span className="font-bold text-lg">IdeaDen</span>
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-xs">
-              AI-powered project blueprints and blog articles. From idea to architecture, and thought to post, in seconds.
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-sm">
+              AI-powered project blueprints and blog articles. From idea to
+              architecture, and thought to post, in seconds.
             </p>
             <div className="flex items-center gap-3">
               {socialLinks.map((link) => {
@@ -76,7 +69,7 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="flex size-9 items-center justify-center rounded-lg bg-background border border-border/50 text-muted-foreground transition-colors hover:text-foreground hover:border-foreground/20"
+                    className="flex size-9 items-center justify-center rounded-xl border border-border/50 bg-background/50 text-muted-foreground transition-all hover:shadow-sm hover:-translate-y-0.5 hover:border-primary/30 hover:text-primary"
                     aria-label={link.label}
                   >
                     <Icon className="size-4" />
@@ -86,18 +79,17 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Link Columns */}
-          {footerLinks.map((group) => (
+          {footerGroups.map((group) => (
             <div key={group.title}>
-              <h4 className="text-sm font-semibold text-foreground mb-4">
+              <h4 className="text-xs font-bold text-foreground/60 uppercase tracking-wider mb-4">
                 {group.title}
               </h4>
-              <ul className="space-y-2.5">
+              <ul className="space-y-3">
                 {group.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {link.label}
                     </Link>
@@ -108,15 +100,28 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-6 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
+        <div className="border-t border-border/50 py-12">
+          <div className="max-w-xl">
+            <h4 className="font-heading text-lg font-bold tracking-tight mb-1">
+              Stay Inspired with IdeaDen
+            </h4>
+            <p className="text-sm text-muted-foreground mb-5">
+              Product updates, creative tips, and new feature announcements
+              from IdeaDen. No spam, ever.
+            </p>
+            <NewsletterForm />
+          </div>
+        </div>
+
+        <div className="border-t border-border/50 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} IdeaDen. All rights reserved.
           </p>
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Lightbulb className="size-3.5 text-primary" />
-            Built with Idea AI
-          </div>
+          <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+            Built with
+            <Heart className="size-3 text-primary fill-primary" />
+            for creators everywhere
+          </p>
         </div>
       </div>
     </footer>

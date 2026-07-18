@@ -9,7 +9,7 @@ const blueprintFeatures = [
   "Problem statement & 4+ target personas",
   "Core feature specifications",
   "Tech stack by layer (frontend, backend, DB, AI)",
-  "Competitive landscape & differentiation",
+  "Competitor landscape & differentiation",
   "Elevator pitch & first steps roadmap",
 ];
 
@@ -38,12 +38,12 @@ export function SolutionSection() {
 
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
           <SlideUp className="h-full">
-            <div className="group relative h-full rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-primary/[0.02] p-8 sm:p-10 transition-all hover:shadow-xl hover:shadow-primary/5 hover:border-primary/40">
-              <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-primary/5 blur-[60px] pointer-events-none" />
+            <div className="group/card relative h-full rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-primary/[0.03] p-8 sm:p-10 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/30">
+              <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-primary/10 blur-[60px] pointer-events-none transition-opacity duration-300 group-hover/card:opacity-100 opacity-50" />
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 transition-transform group-hover:scale-110 group-hover:bg-primary">
-                    <Lightbulb className="size-6 text-primary group-hover:text-primary-foreground" />
+                  <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 transition-all duration-300 group-hover/card:scale-110 group-hover/card:bg-primary group-hover/card:shadow-lg">
+                    <Lightbulb className="size-6 text-primary transition-colors duration-300 group-hover/card:text-primary-foreground" />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-primary/60 uppercase tracking-widest">Engine One</div>
@@ -52,10 +52,7 @@ export function SolutionSection() {
                 </div>
 
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  Tell IdeaDen about your interests, tech stack, and time
-                  constraints. It acts like a senior PM, generating a complete
-                  PRD with market analysis, feature specs, competitor insights,
-                  and an actionable roadmap — in under 60 seconds.
+                  Tell IdeaDen all your interests, tech stack, and time constraints. It acts like a senior PM, generating a complete PRD with market analysis, feature specs, competitor insights, and a clear, actionable roadmap — all in under sixty seconds.
                 </p>
 
                 <div className="flex items-center gap-2 mb-5 text-sm font-semibold text-foreground/70">
@@ -76,23 +73,23 @@ export function SolutionSection() {
                   href="/generate/ideas"
                   className={cn(
                     buttonVariants(),
-                    "rounded-full w-full sm:w-auto group shadow-lg shadow-primary/20"
+                    "rounded-full w-full sm:w-auto group/btn shadow-lg shadow-primary/20"
                   )}
                 >
                   Generate a Blueprint
-                  <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="ml-2 size-4 transition-transform group-hover/btn:translate-x-1" />
                 </Link>
               </div>
             </div>
           </SlideUp>
 
           <SlideUp delay={0.15} className="h-full">
-            <div className="group relative h-full rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-accent/20 p-8 sm:p-10 transition-all hover:shadow-xl hover:shadow-accent/10 hover:border-accent/40">
-              <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-accent/10 blur-[60px] pointer-events-none" />
+            <div className="group/card relative h-full rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-secondary/30 p-8 sm:p-10 transition-all duration-300 hover:shadow-2xl hover:shadow-secondary/20 hover:border-foreground/20">
+              <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-secondary/40 blur-[60px] pointer-events-none transition-opacity duration-300 group-hover/card:opacity-100 opacity-50" />
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/30 border border-accent/40 transition-transform group-hover:scale-110 group-hover:bg-primary">
-                    <PenTool className="size-6 text-accent-foreground group-hover:text-primary-foreground" />
+                  <div className="flex size-12 items-center justify-center rounded-2xl bg-secondary border border-border transition-all duration-300 group-hover/card:scale-110 group-hover/card:bg-foreground group-hover/card:shadow-lg">
+                    <PenTool className="size-6 text-foreground transition-colors duration-300 group-hover/card:text-background" />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-foreground/40 uppercase tracking-widest">Engine Two</div>
@@ -101,10 +98,7 @@ export function SolutionSection() {
                 </div>
 
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  Feed a topic into IdeaDen, choose your format and tone, and
-                  watch it craft a complete, SEO-optimized, markdown-formatted
-                  blog post ready for publication. No more editing robotic
-                  garbage for hours.
+                  Feed a topic into IdeaDen, choose your format and tone, and watch it craft a complete, SEO-optimized, markdown-formatted blog post. It organically integrates keywords and structures headers so you never waste hours editing AI texts again.
                 </p>
 
                 <div className="flex items-center gap-2 mb-5 text-sm font-semibold text-foreground/70">
@@ -125,11 +119,11 @@ export function SolutionSection() {
                   href="/generate/blogs"
                   className={cn(
                     buttonVariants({ variant: "secondary" }),
-                    "rounded-full w-full sm:w-auto group shadow-lg shadow-accent/20"
+                    "rounded-full w-full sm:w-auto group/btn shadow-lg"
                   )}
                 >
                   Write an Article
-                  <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="ml-2 size-4 transition-transform group-hover/btn:translate-x-1" />
                 </Link>
               </div>
             </div>

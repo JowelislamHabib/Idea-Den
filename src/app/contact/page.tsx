@@ -1,32 +1,32 @@
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ContactInfo } from "@/components/contact/ContactInfo";
-import { SlideUp } from "@/components/ui/motion-wrapper";
+import { FadeIn } from "@/components/ui/motion-wrapper";
 
 export default function ContactPage() {
   return (
-    <div className="min-h-[60vh] py-12 bg-muted/20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <SlideUp>
-          <div className="text-center mb-12">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Contact Us
+    <>
+      <section className="relative py-24 sm:py-28 overflow-hidden">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <FadeIn className="text-center max-w-3xl mx-auto mb-16">
+            <h1 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight">
+              Get in Touch
             </h1>
-            <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
-              We&apos;re here to help. Reach out with any questions about
-              IdeaDen.
+            <p className="mt-4 text-lg text-muted-foreground">
+              Have questions, feedback, or want to collaborate? We&apos;d love
+              to hear from you.
             </p>
-          </div>
-        </SlideUp>
+          </FadeIn>
 
-        <div className="grid gap-12 lg:grid-cols-2">
-          <SlideUp delay={0.1}>
-            <ContactForm />
-          </SlideUp>
-          <SlideUp delay={0.2}>
-            <ContactInfo />
-          </SlideUp>
+          <div className="grid gap-12 lg:grid-cols-5 items-start">
+            <FadeIn delay={0.1} className="lg:col-span-3">
+              <ContactForm />
+            </FadeIn>
+            <FadeIn delay={0.15} className="lg:col-span-2 lg:sticky lg:top-24 lg:self-start">
+              <ContactInfo />
+            </FadeIn>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 }

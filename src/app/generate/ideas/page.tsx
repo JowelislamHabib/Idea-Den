@@ -175,7 +175,7 @@ export default function GeneratePage() {
 
   return (
     <div className="min-h-[60vh] py-12 bg-muted/20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SlideUp>
           <div className="text-center mb-10">
             <div className="flex flex-col items-center justify-center gap-3 mb-4">

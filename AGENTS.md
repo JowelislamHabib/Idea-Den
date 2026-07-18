@@ -19,41 +19,36 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `../ideaden-server` | `npm run build` | esbuild bundle → `api/index.js` |
 | `../ideaden-server` | `npm start` | Vercel serverless entry (`api/index.js`) |
 
-No test/typecheck scripts. No CI in `.github/`.
+**No test/typecheck scripts. No CI.** Only build check before committing.
 
 ## Architecture
 
-- **Data flow:** Auth → Next.js → MongoDB (via Better Auth, direct). Business API → Next.js → Express (`@/lib/api/client.ts`) → MongoDB. AI gen → Express → Gemini API. Gemini errors are re-thrown (no mock fallback — router returns 500).
-- **Server repo:** `../ideaden-server`. CommonJS (`"type": "commonjs"`), Express 5, `module.exports = app` for Vercel compat.
-- **Server routes:** `/api/ideas/generate` (generate.ts), `/api/ideas` (ideas.ts ideas CRUD), `/api/blogs` (blogs.ts blogs CRUD + generate), `/api/users` (users.ts profile).
+- **Data flow:** Auth → Next.js → MongoDB (via Better Auth, direct). Business API → Next.js → Express (`@/lib/api/client.ts`) → MongoDB. AI gen → Express → Gemini API.
+- **Server repo:** `../ideaden-server`. CommonJS (`"type": "commonjs"`), Express 5. Imports `"dotenv/config"` as first import in `config/db.ts:1` (tsx/esbuild hoists `import` above `require`).
+- **Server routes:** `/api/ideas/generate` (generate.ts), `/api/ideas` (ideas.ts CRUD + `/quota`, `/mine`), `/api/blogs` (blogs.ts CRUD + generate + `/quota`, `/mine`), `/api/users` (users.ts profile).
 - **Auth:** Better Auth at `src/app/api/auth/[...all]/route.ts`. MongoDB native adapter, email/password + Google OAuth. Uses `adminClient()` + `jwtClient()` plugins.
 - **Protected routes:** `<AuthRequired>` wrapper + `useSession()` from `@/lib/auth-client`.
-- **State:** TanStack Query (React Query v5).
-- **Env:** Two `.env` files — both committed (`.gitignore` has an opt-in exception).
-- **Daily quota:** Free users limited to **3 generations/day** (ideas + blogs each). Checked server-side after rate limit.
+- **State:** TanStack Query (React Query v5) via `src/app/providers.tsx`.
+- **Env:** `.env` exists locally but is gitignored (`.gitignore` has `.env*`). Do NOT commit env files.
+- **Daily quota:** Free users limited to **3 generations/day** (ideas + blogs combined). Server-side, checked after rate limit.
 - **User lookup:** Dual query `${or: [{_id: ObjectId(userId)}, {id: userId}]}` — Better Auth stores `id` as string, not ObjectId.
-
-## Server env loading gotcha
-
-Use `import "dotenv/config"` as the **first** import (e.g. `config/db.ts:1`). Do NOT use `require("dotenv")` + `dotenv.config()` — tsx/esbuild hoists `import` above `require`, so env vars aren't set at module level.
 
 ## Conventions
 
-- **shadcn/ui style:** `"base-luma"` (components.json).
-- **CSS:** Tailwind v4 (`@tailwindcss/postcss`), `tw-animate-css`, `@import "shadcn/tailwind.css"`.
+- **UI:** shadcn `"base-luma"` style (`components.json`). Tailwind v4 (`@tailwindcss/postcss`), `tw-animate-css`, `@import "shadcn/tailwind.css"`.
+- **CSS lib:** `tailwind-merge`, `class-variance-authority`, `clsx`.
+- **Icons:** `lucide-react` only. No emojis.
 - **Imports:** `@/` → `./src/*`.
-- **Component exports:** Named exports only. File names: PascalCase.
-- **Directories:** UI primitives at `@/components/ui/`, shared layout at `@/components/shared/`, feature components at `@/components/{feature}/`.
-- **DB:** Native MongoDB driver only. **No ORMs.**
-- **Page wrappers:** Navbar, Footer, and all home sections use `mx-auto max-w-7xl px-4 sm:px-6` for alignment. Other (non-home) pages use `max-w-6xl px-4 sm:px-6`.
-- **Route groups:** Auth pages in `(auth)/login`, `(auth)/register`.
+- **Components:** Named exports. PascalCase filenames. UI primitives at `@/components/ui/`, shared layout at `@/components/shared/`, feature components at `@/components/{feature}/`.
+- **Animations (home page):** Custom motion-wrapper at `@/components/ui/motion-wrapper.tsx` with `FadeIn`, `SlideUp`, `StaggerContainer`, `StaggerItem`. IntersectionObserver-based, no Framer Motion dependency.
+- **Page wrappers:** Home sections use `mx-auto max-w-7xl px-4 sm:px-6`. Other pages use `max-w-6xl px-4 sm:px-6`.
+- **Route groups:** Auth at `(auth)/login`, `(auth)/register`.
+- **DB:** Native MongoDB driver only. No ORMs.
 
 ## Notable
 
 - **Gemini:** Uses `gemini-flash-lite` with `responseMimeType: "application/json"` via raw `fetch()` (not Google SDK). Two services: `services/gemini.ts` (ideas, JSON) and `services/gemini-blog.ts` (blogs, JSON with markdown content field).
 - **Server build:** `esbuild index.ts --bundle --platform=node --outfile=api/index.js --external:express --external:cors --external:mongodb --external:dotenv`
-- **Two rate limits per generation:** 15s client-side (`handleCooldown` in generate pages) AND 15s server-side per `userId` in `routes/{generate,blogs}.ts`. Both needed.
-- **No `lorem ipsum` per PRD.**
-- **Big dependency:** `shadcn` (^4.13.0) and `@base-ui/react` (^1.6.0) — the latter is installed but not obviously imported in app code (may be used by shadcn deps).
+- **Two rate limits per generation:** 15s client-side (`handleCooldown` in generate pages) AND 15s server-side per `userId` (in-memory Map in `routes/{generate,blogs}.ts`). Both needed.
+- **Icon hover pattern:** Home section icon boxes use `transition-transform group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground` (container has `group`, icon box has `bg-primary/10 border border-primary/20`, icon has `text-primary`).
 - **`PRD.md`** is gitignored (project spec, not part of app).
-- **`CLAUDE.md`** just contains `@AGENTS.md`.
