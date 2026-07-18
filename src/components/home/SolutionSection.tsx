@@ -37,13 +37,13 @@ export function SolutionSection() {
         </FadeIn>
 
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
-          <SlideUp>
-            <div className="group relative rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-primary/[0.02] p-8 sm:p-10 transition-all hover:shadow-xl hover:shadow-primary/5 hover:border-primary/40">
+          <SlideUp className="h-full">
+            <div className="group relative h-full rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-primary/[0.02] p-8 sm:p-10 transition-all hover:shadow-xl hover:shadow-primary/5 hover:border-primary/40">
               <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-primary/5 blur-[60px] pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20">
-                    <Lightbulb className="size-6 text-primary" />
+                  <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 transition-transform group-hover:scale-110 group-hover:bg-primary">
+                    <Lightbulb className="size-6 text-primary group-hover:text-primary-foreground" />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-primary/60 uppercase tracking-widest">Engine One</div>
@@ -86,13 +86,13 @@ export function SolutionSection() {
             </div>
           </SlideUp>
 
-          <SlideUp delay={0.15}>
-            <div className="group relative rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-accent/20 p-8 sm:p-10 transition-all hover:shadow-xl hover:shadow-accent/10 hover:border-accent/40">
+          <SlideUp delay={0.15} className="h-full">
+            <div className="group relative h-full rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-accent/20 p-8 sm:p-10 transition-all hover:shadow-xl hover:shadow-accent/10 hover:border-accent/40">
               <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-accent/10 blur-[60px] pointer-events-none" />
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/30 border border-accent/40">
-                    <PenTool className="size-6 text-accent-foreground" />
+                  <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/30 border border-accent/40 transition-transform group-hover:scale-110 group-hover:bg-primary">
+                    <PenTool className="size-6 text-accent-foreground group-hover:text-primary-foreground" />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-foreground/40 uppercase tracking-widest">Engine Two</div>

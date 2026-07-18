@@ -61,7 +61,7 @@ export function WhyChooseSection() {
               <StaggerItem key={i} delay={i * 0.08}>
                 <div className={`group relative rounded-2xl border border-border/50 bg-gradient-to-r ${isEven ? "from-background via-background to-primary/[0.02]" : "from-background via-background to-accent/15"} p-6 sm:p-8 transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-primary/30`}>
                   <div className="flex items-start gap-5 sm:gap-8">
-                    <div className={`flex size-14 shrink-0 items-center justify-center rounded-2xl border ${isEven ? "bg-primary/10 border-primary/20 text-primary" : "bg-accent/30 border-accent/40 text-accent-foreground"} transition-all group-hover:scale-110 group-hover:shadow-md`}>
+                    <div className={`flex size-14 shrink-0 items-center justify-center rounded-2xl border ${isEven ? "bg-primary/10 border-primary/20 text-primary" : "bg-accent/30 border-accent/40 text-accent-foreground"} transition-transform group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground`}>
                       <Icon className="size-6" />
                     </div>
                     <div className="flex-1 min-w-0">

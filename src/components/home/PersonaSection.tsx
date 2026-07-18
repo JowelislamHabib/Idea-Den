@@ -76,7 +76,7 @@ export function PersonaSection() {
               <StaggerItem key={i} delay={i * 0.05}>
                 <div className="group relative h-full rounded-2xl border border-border/50 bg-background/50 backdrop-blur-sm p-6 transition-all hover:shadow-lg hover:-translate-y-1 hover:border-primary/30 hover:bg-background/80">
                   <div className="flex items-center gap-3 mb-5">
-                    <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 shadow-sm text-primary">
+                    <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 shadow-sm text-primary transition-transform group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
                       <Icon className="size-5" />
                     </div>
                     <h3 className="font-bold text-base">{persona.name}</h3>
@@ -92,7 +92,7 @@ export function PersonaSection() {
 
                     <div className="rounded-xl bg-accent/20 border border-accent/30 p-4">
                       <p className="text-xs font-bold text-accent-foreground uppercase tracking-wider mb-1.5">How IdeaDen Helps</p>
-                      <p className="text-sm text-foreground/90 leading-relaxed font-medium">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         {persona.solution}
                       </p>
                     </div>

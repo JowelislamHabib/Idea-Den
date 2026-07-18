@@ -31,7 +31,7 @@ const painPoints = [
 
 export function ProblemSection() {
   return (
-    <section className="relative py-24 sm:py-28 overflow-hidden bg-secondary/50">
+    <section className="relative py-24 sm:py-28 bg-secondary/50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-start">
           <FadeIn className="lg:col-span-2 lg:sticky lg:top-24">

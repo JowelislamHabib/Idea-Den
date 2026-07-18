@@ -54,7 +54,7 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="relative py-24 sm:py-28 overflow-hidden bg-secondary/50">
+    <section className="relative py-24 sm:py-28 bg-secondary/50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-start">
           <FadeIn className="lg:col-span-2 lg:sticky lg:top-24">
@@ -86,10 +86,10 @@ export function FAQSection() {
                     >
                       <div className="flex items-center gap-4 p-5 sm:p-6 select-none">
                         <div className={cn(
-                          "flex size-10 shrink-0 items-center justify-center rounded-xl border transition-all",
+                          "flex size-10 shrink-0 items-center justify-center rounded-xl border transition-transform",
                           openIndex === index
-                            ? "bg-primary/10 border-primary/20 text-primary"
-                            : "bg-muted/50 border-border/50 text-muted-foreground group-hover:bg-primary/5 group-hover:border-primary/20"
+                            ? "bg-primary text-primary-foreground scale-110"
+                            : "bg-muted/50 border-border/50 text-muted-foreground group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground"
                         )}>
                           <Icon className="size-4" />
                         </div>
@@ -110,7 +110,7 @@ export function FAQSection() {
                         )}
                       >
                         <div className="overflow-hidden">
-                          <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0 text-sm text-muted-foreground leading-relaxed border-t border-border/40 mx-5 sm:mx-6">
+                          <div className="px-5 sm:px-6 py-5 sm:py-6 text-sm text-muted-foreground leading-relaxed border-t border-border/40 mx-5 sm:mx-6">
                             {faq.answer}
                           </div>
                         </div>

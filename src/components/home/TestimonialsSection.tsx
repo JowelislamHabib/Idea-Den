@@ -47,19 +47,21 @@ export function TestimonialsSection() {
           {stats.map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <StaggerItem key={i} delay={i * 0.08}>
-                <div className="rounded-2xl bg-gradient-to-br from-background via-background to-primary/[0.03] border border-border/50 p-6 text-center transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-primary/30">
-                  <div className="flex justify-center mb-3">
-                    <Icon className="size-6 text-primary" />
-                  </div>
-                  <div className="text-2xl sm:text-3xl font-black tracking-tight text-foreground mb-1">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm font-medium text-muted-foreground">
-                    {stat.label}
-                  </div>
-                </div>
-              </StaggerItem>
+                  <StaggerItem key={i} delay={i * 0.08}>
+                    <div className="group rounded-2xl bg-gradient-to-br from-background via-background to-primary/[0.03] border border-border/50 p-6 text-center transition-all hover:shadow-lg hover:-translate-y-0.5 hover:border-primary/30">
+                      <div className="flex justify-center mb-3">
+                        <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-primary transition-transform group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
+                          <Icon className="size-6" />
+                        </div>
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-black tracking-tight text-foreground mb-1">
+                        {stat.value}
+                      </div>
+                      <div className="text-sm font-medium text-muted-foreground">
+                        {stat.label}
+                      </div>
+                    </div>
+                  </StaggerItem>
             );
           })}
         </StaggerContainer>
