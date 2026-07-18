@@ -67,7 +67,7 @@ export function BlogCard({
         </CardContent>
         <CardFooter className="pt-0">
           <Link 
-            href={`/blog/${_id}`} 
+            href={`/explore/blogs/${_id}`} 
             className={buttonVariants({ variant: "default", size: "sm" }) + " w-full flex items-center justify-center group"}
           >
             Read Article 

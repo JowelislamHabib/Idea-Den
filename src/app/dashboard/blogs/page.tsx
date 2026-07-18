@@ -134,7 +134,7 @@ export default function DashboardBlogsPage() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-2">
-                            <Link href={`/blog/${blog._id}`} className={buttonVariants({ variant: "ghost", size: "icon" })}>
+                            <Link href={`/explore/blogs/${blog._id}`} className={buttonVariants({ variant: "ghost", size: "icon" })}>
                                 <Eye className="size-4" />
                             </Link>
                             <Button

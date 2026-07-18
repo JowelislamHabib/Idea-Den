@@ -10,6 +10,15 @@ import { BlogCard } from "@/components/explore/BlogCard";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface ExploreBlog {
   _id: string;
@@ -29,23 +38,38 @@ function ExploreBlogsContent() {
 
   const initialSearch = searchParams.get("q") || "";
   const sort = searchParams.get("sort") || "newest";
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
 
   const [search, setSearch] = useState(initialSearch);
+
+  const createPageURL = (pageNumber: number | string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", pageNumber.toString());
+    return `${pathname}?${params.toString()}`;
+  };
 
   // Debounce search input to update URL params
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
+      let changed = false;
+
       if (search) {
-        params.set("q", search);
+        if (params.get("q") !== search) {
+          params.set("q", search);
+          params.set("page", "1");
+          changed = true;
+        }
       } else {
-        params.delete("q");
+        if (params.has("q")) {
+          params.delete("q");
+          params.set("page", "1");
+          changed = true;
+        }
       }
-      // Ensure we don't push if nothing changed
-      if (
-        searchParams.get("q") !== search &&
-        (search || searchParams.has("q"))
-      ) {
+
+      if (changed) {
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
       }
     }, 300);
@@ -56,18 +80,20 @@ function ExploreBlogsContent() {
   const handleSortChange = (newSort: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("sort", newSort);
+    params.set("page", "1");
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const { data, isPending } = useQuery({
-    queryKey: ["explore-blogs", searchParams.get("q"), sort],
+    queryKey: ["explore-blogs", searchParams.get("q"), sort, currentPage],
     queryFn: () => {
       const params = new URLSearchParams();
       const currentQ = searchParams.get("q");
       if (currentQ) params.set("q", currentQ);
 
       params.set("sort", sort);
-      params.set("limit", "24");
+      params.set("page", currentPage.toString());
+      params.set("limit", "9");
       return apiClient<{
         blogs: ExploreBlog[];
         pagination: Record<string, number>;
@@ -76,6 +102,7 @@ function ExploreBlogsContent() {
   });
 
   const blogs = data?.blogs || [];
+  const pagination = data?.pagination;
 
   return (
     <div className="min-h-[60vh] py-12 bg-background">
@@ -151,6 +178,58 @@ function ExploreBlogsContent() {
                 <BlogCard {...blog} />
               </SlideUp>
             ))}
+          </div>
+        )}
+
+        {!isPending && blogs.length > 0 && pagination && pagination.pages > 1 && (
+          <div className="mt-12 flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    href={currentPage > 1 ? createPageURL(currentPage - 1) : "#"} 
+                    className={currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
+                  />
+                </PaginationItem>
+                
+                {[...Array(pagination.pages)].map((_, i) => {
+                  const page = i + 1;
+                  if (
+                    page === 1 || 
+                    page === pagination.pages || 
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  ) {
+                    return (
+                      <PaginationItem key={page}>
+                        <PaginationLink 
+                          href={createPageURL(page)}
+                          isActive={page === currentPage}
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  }
+                  
+                  if (page === currentPage - 2 || page === currentPage + 2) {
+                    return (
+                      <PaginationItem key={`ellipsis-${page}`}>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    );
+                  }
+                  
+                  return null;
+                })}
+
+                <PaginationItem>
+                  <PaginationNext 
+                    href={currentPage < pagination.pages ? createPageURL(currentPage + 1) : "#"} 
+                    className={currentPage >= pagination.pages ? "pointer-events-none opacity-50" : ""}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         )}
       </div>

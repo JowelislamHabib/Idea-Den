@@ -316,7 +316,7 @@ export default function IdeaDetailPage({
               </h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((r) => (
-                  <Link key={r._id} href={`/idea/${r._id}`}>
+                  <Link key={r._id} href={`/explore/ideas/${r._id}`}>
                     <Card className="h-full hover:shadow-md transition-shadow">
                       <CardContent className="p-5">
                         <h3 className="font-semibold line-clamp-1 mb-1">{r.projectTitle}</h3>

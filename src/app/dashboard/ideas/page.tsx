@@ -142,7 +142,7 @@ export default function DashboardIdeasPage() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-2">
-                            <Link href={`/idea/${idea._id}`} className={buttonVariants({ variant: "ghost", size: "icon" })}>
+                            <Link href={`/explore/ideas/${idea._id}`} className={buttonVariants({ variant: "ghost", size: "icon" })}>
                                 <Eye className="size-4" />
                             </Link>
                             <Button

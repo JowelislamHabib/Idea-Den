@@ -56,7 +56,7 @@ export function IdeaCard({
         </CardContent>
         <CardFooter className="pt-0">
           <Link 
-            href={`/idea/${_id}`} 
+            href={`/explore/ideas/${_id}`} 
             className={buttonVariants({ variant: "default", size: "sm" }) + " w-full flex items-center justify-center group"}
           >
             Explore Idea 
