@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import { apiClient } from "@/lib/api/client";
 import { toast } from "sonner";
-import { Sparkles, X, Plus, Clock, Loader2, CheckCircle2, Type, FileText } from "lucide-react";
+import { Sparkles, X, Plus, Clock, Loader2, CheckCircle2, Type, FileText, Zap } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 const TEMPLATE_OPTIONS = [
@@ -200,9 +200,18 @@ export default function BlogGeneratePage() {
                     <CheckCircle2 className="size-3 mr-1.5" /> Pro Plan (Unlimited)
                   </Badge>
                 ) : (
-                  <Badge variant={isLimitReached ? "destructive" : "outline"} className={isLimitReached ? "" : "text-amber-500 border-amber-500/30"}>
-                    {quota.count} / {quota.limit} Blogs Generated Today
-                  </Badge>
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-background shadow-sm">
+                    <Zap className={isLimitReached ? "size-4 text-destructive" : "size-4 text-amber-500"} />
+                    <span className="text-sm font-medium">
+                      {isLimitReached ? "Daily Limit Reached" : `${quota.limit - quota.count} Generations Left`}
+                    </span>
+                    <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden ml-2 hidden sm:block">
+                      <div 
+                        className={isLimitReached ? "h-full rounded-full transition-all bg-destructive" : "h-full rounded-full transition-all bg-amber-500"} 
+                        style={{ width: `${(quota.count / quota.limit) * 100}%` }}
+                      />
+                    </div>
+                  </div>
                 )
               ) : null}
             </div>
