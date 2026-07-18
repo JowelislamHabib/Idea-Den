@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { AuthRequired } from "@/components/shared/AuthRequired";
 import { useSession } from "@/lib/auth-client";
-import { Loader2, LayoutDashboard, FileText, Plus } from "lucide-react";
+import { Loader2, LayoutDashboard, Lightbulb, PenTool, Plus } from "lucide-react";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -31,8 +31,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const tabs = [
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
-    { name: "My Ideas", href: "/dashboard/ideas", icon: FileText },
-    { name: "My Blogs", href: "/dashboard/blogs", icon: FileText },
+    { name: "My Ideas", href: "/dashboard/ideas", icon: Lightbulb },
+    { name: "My Blogs", href: "/dashboard/blogs", icon: PenTool },
   ];
 
   return (

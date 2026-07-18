@@ -5,7 +5,7 @@ import { apiClient } from "@/lib/api/client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { Loader2, FileText, Layers, TrendingUp, PenTool } from "lucide-react";
+import { Loader2, Lightbulb, Layers, TrendingUp, PenTool } from "lucide-react";
 import {
   PieChart,
   Pie,
@@ -150,12 +150,12 @@ export default function DashboardOverviewPage() {
         <SlideUp delay={0.1}>
           <Card className={glassCardClass}>
             <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-              <FileText className="size-24" />
+              <Lightbulb className="size-24" />
             </div>
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center gap-4">
                 <div className="flex size-12 items-center justify-center rounded-xl bg-primary/20 text-primary border border-primary/20 backdrop-blur-md">
-                  <FileText className="size-6" />
+                  <Lightbulb className="size-6" />
                 </div>
                 <div>
                   <div className="text-3xl font-extrabold tracking-tight">{totalIdeas}</div>

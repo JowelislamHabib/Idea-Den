@@ -5,7 +5,7 @@ import { apiClient } from "@/lib/api/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { Loader2, FileText, Eye, Trash2, Plus } from "lucide-react";
+import { Loader2, PenTool, Eye, Trash2, Plus } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -91,7 +91,7 @@ export default function DashboardBlogsPage() {
             ) : blogs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <div className="flex size-12 items-center justify-center rounded-full bg-muted mb-4">
-                  <FileText className="size-6 text-muted-foreground" />
+                  <PenTool className="size-6 text-muted-foreground" />
                 </div>
                 <h3 className="text-lg font-semibold">No blogs generated yet</h3>
                 <p className="text-sm text-muted-foreground mt-1 mb-4">

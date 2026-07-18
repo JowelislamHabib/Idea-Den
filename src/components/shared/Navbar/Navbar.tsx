@@ -8,7 +8,8 @@ import {
   Menu,
   X,
   User,
-  FileText,
+  Lightbulb,
+  PenTool,
   LayoutDashboard,
   BarChart3,
   ChevronDown,
@@ -199,7 +200,7 @@ export default function Navbar() {
                           href="/dashboard/ideas"
                           className="flex items-center w-full"
                         >
-                          <FileText
+                          <Lightbulb
                             size={16}
                             className="mr-2.5 text-muted-foreground"
                           />
@@ -211,7 +212,7 @@ export default function Navbar() {
                           href="/dashboard/blogs"
                           className="flex items-center w-full"
                         >
-                          <FileText
+                          <PenTool
                             size={16}
                             className="mr-2.5 text-muted-foreground"
                           />
