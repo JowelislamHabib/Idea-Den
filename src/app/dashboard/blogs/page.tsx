@@ -94,7 +94,7 @@ export default function DashboardBlogsPage() {
                 <p className="text-sm text-muted-foreground mt-1 mb-4">
                   Generate your first AI blog to get started.
                 </p>
-                <Link href="/blogs/generate" className={buttonVariants({ className: "flex items-center" })}>
+                <Link href="/generate/blogs" className={buttonVariants({ className: "flex items-center" })}>
                     <Plus className="mr-1.5 size-4" /> Generate Blog
                 </Link>
               </div>

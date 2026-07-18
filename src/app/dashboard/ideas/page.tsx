@@ -94,7 +94,7 @@ export default function DashboardIdeasPage() {
                 <p className="text-sm text-muted-foreground mt-1 mb-4">
                   Generate your first project idea to get started.
                 </p>
-                <Link href="/ideas/generate" className={buttonVariants({ className: "flex items-center" })}>
+                <Link href="/generate/ideas" className={buttonVariants({ className: "flex items-center" })}>
                     <Plus className="mr-1.5 size-4" /> Generate Idea
                 </Link>
               </div>

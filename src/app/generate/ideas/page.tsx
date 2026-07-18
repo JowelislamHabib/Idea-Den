@@ -70,7 +70,7 @@ export default function GeneratePage() {
     },
     onSuccess: (data) => {
       toast.success("Idea generated successfully!");
-      router.push(`/idea/${data.idea._id}`);
+      router.push(`/explore/ideas/${data.idea._id}`);
     },
     onError: (error) => {
       toast.error(error instanceof Error ? error.message : "Generation failed. Please try again.");

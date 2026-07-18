@@ -100,7 +100,7 @@ export default function IdeaDetailPage({
           This project idea may have been deleted or is not public.
         </p>
         <Link
-          href="/explore"
+          href="/explore/ideas"
           className="text-primary hover:underline font-semibold"
         >
           Browse project ideas
@@ -116,7 +116,7 @@ export default function IdeaDetailPage({
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SlideUp>
           <Link
-            href="/explore"
+            href="/explore/ideas"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground mb-6 transition-colors"
           >
             <ArrowLeft className="size-4" /> Back to Explore

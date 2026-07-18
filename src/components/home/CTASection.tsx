@@ -16,7 +16,7 @@ export function CTASection() {
             project blueprints and generate articles using custom templates in seconds.
           </p>
           <Link
-            href="/ideas/generate"
+            href="/generate/ideas"
             className={buttonVariants({ size: "lg", variant: "secondary" }) + " font-bold px-8 h-12"}
           >
             Get Started Free <ArrowRight className="ml-2 size-4" />

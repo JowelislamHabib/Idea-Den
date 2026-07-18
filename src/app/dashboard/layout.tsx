@@ -48,7 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 Manage your profile and generated ideas.
               </p>
             </div>
-            <Link href="/ideas/generate" className={buttonVariants({ className: "flex items-center" })}>
+            <Link href="/generate/ideas" className={buttonVariants({ className: "flex items-center" })}>
                 <Plus className="mr-1.5 size-4" /> New Idea
             </Link>
           </div>

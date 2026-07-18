@@ -32,10 +32,10 @@ export function HeroSection() {
 
         <SlideUp delay={0.3}>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/ideas/generate" className={buttonVariants({ size: "lg" }) + " font-bold px-8 h-12"}>
+            <Link href="/generate/ideas" className={buttonVariants({ size: "lg" }) + " font-bold px-8 h-12"}>
               Generate Blueprint <ArrowRight className="ml-2 size-4" />
             </Link>
-            <Link href="/blogs/generate" className={buttonVariants({ variant: "outline", size: "lg" }) + " font-bold px-8 h-12"}>
+            <Link href="/generate/blogs" className={buttonVariants({ variant: "outline", size: "lg" }) + " font-bold px-8 h-12"}>
               Write Article <ArrowRight className="ml-2 size-4" />
             </Link>
           </div>

@@ -79,7 +79,7 @@ export default function BlogGeneratePage() {
     },
     onSuccess: (data) => {
       toast.success("Blog generated successfully!");
-      router.push(`/blog/${data.blog._id}`);
+      router.push(`/explore/blogs/${data.blog._id}`);
     },
     onError: (error) => {
       toast.error(error instanceof Error ? error.message : "Generation failed. Please try again.");

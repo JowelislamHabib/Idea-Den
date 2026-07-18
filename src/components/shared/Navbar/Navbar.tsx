@@ -83,7 +83,7 @@ export default function Navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <Link href="/explore" className="cursor-pointer w-full">
+                  <Link href="/explore/ideas" className="cursor-pointer w-full">
                     Ideas
                   </Link>
                 </DropdownMenuItem>
@@ -100,8 +100,7 @@ export default function Navbar() {
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 outline-none ${
-                      pathname.startsWith("/ideas/generate") ||
-                      pathname.startsWith("/blogs/generate")
+                      pathname.startsWith("/generate")
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     }`}
@@ -111,7 +110,7 @@ export default function Navbar() {
                   <DropdownMenuContent>
                     <DropdownMenuItem>
                       <Link
-                        href="/ideas/generate"
+                        href="/generate/ideas"
                         className="cursor-pointer w-full"
                       >
                         Project Idea
@@ -119,7 +118,7 @@ export default function Navbar() {
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link
-                        href="/blogs/generate"
+                        href="/generate/blogs"
                         className="cursor-pointer w-full"
                       >
                         Blog Article
@@ -306,7 +305,7 @@ export default function Navbar() {
                   Explore
                 </div>
                 <Link
-                  href="/explore"
+                  href="/explore/ideas"
                   onClick={() => setMobileOpen(false)}
                   className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
                     pathname === "/explore"
@@ -336,7 +335,7 @@ export default function Navbar() {
                       Generate
                     </div>
                     <Link
-                      href="/ideas/generate"
+                      href="/generate/ideas"
                       onClick={() => setMobileOpen(false)}
                       className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
                         pathname === "/ideas/generate"
@@ -347,7 +346,7 @@ export default function Navbar() {
                       Project Idea
                     </Link>
                     <Link
-                      href="/blogs/generate"
+                      href="/generate/blogs"
                       onClick={() => setMobileOpen(false)}
                       className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
                         pathname === "/blogs/generate"
