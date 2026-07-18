@@ -11,8 +11,8 @@ import {
   Pie,
   Cell,
   ResponsiveContainer,
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -248,6 +248,14 @@ export default function DashboardOverviewPage() {
               ) : (
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
+                    <defs>
+                      {COLORS.map((color, index) => (
+                        <linearGradient key={`pie1-${index}`} id={`pie1-gradient-${index}`} x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0%" stopColor={color} stopOpacity={1} />
+                          <stop offset="100%" stopColor={color} stopOpacity={0.6} />
+                        </linearGradient>
+                      ))}
+                    </defs>
                     <Pie
                       data={stackData}
                       cx="50%"
@@ -256,8 +264,8 @@ export default function DashboardOverviewPage() {
                       outerRadius={105}
                       paddingAngle={5}
                       dataKey="value"
-                      stroke="rgba(255,255,255,0.1)"
-                      strokeWidth={2}
+                      stroke="var(--background)"
+                      strokeWidth={3}
                       label={({ name, percent }) =>
                         `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
                       }
@@ -265,8 +273,7 @@ export default function DashboardOverviewPage() {
                       {stackData.map((_entry, index) => (
                         <Cell
                           key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                          fillOpacity={0.85}
+                          fill={`url(#pie1-gradient-${index % COLORS.length})`}
                         />
                       ))}
                     </Pie>
@@ -291,6 +298,14 @@ export default function DashboardOverviewPage() {
               ) : (
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
+                    <defs>
+                      {COLORS.map((color, index) => (
+                        <linearGradient key={`pie2-${index}`} id={`pie2-gradient-${index}`} x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0%" stopColor={color} stopOpacity={1} />
+                          <stop offset="100%" stopColor={color} stopOpacity={0.6} />
+                        </linearGradient>
+                      ))}
+                    </defs>
                     <Pie
                       data={topicData}
                       cx="50%"
@@ -299,8 +314,8 @@ export default function DashboardOverviewPage() {
                       outerRadius={105}
                       paddingAngle={5}
                       dataKey="value"
-                      stroke="rgba(255,255,255,0.1)"
-                      strokeWidth={2}
+                      stroke="var(--background)"
+                      strokeWidth={3}
                       label={({ name, percent }) =>
                         `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
                       }
@@ -308,8 +323,7 @@ export default function DashboardOverviewPage() {
                       {topicData.map((_entry, index) => (
                         <Cell
                           key={`cell-${index}`}
-                          fill={COLORS[(index + 5) % COLORS.length]}
-                          fillOpacity={0.85}
+                          fill={`url(#pie2-gradient-${(index + 5) % COLORS.length})`}
                         />
                       ))}
                     </Pie>
@@ -334,7 +348,17 @@ export default function DashboardOverviewPage() {
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={350}>
-                <LineChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorIdeas" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#0066FF" stopOpacity={1} />
+                      <stop offset="95%" stopColor="#0066FF" stopOpacity={0.1} />
+                    </linearGradient>
+                    <linearGradient id="colorBlogs" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#8884D8" stopOpacity={1} />
+                      <stop offset="95%" stopColor="#8884D8" stopOpacity={0.1} />
+                    </linearGradient>
+                  </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
                   <XAxis 
                     dataKey="date" 
@@ -352,25 +376,27 @@ export default function DashboardOverviewPage() {
                     tickFormatter={(val) => Math.floor(val) === val ? val : ""}
                   />
                   <Tooltip content={<CustomTooltip />} />
-                  <Line
+                  <Area
                     type="monotone"
                     dataKey="ideas"
                     name="Ideas Generated"
                     stroke="#0066FF"
-                    strokeWidth={4}
-                    dot={{ fill: "#0066FF", strokeWidth: 2, r: 4, stroke: "var(--background)" }}
-                    activeDot={{ r: 6, strokeWidth: 0 }}
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorIdeas)"
+                    activeDot={{ r: 6, strokeWidth: 0, fill: "#0066FF" }}
                   />
-                  <Line
+                  <Area
                     type="monotone"
                     dataKey="blogs"
                     name="Blogs Generated"
                     stroke="#8884D8"
-                    strokeWidth={4}
-                    dot={{ fill: "#8884D8", strokeWidth: 2, r: 4, stroke: "var(--background)" }}
-                    activeDot={{ r: 6, strokeWidth: 0 }}
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorBlogs)"
+                    activeDot={{ r: 6, strokeWidth: 0, fill: "#8884D8" }}
                   />
-                </LineChart>
+                </AreaChart>
               </ResponsiveContainer>
             )}
           </CardContent>
