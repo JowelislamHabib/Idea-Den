@@ -2,6 +2,7 @@
 
 import { useSession } from "@/lib/auth-client";
 import { apiClient } from "@/lib/api/client";
+import { getToken } from "@/lib/api/get-token";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlideUp } from "@/components/ui/motion-wrapper";
@@ -47,17 +48,21 @@ export default function DashboardBlogsPage() {
 
   const { data, isPending } = useQuery({
     queryKey: ["my-blogs"],
-    queryFn: () =>
-      apiClient<{ blogs: DashboardBlog[] }>(`/api/blogs/mine?userId=${userId}`),
+    queryFn: async () => {
+      const token = await getToken();
+      return apiClient<{ blogs: DashboardBlog[] }>("/api/blogs/mine", { token });
+    },
     enabled: !!userId,
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) =>
-      apiClient(`/api/blogs/${id}`, {
+    mutationFn: async (id: string) => {
+      const token = await getToken();
+      return apiClient(`/api/blogs/${id}`, {
         method: "DELETE",
-        body: JSON.stringify({ userId }),
-      }),
+        token,
+      });
+    },
     onSuccess: () => {
       toast.success("Blog deleted");
       queryClient.invalidateQueries({ queryKey: ["my-blogs"] });

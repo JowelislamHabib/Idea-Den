@@ -2,6 +2,7 @@
 
 import { useSession } from "@/lib/auth-client";
 import { apiClient } from "@/lib/api/client";
+import { getToken } from "@/lib/api/get-token";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlideUp } from "@/components/ui/motion-wrapper";
@@ -67,15 +68,19 @@ export default function DashboardOverviewPage() {
 
   const { data: ideasData, isPending: ideasPending } = useQuery({
     queryKey: ["my-ideas"],
-    queryFn: () =>
-      apiClient<{ ideas: DashboardIdea[] }>(`/api/ideas/mine?userId=${userId}`),
+    queryFn: async () => {
+      const token = await getToken();
+      return apiClient<{ ideas: DashboardIdea[] }>("/api/ideas/mine", { token });
+    },
     enabled: !!userId,
   });
 
   const { data: blogsData, isPending: blogsPending } = useQuery({
     queryKey: ["my-blogs"],
-    queryFn: () =>
-      apiClient<{ blogs: DashboardBlog[] }>(`/api/blogs/mine?userId=${userId}`),
+    queryFn: async () => {
+      const token = await getToken();
+      return apiClient<{ blogs: DashboardBlog[] }>("/api/blogs/mine", { token });
+    },
     enabled: !!userId,
   });
 

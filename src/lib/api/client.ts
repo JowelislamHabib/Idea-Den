@@ -1,17 +1,18 @@
 const API_BASE = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000";
 
 interface FetchOptions extends RequestInit {
-  token?: string;
+  token?: string | null;
 }
 
 export async function apiClient<T>(
   endpoint: string,
   options: FetchOptions = {}
 ): Promise<T> {
-  const { token: _token, ...fetchOptions } = options;
+  const { token, ...fetchOptions } = options;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers as Record<string, string>),
   };
 

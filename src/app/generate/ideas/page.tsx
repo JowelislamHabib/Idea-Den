@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import { apiClient } from "@/lib/api/client";
+import { getToken } from "@/lib/api/get-token";
 import { toast } from "sonner";
 import { Sparkles, X, Plus, Clock, Loader2, CheckCircle2, Zap } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -50,22 +51,24 @@ export default function GeneratePage() {
 
   const { data: quota, isLoading: quotaLoading } = useQuery({
     queryKey: ["userQuota", session?.user?.id],
-    queryFn: () => apiClient<{ count: number; limit: number; isPro: boolean }>(`/api/ideas/quota?userId=${session?.user?.id}`),
+    queryFn: async () => {
+      const token = await getToken();
+      return apiClient<{ count: number; limit: number; isPro: boolean }>("/api/ideas/quota", { token });
+    },
     enabled: !!session?.user?.id,
   });
 
   const generateMutation = useMutation({
     mutationFn: async () => {
+      const token = await getToken();
       return apiClient<{ success: boolean; idea: { _id: string } }>("/api/ideas/generate", {
         method: "POST",
         body: JSON.stringify({
           interests: interests.trim(),
           timeAvailable,
           techStack,
-          userId: session?.user?.id || "",
-          userName: session?.user?.name || "",
-          userEmail: session?.user?.email || "",
         }),
+        token,
       });
     },
     onSuccess: (data) => {

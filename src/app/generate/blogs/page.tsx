@@ -12,6 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import { apiClient } from "@/lib/api/client";
+import { getToken } from "@/lib/api/get-token";
 import { toast } from "sonner";
 import { Sparkles, X, Plus, Clock, Loader2, CheckCircle2, Type, FileText, Zap } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -56,12 +57,16 @@ export default function BlogGeneratePage() {
 
   const { data: quota, isLoading: quotaLoading } = useQuery({
     queryKey: ["userBlogQuota", session?.user?.id],
-    queryFn: () => apiClient<{ count: number; limit: number; isPro: boolean }>(`/api/blogs/quota?userId=${session?.user?.id}`),
+    queryFn: async () => {
+      const token = await getToken();
+      return apiClient<{ count: number; limit: number; isPro: boolean }>("/api/blogs/quota", { token });
+    },
     enabled: !!session?.user?.id,
   });
 
   const generateMutation = useMutation({
     mutationFn: async () => {
+      const token = await getToken();
       return apiClient<{ success: boolean; blog: { _id: string } }>("/api/blogs/generate", {
         method: "POST",
         body: JSON.stringify({
@@ -71,10 +76,8 @@ export default function BlogGeneratePage() {
           length,
           keywords,
           additionalInstructions,
-          userId: session?.user?.id || "",
-          userName: session?.user?.name || "",
-          userEmail: session?.user?.email || "",
         }),
+        token,
       });
     },
     onSuccess: (data) => {
