@@ -1,0 +1,141 @@
+import { FadeIn, SlideUp } from "@/components/ui/motion-wrapper";
+import { Lightbulb, PenTool, CheckCircle2, ArrowRight, ListChecks } from "lucide-react";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const blueprintFeatures = [
+  "Catchy project name & tagline",
+  "Problem statement & 4+ target personas",
+  "Core feature specifications",
+  "Tech stack by layer (frontend, backend, DB, AI)",
+  "Competitive landscape & differentiation",
+  "Elevator pitch & first steps roadmap",
+];
+
+const contentFeatures = [
+  "SEO-optimized title & meta description",
+  "Full markdown-formatted article body",
+  "Natural keyword integration (no stuffing)",
+  "Heading hierarchy for readability",
+  "Tone-matched (Professional, Casual, Humorous)",
+  "Fresh content on regeneration (no duplicates)",
+];
+
+export function SolutionSection() {
+  return (
+    <section className="relative py-24 sm:py-28 overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <FadeIn className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+            Two Powerful Tools. One Creative Workshop.
+          </h2>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            IdeaDen is a purpose-built creative environment with two specialized
+            engines designed for two distinct creative challenges.
+          </p>
+        </FadeIn>
+
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
+          <SlideUp>
+            <div className="group relative rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-primary/[0.02] p-8 sm:p-10 transition-all hover:shadow-xl hover:shadow-primary/5 hover:border-primary/40">
+              <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-primary/5 blur-[60px] pointer-events-none" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20">
+                    <Lightbulb className="size-6 text-primary" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-primary/60 uppercase tracking-widest">Engine One</div>
+                    <h3 className="text-xl font-bold">The Blueprint Engine</h3>
+                  </div>
+                </div>
+
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  Tell IdeaDen about your interests, tech stack, and time
+                  constraints. It acts like a senior PM, generating a complete
+                  PRD with market analysis, feature specs, competitor insights,
+                  and an actionable roadmap — in under 60 seconds.
+                </p>
+
+                <div className="flex items-center gap-2 mb-5 text-sm font-semibold text-foreground/70">
+                  <ListChecks className="size-4" />
+                  What you get:
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  {blueprintFeatures.map((f, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-foreground/80">
+                      <CheckCircle2 className="size-4 text-primary shrink-0 mt-0.5" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/generate/ideas"
+                  className={cn(
+                    buttonVariants(),
+                    "rounded-full w-full sm:w-auto group shadow-lg shadow-primary/20"
+                  )}
+                >
+                  Generate a Blueprint
+                  <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+          </SlideUp>
+
+          <SlideUp delay={0.15}>
+            <div className="group relative rounded-3xl border border-border/60 bg-gradient-to-br from-background via-background to-accent/20 p-8 sm:p-10 transition-all hover:shadow-xl hover:shadow-accent/10 hover:border-accent/40">
+              <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-accent/10 blur-[60px] pointer-events-none" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/30 border border-accent/40">
+                    <PenTool className="size-6 text-accent-foreground" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-foreground/40 uppercase tracking-widest">Engine Two</div>
+                    <h3 className="text-xl font-bold">The Content Engine</h3>
+                  </div>
+                </div>
+
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  Feed a topic into IdeaDen, choose your format and tone, and
+                  watch it craft a complete, SEO-optimized, markdown-formatted
+                  blog post ready for publication. No more editing robotic
+                  garbage for hours.
+                </p>
+
+                <div className="flex items-center gap-2 mb-5 text-sm font-semibold text-foreground/70">
+                  <ListChecks className="size-4" />
+                  What you get:
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  {contentFeatures.map((f, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-foreground/80">
+                      <CheckCircle2 className="size-4 text-accent-foreground/70 shrink-0 mt-0.5" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/generate/blogs"
+                  className={cn(
+                    buttonVariants({ variant: "secondary" }),
+                    "rounded-full w-full sm:w-auto group shadow-lg shadow-accent/20"
+                  )}
+                >
+                  Write an Article
+                  <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+          </SlideUp>
+        </div>
+      </div>
+    </section>
+  );
+}

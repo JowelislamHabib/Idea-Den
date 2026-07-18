@@ -47,7 +47,7 @@ export default function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b bg-background">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           {/* Logo */}
           <Link
             href="/"
@@ -287,7 +287,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div className="fixed inset-x-0 top-16 z-50 border-b bg-background shadow-lg md:hidden h-[calc(100vh-4rem)] overflow-y-auto">
-          <div className="mx-auto max-w-6xl px-4 py-4 pb-12">
+          <div className="mx-auto max-w-7xl px-4 py-4 pb-12">
             <nav className="flex flex-col gap-2">
               <Link
                 href="/"

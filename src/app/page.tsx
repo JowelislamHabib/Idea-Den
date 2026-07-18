@@ -1,23 +1,25 @@
 import { HeroSection } from "@/components/home/HeroSection";
-import { FeaturesSection } from "@/components/home/FeaturesSection";
+import { ProblemSection } from "@/components/home/ProblemSection";
+import { SolutionSection } from "@/components/home/SolutionSection";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
-import { StacksSection } from "@/components/home/StacksSection";
-import { StatsSection } from "@/components/home/StatsSection";
-import { HighlightsSection } from "@/components/home/HighlightsSection";
+import { WhyChooseSection } from "@/components/home/WhyChooseSection";
+import { PersonaSection } from "@/components/home/PersonaSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { FAQSection } from "@/components/home/FAQSection";
 import { CTASection } from "@/components/home/CTASection";
 
 export default function Home() {
   return (
-    <>
+    <main className="flex flex-col min-h-screen">
       <HeroSection />
-      <FeaturesSection />
+      <ProblemSection />
+      <SolutionSection />
       <HowItWorksSection />
-      <StacksSection />
-      <StatsSection />
-      <HighlightsSection />
+      <WhyChooseSection />
+      <PersonaSection />
       <TestimonialsSection />
+      <FAQSection />
       <CTASection />
-    </>
+    </main>
   );
 }

@@ -45,7 +45,7 @@ Use `import "dotenv/config"` as the **first** import (e.g. `config/db.ts:1`). Do
 - **Component exports:** Named exports only. File names: PascalCase.
 - **Directories:** UI primitives at `@/components/ui/`, shared layout at `@/components/shared/`, feature components at `@/components/{feature}/`.
 - **DB:** Native MongoDB driver only. **No ORMs.**
-- **Page wrappers:** All pages use `mx-auto max-w-6xl px-4 sm:px-6` for vertical alignment with Navbar/Footer.
+- **Page wrappers:** Navbar, Footer, and all home sections use `mx-auto max-w-7xl px-4 sm:px-6` for alignment. Other (non-home) pages use `max-w-6xl px-4 sm:px-6`.
 - **Route groups:** Auth pages in `(auth)/login`, `(auth)/register`.
 
 ## Notable
