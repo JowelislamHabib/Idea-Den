@@ -19,6 +19,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ExploreIdea {
   _id: string;
@@ -35,6 +42,7 @@ function ExploreContent() {
 
   const initialSearch = searchParams.get("q") || "";
   const sort = searchParams.get("sort") || "newest";
+  const estimatedDuration = searchParams.get("estimatedDuration") || "";
   const pageParam = searchParams.get("page");
   const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
 
@@ -81,12 +89,27 @@ function ExploreContent() {
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
+  const handleDurationChange = (newDuration: string | null) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (!newDuration || newDuration === "all") {
+      params.delete("estimatedDuration");
+    } else {
+      params.set("estimatedDuration", newDuration);
+    }
+    params.set("page", "1");
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   const { data, isPending } = useQuery({
-    queryKey: ["explore", searchParams.get("q"), sort, currentPage],
+    queryKey: ["explore", searchParams.get("q"), sort, estimatedDuration, currentPage],
     queryFn: () => {
       const params = new URLSearchParams();
       const currentQ = searchParams.get("q");
       if (currentQ) params.set("q", currentQ);
+
+      if (estimatedDuration && estimatedDuration !== "all") {
+        params.set("estimatedDuration", estimatedDuration);
+      }
 
       params.set("sort", sort);
       params.set("page", currentPage.toString());
@@ -128,7 +151,20 @@ function ExploreContent() {
               />
             </div>
 
-            <div className="w-full sm:w-auto overflow-x-auto">
+            <div className="w-full sm:w-auto overflow-x-auto flex flex-col sm:flex-row gap-4 items-center">
+              <Select value={estimatedDuration || null} onValueChange={handleDurationChange}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Duration" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Any Duration</SelectItem>
+                  <SelectItem value="1-week">~1 Week</SelectItem>
+                  <SelectItem value="2-weeks">~2 Weeks</SelectItem>
+                  <SelectItem value="1-month">~1 Month</SelectItem>
+                  <SelectItem value="2-months">~2 Months</SelectItem>
+                </SelectContent>
+              </Select>
+
               <Tabs value={sort} onValueChange={handleSortChange}>
                 <TabsList className="w-full sm:w-auto">
                   <TabsTrigger value="newest">Newest</TabsTrigger>

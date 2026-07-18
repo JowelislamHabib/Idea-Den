@@ -19,6 +19,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ExploreBlog {
   _id: string;
@@ -38,6 +45,7 @@ function ExploreBlogsContent() {
 
   const initialSearch = searchParams.get("q") || "";
   const sort = searchParams.get("sort") || "newest";
+  const template = searchParams.get("template") || "";
   const pageParam = searchParams.get("page");
   const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
 
@@ -84,12 +92,27 @@ function ExploreBlogsContent() {
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
+  const handleTemplateChange = (newTemplate: string | null) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (!newTemplate || newTemplate === "all") {
+      params.delete("template");
+    } else {
+      params.set("template", newTemplate);
+    }
+    params.set("page", "1");
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   const { data, isPending } = useQuery({
-    queryKey: ["explore-blogs", searchParams.get("q"), sort, currentPage],
+    queryKey: ["explore-blogs", searchParams.get("q"), sort, template, currentPage],
     queryFn: () => {
       const params = new URLSearchParams();
       const currentQ = searchParams.get("q");
       if (currentQ) params.set("q", currentQ);
+
+      if (template && template !== "all") {
+        params.set("template", template);
+      }
 
       params.set("sort", sort);
       params.set("page", currentPage.toString());
@@ -131,7 +154,22 @@ function ExploreBlogsContent() {
               />
             </div>
 
-            <div className="w-full sm:w-auto overflow-x-auto">
+            <div className="w-full sm:w-auto overflow-x-auto flex flex-col sm:flex-row gap-4 items-center">
+              <Select value={template || null} onValueChange={handleTemplateChange}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Template" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Templates</SelectItem>
+                  <SelectItem value="Standard Article">Standard Article</SelectItem>
+                  <SelectItem value="How-To Guide">How-To Guide</SelectItem>
+                  <SelectItem value="Listicle">Listicle</SelectItem>
+                  <SelectItem value="Thought Leadership">Thought Leadership</SelectItem>
+                  <SelectItem value="Case Study">Case Study</SelectItem>
+                  <SelectItem value="Review">Review</SelectItem>
+                </SelectContent>
+              </Select>
+
               <Tabs value={sort} onValueChange={handleSortChange}>
                 <TabsList className="w-full sm:w-auto">
                   <TabsTrigger value="newest">Newest</TabsTrigger>
