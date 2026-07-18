@@ -24,6 +24,7 @@
 .DS_Store
 *.pem
 PRD.md
+CONTENT.md
 
 # debug
 npm-debug.log*

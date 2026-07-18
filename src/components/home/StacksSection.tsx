@@ -1,47 +1,69 @@
-import { SlideUp } from "@/components/ui/motion-wrapper";
+import {
+  SlideUp,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/ui/motion-wrapper";
 
-const stacks = [
-  { name: "React", color: "bg-blue-500/10 text-blue-600 dark:text-blue-400" },
-  { name: "Next.js", color: "bg-foreground/10 text-foreground" },
-  { name: "Node.js", color: "bg-green-500/10 text-green-600 dark:text-green-400" },
-  { name: "Python", color: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400" },
-  { name: "MongoDB", color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" },
-  { name: "PostgreSQL", color: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400" },
-  { name: "Express", color: "bg-gray-500/10 text-gray-600 dark:text-gray-400" },
-  { name: "Django", color: "bg-teal-500/10 text-teal-600 dark:text-teal-400" },
-  { name: "FastAPI", color: "bg-red-500/10 text-red-600 dark:text-red-400" },
-  { name: "Vue.js", color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" },
-  { name: "Svelte", color: "bg-orange-500/10 text-orange-600 dark:text-orange-400" },
-  { name: "Go", color: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400" },
+const categories = [
+  {
+    label: "Frontend",
+    stacks: ["React", "Next.js", "Vue", "Svelte", "Angular", "Tailwind CSS"],
+    color: "text-indigo-500",
+  },
+  {
+    label: "Backend",
+    stacks: ["Node.js", "Express", "Python", "FastAPI", "Go", "Rails"],
+    color: "text-emerald-500",
+  },
+  {
+    label: "Database",
+    stacks: ["MongoDB", "PostgreSQL", "MySQL", "Redis", "Firebase", "Supabase"],
+    color: "text-amber-500",
+  },
+  {
+    label: "Cloud & DevOps",
+    stacks: ["AWS", "Vercel", "Docker", "GCP", "Cloudflare", "Netlify"],
+    color: "text-cyan-500",
+  },
 ];
 
 export function StacksSection() {
   return (
-    <section className="py-24 bg-background">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <SlideUp>
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Built for modern tech stacks & custom templates
-            </h2>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Idea AI understands a wide range of frameworks for your projects, and seamlessly adapts to your custom prompt templates for articles.
-            </p>
-          </div>
+    <section className="border-t bg-muted/20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-24">
+        <SlideUp className="text-center mb-14">
+          <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+            Supports Your Entire Stack
+          </h2>
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+            IdeaDen tailors blueprints to the technologies you actually use — or
+            recommends the best fit for your project.
+          </p>
         </SlideUp>
 
-        <SlideUp delay={0.1}>
-          <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
-            {stacks.map((stack) => (
-              <span
-                key={stack.name}
-                className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold ${stack.color}`}
-              >
-                {stack.name}
-              </span>
-            ))}
-          </div>
-        </SlideUp>
+        <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {categories.map((cat, i) => (
+            <StaggerItem key={cat.label} delay={i * 80}>
+              <div className="rounded-xl border bg-background/60 p-5 backdrop-blur-sm h-full">
+                <h3
+                  className={`text-sm font-semibold mb-3 ${cat.color}`}
+                >
+                  {cat.label}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {cat.stacks.map((stack) => (
+                    <span
+                      key={stack}
+                      className="rounded-md bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"
+                    >
+                      {stack}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
       </div>
     </section>
   );

@@ -1,79 +1,107 @@
-import { SlideUp } from "@/components/ui/motion-wrapper";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  SlideUp,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/ui/motion-wrapper";
 
-const highlights = [
+const sampleIdeas = [
   {
-    type: "Project Idea",
-    title: "E-Commerce Platform",
-    domain: "Web Application",
-    tags: ["Next.js", "Stripe", "MongoDB"],
-    meta: "12 features",
+    title: "SkillBridge",
+    tagline: "Micro-mentorship marketplace for developers",
+    tags: ["React", "Node.js", "MongoDB"],
+    type: "Project Idea" as const,
+    sections: [
+      "Problem: Junior devs lack access to affordable, targeted mentorship",
+      "4+ target personas identified",
+      "Full tech stack with WebSocket real-time messaging",
+    ],
   },
   {
-    type: "Blog Article",
-    title: "The Future of AI in Web Dev",
-    domain: "Thought Leadership",
-    tags: ["Custom Tone", "1500 words"],
-    meta: "Long Form",
+    title: "DevPulse",
+    tagline: "Real-time GitHub contribution analytics dashboard",
+    tags: ["Next.js", "Recharts", "PostgreSQL"],
+    type: "Project Idea" as const,
+    sections: [
+      "Problem: Developers can't visualize their growth over time",
+      "Competitor analysis vs GitHub Insights & Graphite",
+      "Monetization strategy included",
+    ],
   },
   {
-    type: "Project Idea",
-    title: "Real-Time Chat App",
-    domain: "Web Application",
-    tags: ["React", "Socket.io", "Express"],
-    meta: "15 features",
+    title: "The Pragmatic Guide to API Rate Limiting",
+    tagline:
+      "Token buckets, sliding windows, and production-ready patterns",
+    tags: ["Technical", "Backend", "How-To Guide"],
+    type: "Blog" as const,
+    sections: [
+      "SEO-optimized meta description (156 chars)",
+      "Rich markdown with code examples",
+      "Professional tone, 1200+ words",
+    ],
   },
-  {
-    type: "Blog Article",
-    title: "Building REST APIs with FastAPI",
-    domain: "How-To Guide",
-    tags: ["Educational", "Code Snippets"],
-    meta: "Short Form",
-  }
 ];
 
 export function HighlightsSection() {
   return (
-    <section className="py-24 bg-background">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <SlideUp>
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Sample generations
-            </h2>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              See what Idea AI generates. From structured project ideas to engaging articles driven by custom prompt templates.
-            </p>
-          </div>
+    <section className="border-t bg-muted/20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-24">
+        <SlideUp className="text-center mb-14">
+          <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+            See What IdeaDen Can Create
+          </h2>
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+            Sample outputs from the platform. Each one generated in a single
+            pass — structured, actionable, and ready to use.
+          </p>
         </SlideUp>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {highlights.map((item, i) => (
-            <SlideUp key={item.title} delay={i * 0.1}>
-              <Card className="h-full">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <Badge variant={item.type === "Blog Article" ? "default" : "secondary"}>{item.domain}</Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {item.meta}
+        <StaggerContainer className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {sampleIdeas.map((item, i) => (
+            <StaggerItem key={item.title} delay={i * 80}>
+              <div className="group rounded-xl border bg-background/60 p-6 backdrop-blur-sm transition-colors hover:bg-background hover:border-primary/20 flex flex-col h-full">
+                <div className="flex items-center justify-between mb-3">
+                  <Badge
+                    variant="secondary"
+                    className="text-[10px] font-semibold uppercase tracking-wider"
+                  >
+                    {item.type}
+                  </Badge>
+                </div>
+
+                <h3 className="text-lg font-bold tracking-tight mb-1">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  {item.tagline}
+                </p>
+
+                <ul className="space-y-1.5 mb-4 flex-1">
+                  {item.sections.map((s) => (
+                    <li
+                      key={s}
+                      className="text-xs text-muted-foreground/80 leading-relaxed flex items-start gap-2"
+                    >
+                      <span className="mt-1.5 size-1 shrink-0 rounded-full bg-primary/30" />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {item.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+                    >
+                      {tag}
                     </span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-3 line-clamp-2">
-                    {item.title}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {item.tags.map((tech) => (
-                      <Badge key={tech} variant="outline" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </SlideUp>
+                  ))}
+                </div>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

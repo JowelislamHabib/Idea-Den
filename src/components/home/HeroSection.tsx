@@ -1,45 +1,63 @@
-"use client";
-
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { SlideUp } from "@/components/ui/motion-wrapper";
+import { buttonVariants } from "@/components/ui/button";
+import { FadeIn } from "@/components/ui/motion-wrapper";
 
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-muted/20">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
+    <section className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/3 h-[600px] w-[900px] rounded-full bg-primary/[0.04] blur-3xl" />
+        <div className="absolute right-0 top-1/2 h-[400px] w-[400px] rounded-full bg-primary/[0.03] blur-3xl" />
+      </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 py-24 text-center">
-        <SlideUp>
-          <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-4 py-1.5 text-sm font-medium text-muted-foreground mb-8 backdrop-blur">
-            <Sparkles className="size-4 text-primary" />
-            Powered by Idea AI
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-20 pb-24 sm:pt-28 sm:pb-32">
+        <FadeIn className="flex flex-col items-center text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/80 px-4 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-sm mb-8">
+            <Sparkles className="size-3.5 text-primary" />
+            AI-Powered Ideation &amp; Content Engine
           </div>
-        </SlideUp>
 
-        <SlideUp delay={0.1}>
-          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl max-w-4xl mx-auto leading-[1.1]">
-            Generate Project Ideas & <span className="text-primary">AI Blog Articles</span>
+          <h1 className="font-heading text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl max-w-4xl leading-[1.1]">
+            Stop Staring at a Blank Screen.
+            <br />
+            <span className="text-muted-foreground">
+              Start Building with IdeaDen.
+            </span>
           </h1>
-        </SlideUp>
 
-        <SlideUp delay={0.2}>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            IdeaDen is your AI-powered ideation engine. Generate structured project ideas, or use our AI Blog generator featuring custom prompt templates and adjustable output lengths to craft the perfect article.
+          <p className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
+            IdeaDen uses advanced AI to help you generate fully-formed project
+            blueprints and publish-ready blog content — in minutes, not weeks.
           </p>
-        </SlideUp>
 
-        <SlideUp delay={0.3}>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/generate/ideas" className={buttonVariants({ size: "lg" }) + " font-bold px-8 h-12"}>
-              Generate Blueprint <ArrowRight className="ml-2 size-4" />
+          <div className="mt-10 flex flex-col sm:flex-row items-center gap-3">
+            <Link
+              href="/generate/ideas"
+              className={buttonVariants({
+                size: "lg",
+                className: "rounded-xl px-7 font-semibold",
+              })}
+            >
+              Try IdeaDen Free
+              <ArrowRight className="ml-2 size-4" />
             </Link>
-            <Link href="/generate/blogs" className={buttonVariants({ variant: "outline", size: "lg" }) + " font-bold px-8 h-12"}>
-              Write Article <ArrowRight className="ml-2 size-4" />
+            <Link
+              href="#how-it-works"
+              className={buttonVariants({
+                variant: "outline",
+                size: "lg",
+                className: "rounded-xl px-7 font-semibold",
+              })}
+            >
+              See How It Works
             </Link>
           </div>
-        </SlideUp>
+
+          <p className="mt-8 text-xs text-muted-foreground/70">
+            Free tier available &middot; No credit card required
+          </p>
+        </FadeIn>
       </div>
     </section>
   );

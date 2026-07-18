@@ -1,30 +1,39 @@
-import { SlideUp } from "@/components/ui/motion-wrapper";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion-wrapper";
 
 const stats = [
-  { value: "3", label: "Seconds to generate" },
-  { value: "100%", label: "Free to use" },
-  { value: "12+", label: "Supported stacks" },
-  { value: "0", label: "Setup required" },
+  { value: "50K+", label: "Blueprints Generated" },
+  { value: "100K+", label: "Blog Posts Written" },
+  { value: "4.8/5", label: "Average Rating" },
+  { value: "12h", label: "Avg. Time Saved Per Project" },
 ];
 
 export function StatsSection() {
   return (
-    <section className="py-24 bg-muted/20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+    <section>
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-24">
+        <FadeIn className="text-center mb-14">
+          <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+            Trusted by Creative Minds Worldwide
+          </h2>
+          <p className="mt-3 text-muted-foreground max-w-lg mx-auto">
+            Join thousands of creators using IdeaDen every day.
+          </p>
+        </FadeIn>
+
+        <StaggerContainer className="grid grid-cols-2 gap-6 sm:gap-8 lg:grid-cols-4">
           {stats.map((stat, i) => (
-            <SlideUp key={stat.label} delay={i * 0.1}>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary">
+            <StaggerItem key={stat.label} delay={i * 80}>
+              <div className="text-center rounded-xl border bg-background/60 p-6 backdrop-blur-sm">
+                <div className="text-3xl sm:text-4xl font-bold tracking-tight font-heading">
                   {stat.value}
                 </div>
-                <div className="mt-2 text-sm font-medium text-muted-foreground">
+                <p className="mt-2 text-sm text-muted-foreground">
                   {stat.label}
-                </div>
+                </p>
               </div>
-            </SlideUp>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

@@ -1,65 +1,61 @@
-import { PenLine, Cpu, Sparkles } from "lucide-react";
-import { SlideUp } from "@/components/ui/motion-wrapper";
+import { Crosshair, Cpu, Rocket } from "lucide-react";
+import {
+  FadeIn,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/ui/motion-wrapper";
 
 const steps = [
   {
-    icon: PenLine,
-    step: "01",
-    title: "Describe Your Goal",
+    icon: Crosshair,
+    title: "Tell IdeaDen What You Need",
     description:
-      "Choose to build a software project idea or write a blog. Enter your preferred stack, or pick a custom prompt template and adjustable output length.",
+      "Choose your tool — Blueprint or Blog. Fill in a few simple inputs: your interests, preferred tone, topic, tech stack, whatever's relevant. It takes less than 60 seconds.",
   },
   {
     icon: Cpu,
-    step: "02",
-    title: "Idea AI Generates",
+    title: "IdeaDen's AI Works Its Magic",
     description:
-      "Our AI engine processes your input and drafts your output instantly using advanced reasoning models.",
+      "IdeaDen's specially-tuned AI models analyze your inputs and generate comprehensive, context-aware output. It doesn't just predict words — it crafts structured, actionable, human-quality results.",
   },
   {
-    icon: Sparkles,
-    step: "03",
-    title: "Get Your Output",
+    icon: Rocket,
+    title: "Launch, Publish, Build",
     description:
-      "Receive a structured project architecture or a perfectly formatted, engaging markdown article ready to publish.",
+      "Copy your blog straight into your CMS. Take your blueprint and start coding. Share with your team. Regenerate for a fresh take. Everything IdeaDen produces is yours.",
   },
 ];
 
 export function HowItWorksSection() {
   return (
-    <section className="py-24 bg-muted/20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <SlideUp>
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              How Idea AI works
-            </h2>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Three steps from blank page to a complete blueprint or article.
-            </p>
-          </div>
-        </SlideUp>
+    <section id="how-it-works">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-24">
+        <FadeIn className="text-center mb-14">
+          <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+            From Blank Page to Brilliant
+          </h2>
+          <p className="mt-3 text-muted-foreground max-w-lg mx-auto">
+            How IdeaDen works in three steps.
+          </p>
+        </FadeIn>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <StaggerContainer className="grid gap-8 sm:grid-cols-3">
           {steps.map((step, i) => (
-            <SlideUp key={step.step} delay={i * 0.15}>
-              <div className="relative rounded-xl border bg-background p-8 text-center shadow-sm">
-                <div className="text-xs font-bold text-primary mb-4 tracking-widest">
-                  STEP {step.step}
+            <StaggerItem key={step.title} delay={i * 120}>
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center size-12 rounded-full bg-primary text-primary-foreground mb-4">
+                  <step.icon className="size-5" />
                 </div>
-                <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-5">
-                  <step.icon className="size-6" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
+                <h3 className="text-lg font-semibold tracking-tight mb-2">
                   {step.title}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
                   {step.description}
                 </p>
               </div>
-            </SlideUp>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );
