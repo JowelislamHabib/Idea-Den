@@ -3,7 +3,7 @@
 import { useSession } from "@/lib/auth-client";
 import { apiClient } from "@/lib/api/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import { Loader2, FileText, Eye, Trash2, Plus } from "lucide-react";
 import { useState } from "react";
@@ -74,7 +74,10 @@ export default function DashboardIdeasPage() {
     <>
       <SlideUp delay={0.1}>
         <Card>
-          <CardContent className="p-0">
+          <CardHeader>
+            <CardTitle>My Project Ideas</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0 sm:p-6 sm:pt-0">
             {isPending ? (
               <div className="p-6 space-y-4">
                 {Array.from({ length: 3 }).map((_, i) => (
