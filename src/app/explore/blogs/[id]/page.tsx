@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, notFound } from "next/navigation";
 import { apiClient } from "@/lib/api/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -52,17 +52,7 @@ export default function BlogDetailsPage() {
   }
 
   if (error || !blogData?.blog) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center">
-        <h2 className="text-2xl font-bold tracking-tight mb-2">Blog not found</h2>
-        <p className="text-muted-foreground mb-6">
-          The blog article you are looking for does not exist or has been deleted.
-        </p>
-        <Button onClick={() => router.push("/dashboard/blogs")}>
-          Back to My Blogs
-        </Button>
-      </div>
-    );
+    notFound();
   }
 
   const { blog } = blogData;

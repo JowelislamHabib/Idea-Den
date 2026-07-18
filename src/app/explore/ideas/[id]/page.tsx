@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -93,20 +94,7 @@ export default function IdeaDetailPage({
   }
 
   if (error || !data?.idea) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center py-16">
-        <h2 className="text-xl font-semibold mb-2">Idea not found</h2>
-        <p className="text-muted-foreground mb-4">
-          This project idea may have been deleted or is not public.
-        </p>
-        <Link
-          href="/explore/ideas"
-          className="text-primary hover:underline font-semibold"
-        >
-          Browse project ideas
-        </Link>
-      </div>
-    );
+    notFound();
   }
 
   const { idea, related } = data;
