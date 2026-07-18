@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Heart } from "lucide-react";
 import { NewsletterForm } from "./NewsletterForm";
 
@@ -24,15 +25,15 @@ const footerGroups = [
   {
     title: "Company",
     links: [
-      { label: "About IdeaDen", href: "/about" },
-      { label: "Contact IdeaDen", href: "/contact" },
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   {
     title: "Product",
     links: [
-      { label: "IdeaDen Blueprint Engine", href: "/generate/ideas" },
-      { label: "IdeaDen Blog Writer", href: "/generate/blogs" },
+      { label: "Blueprint Engine", href: "/generate/ideas" },
+      { label: "Blog Writer", href: "/generate/blogs" },
       { label: "Explore Ideas", href: "/explore/ideas" },
       { label: "Explore Blogs", href: "/explore/blogs" },
       { label: "Dashboard", href: "/dashboard" },
@@ -50,13 +51,11 @@ export default function Footer() {
   return (
     <footer className="border-t border-border/50 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5 mb-5">
-              <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-sm font-black shadow-sm">
-                ID
-              </div>
-              <span className="font-bold text-lg">IdeaDen</span>
+            <Link href="/" className="flex items-center gap-2.5 mb-5 outline-none">
+              <Image src="/ideaden-black.png" alt="IdeaDen" width={150} height={32} className="h-7 w-auto dark:hidden" />
+              <Image src="/ideaden-white.png" alt="IdeaDen" width={150} height={32} className="h-7 w-auto hidden dark:block" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-sm">
               AI-powered project blueprints and blog articles. From idea to
@@ -98,16 +97,14 @@ export default function Footer() {
               </ul>
             </div>
           ))}
-        </div>
 
-        <div className="border-t border-border/50 py-12">
-          <div className="max-w-xl">
-            <h4 className="font-heading text-lg font-bold tracking-tight mb-1">
-              Stay Inspired with IdeaDen
+          <div className="lg:col-span-2">
+            <h4 className="font-heading text-base font-bold tracking-tight mb-1">
+              Stay Inspired
             </h4>
-            <p className="text-sm text-muted-foreground mb-5">
-              Product updates, creative tips, and new feature announcements
-              from IdeaDen. No spam, ever.
+            <p className="text-sm text-muted-foreground mb-5 max-w-xs">
+              Product updates, creative tips, and new feature announcements.
+              No spam, ever.
             </p>
             <NewsletterForm />
           </div>

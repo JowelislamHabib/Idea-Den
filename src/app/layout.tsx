@@ -25,8 +25,28 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "IdeaDen",
-  description: "AI-powered software project planning platform",
+  title: {
+    default: "IdeaDen - AI-powered Project Ideas, PRDs, and Blog Generation",
+    template: "%s | IdeaDen",
+  },
+  description:
+    "IdeaDen is a purpose-built creative environment with two specialized engines for generating comprehensive project blueprints and SEO-optimized blog articles.",
+  keywords: [
+    "AI",
+    "Project Ideas",
+    "PRD Generator",
+    "Blog Generator",
+    "IdeaDen",
+    "AI Writing",
+    "Startup Toolkit",
+  ],
+  authors: [{ name: "Jowel Islam Habib" }],
+  creator: "Jowel Islam Habib",
+  publisher: "Jowel Islam Habib",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -44,7 +64,7 @@ export default function RootLayout({
         geistMono.variable,
         "font-sans",
         inter.variable,
-        spaceGrotesk.variable
+        spaceGrotesk.variable,
       )}
       suppressHydrationWarning
     >

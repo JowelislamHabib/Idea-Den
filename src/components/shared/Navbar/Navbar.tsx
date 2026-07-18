@@ -51,12 +51,10 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 font-bold text-lg tracking-tight"
+            className="flex items-center gap-2.5 outline-none"
           >
-            <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-sm font-black shadow-sm">
-              ID
-            </div>
-            <span className="hidden sm:block">IdeaDen</span>
+            <Image src="/ideaden-black.png" alt="IdeaDen" width={150} height={32} className="h-7 w-auto dark:hidden" />
+            <Image src="/ideaden-white.png" alt="IdeaDen" width={150} height={32} className="h-7 w-auto hidden dark:block" />
           </Link>
 
           {/* Desktop Nav */}
