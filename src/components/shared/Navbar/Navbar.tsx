@@ -46,7 +46,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b bg-background">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           {/* Logo */}
           <Link
@@ -61,7 +61,7 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/"
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3.5 py-2 rounded-full text-sm font-medium transition-colors ${
                 pathname === "/"
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -72,7 +72,7 @@ export default function Navbar() {
 
             <DropdownMenu>
               <DropdownMenuTrigger
-                className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 outline-none ${
+                className={`px-3.5 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-1 outline-none ${
                   pathname.startsWith("/explore")
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -80,14 +80,14 @@ export default function Navbar() {
               >
                 Explore <ChevronDown size={14} />
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <Link href="/explore/ideas" className="cursor-pointer w-full">
+              <DropdownMenuContent align="start" className="w-40 p-2 flex flex-col gap-1">
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/explore/ideas" className="w-full">
                     Ideas
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link href="/explore/blogs" className="cursor-pointer w-full">
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/explore/blogs" className="w-full">
                     Blogs
                   </Link>
                 </DropdownMenuItem>
@@ -98,7 +98,7 @@ export default function Navbar() {
               <>
                 <DropdownMenu>
                   <DropdownMenuTrigger
-                    className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 outline-none ${
+                    className={`px-3.5 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-1 outline-none ${
                       pathname.startsWith("/generate")
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -106,19 +106,19 @@ export default function Navbar() {
                   >
                     Generate <ChevronDown size={14} />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem>
+                  <DropdownMenuContent align="start" className="w-48 p-2 flex flex-col gap-1">
+                    <DropdownMenuItem asChild className="cursor-pointer">
                       <Link
                         href="/generate/ideas"
-                        className="cursor-pointer w-full"
+                        className="w-full"
                       >
                         Project Idea
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem asChild className="cursor-pointer">
                       <Link
                         href="/generate/blogs"
-                        className="cursor-pointer w-full"
+                        className="w-full"
                       >
                         Blog Article
                       </Link>
@@ -128,7 +128,7 @@ export default function Navbar() {
 
                 <Link
                   href="/dashboard"
-                  className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-3.5 py-2 rounded-full text-sm font-medium transition-colors ${
                     pathname.startsWith("/dashboard")
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -141,7 +141,7 @@ export default function Navbar() {
 
             <Link
               href="/about"
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3.5 py-2 rounded-full text-sm font-medium transition-colors ${
                 pathname === "/about"
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -155,11 +155,11 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
             {isPending ? (
-              <div className="w-20 h-9 rounded-lg bg-muted animate-pulse" />
+              <div className="w-20 h-9 rounded-full bg-muted animate-pulse" />
             ) : user ? (
               <div className="flex items-center gap-2">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-2 rounded-lg border border-border/60 px-3 py-2 text-sm font-medium hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <DropdownMenuTrigger className="flex items-center gap-2 rounded-full border border-border/60 px-3 py-2 text-sm font-medium hover:bg-muted transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
                     {user.image ? (
                       <Image
                         src={user.image}
@@ -192,8 +192,8 @@ export default function Navbar() {
                       </DropdownMenuLabel>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem className="cursor-pointer">
+                    <DropdownMenuGroup className="flex flex-col gap-1">
+                      <DropdownMenuItem asChild className="cursor-pointer">
                         <Link
                           href="/dashboard/ideas"
                           className="flex items-center w-full"
@@ -205,7 +205,7 @@ export default function Navbar() {
                           My Ideas
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem asChild className="cursor-pointer">
                         <Link
                           href="/dashboard/blogs"
                           className="flex items-center w-full"
@@ -217,7 +217,7 @@ export default function Navbar() {
                           My Blogs
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem asChild className="cursor-pointer">
                         <Link
                           href="/dashboard"
                           className="flex items-center w-full"
@@ -229,7 +229,6 @@ export default function Navbar() {
                           Dashboard
                         </Link>
                       </DropdownMenuItem>
-
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -247,11 +246,11 @@ export default function Navbar() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="rounded-lg font-semibold"
+                  className="rounded-full font-semibold"
                 >
                   <Link href={`/login${callbackQuery}`}>Sign in</Link>
                 </Button>
-                <Button size="sm" className="rounded-lg font-semibold">
+                <Button size="sm" className="rounded-full font-semibold">
                   <Link href={`/register${callbackQuery}`}>Get Started</Link>
                 </Button>
               </div>
@@ -279,7 +278,7 @@ export default function Navbar() {
               <Link
                 href="/"
                 onClick={() => setMobileOpen(false)}
-                className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                className={`rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
                   pathname === "/"
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -295,7 +294,7 @@ export default function Navbar() {
                 <Link
                   href="/explore/ideas"
                   onClick={() => setMobileOpen(false)}
-                  className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
+                  className={`block rounded-full px-8 py-2 text-sm font-medium transition-colors ${
                     pathname === "/explore"
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -306,7 +305,7 @@ export default function Navbar() {
                 <Link
                   href="/explore/blogs"
                   onClick={() => setMobileOpen(false)}
-                  className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
+                  className={`block rounded-full px-8 py-2 text-sm font-medium transition-colors ${
                     pathname === "/explore/blogs"
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -325,7 +324,7 @@ export default function Navbar() {
                     <Link
                       href="/generate/ideas"
                       onClick={() => setMobileOpen(false)}
-                      className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
+                      className={`block rounded-full px-8 py-2 text-sm font-medium transition-colors ${
                         pathname === "/ideas/generate"
                           ? "bg-primary/10 text-primary"
                           : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -336,7 +335,7 @@ export default function Navbar() {
                     <Link
                       href="/generate/blogs"
                       onClick={() => setMobileOpen(false)}
-                      className={`block rounded-lg px-8 py-2 text-sm font-medium transition-colors ${
+                      className={`block rounded-full px-8 py-2 text-sm font-medium transition-colors ${
                         pathname === "/blogs/generate"
                           ? "bg-primary/10 text-primary"
                           : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -349,7 +348,7 @@ export default function Navbar() {
                   <Link
                     href="/dashboard"
                     onClick={() => setMobileOpen(false)}
-                    className={`mt-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                    className={`mt-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
                       pathname.startsWith("/dashboard")
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -363,7 +362,7 @@ export default function Navbar() {
               <Link
                 href="/about"
                 onClick={() => setMobileOpen(false)}
-                className={`mt-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                className={`mt-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
                   pathname === "/about"
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -389,7 +388,7 @@ export default function Navbar() {
                   </div>
                   <Button
                     variant="outline"
-                    className="rounded-lg font-semibold text-destructive hover:text-destructive hover:bg-destructive/10 border-transparent"
+                    className="rounded-full font-semibold text-destructive hover:text-destructive hover:bg-destructive/10 border-transparent"
                     onClick={() => {
                       handleLogout();
                       setMobileOpen(false);
@@ -402,14 +401,14 @@ export default function Navbar() {
               ) : (
                 <div className="flex flex-col gap-2">
                   <Button
-                    className="rounded-lg font-semibold"
+                    className="rounded-full font-semibold"
                     onClick={() => setMobileOpen(false)}
                   >
                     <Link href={`/register${callbackQuery}`}>Get Started</Link>
                   </Button>
                   <Button
                     variant="outline"
-                    className="rounded-lg font-semibold"
+                    className="rounded-full font-semibold"
                     onClick={() => setMobileOpen(false)}
                   >
                     <Link href={`/login${callbackQuery}`}>Sign in</Link>

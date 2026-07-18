@@ -32,19 +32,26 @@ const footerGroups = [
   {
     title: "Product",
     links: [
-      { label: "Blueprint Engine", href: "/generate/ideas" },
+      { label: "Idea Engine", href: "/generate/ideas" },
       { label: "Blog Writer", href: "/generate/blogs" },
       { label: "Explore Ideas", href: "/explore/ideas" },
       { label: "Explore Blogs", href: "/explore/blogs" },
-      { label: "Dashboard", href: "/dashboard" },
     ],
   },
 ];
 
 const socialLinks = [
-  { label: "GitHub", icon: GithubIcon, href: "#" },
+  {
+    label: "GitHub",
+    icon: GithubIcon,
+    href: "https://github.com/JowelislamHabib",
+  },
   { label: "X", icon: TwitterIcon, href: "#" },
-  { label: "LinkedIn", icon: LinkedinIcon, href: "#" },
+  {
+    label: "LinkedIn",
+    icon: LinkedinIcon,
+    href: "https://www.linkedin.com/in/jowelislamhabib/",
+  },
 ];
 
 export default function Footer() {
@@ -53,9 +60,24 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5 mb-5 outline-none">
-              <Image src="/ideaden-black.png" alt="IdeaDen" width={150} height={32} className="h-7 w-auto dark:hidden" />
-              <Image src="/ideaden-white.png" alt="IdeaDen" width={150} height={32} className="h-7 w-auto hidden dark:block" />
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 mb-5 outline-none"
+            >
+              <Image
+                src="/ideaden-black.png"
+                alt="IdeaDen"
+                width={150}
+                height={32}
+                className="h-7 w-auto dark:hidden"
+              />
+              <Image
+                src="/ideaden-white.png"
+                alt="IdeaDen"
+                width={150}
+                height={32}
+                className="h-7 w-auto hidden dark:block"
+              />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-sm">
               AI-powered project blueprints and blog articles. From idea to
@@ -103,8 +125,8 @@ export default function Footer() {
               Stay Inspired
             </h4>
             <p className="text-sm text-muted-foreground mb-5 max-w-xs">
-              Product updates, creative tips, and new feature announcements.
-              No spam, ever.
+              Product updates, creative tips, and new feature announcements. No
+              spam, ever.
             </p>
             <NewsletterForm />
           </div>

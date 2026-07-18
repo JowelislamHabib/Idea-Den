@@ -1,22 +1,22 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
 export function NewsletterForm() {
   return (
     <form
       onSubmit={(e) => e.preventDefault()}
       className="flex gap-3"
     >
-      <input
+      <Input
         type="email"
         placeholder="Enter your email"
-        className="flex-1 h-11 rounded-xl border border-border/50 bg-background/50 px-4 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all"
+        className="h-11 flex-1 bg-background/50 border-border/50"
       />
-      <button
-        type="submit"
-        className="inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-bold transition-all hover:bg-primary/90 active:scale-[0.98]"
-      >
+      <Button type="submit" className="h-11 px-5">
         Subscribe
-      </button>
+      </Button>
     </form>
   );
 }
