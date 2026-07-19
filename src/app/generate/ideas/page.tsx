@@ -47,7 +47,9 @@ export default function GeneratePage() {
   const [techStack, setTechStack] = useState<string[]>([]);
   const [customTech, setCustomTech] = useState("");
   const [cooldown, setCooldown] = useState(0);
+  const [randomCooldown, setRandomCooldown] = useState(0);
   const [loadingStep, setLoadingStep] = useState(0);
+  const [isGeneratingRandom, setIsGeneratingRandom] = useState(false);
 
   const { data: quota, isLoading: quotaLoading } = useQuery({
     queryKey: ["userQuota", session?.user?.id],
@@ -117,6 +119,39 @@ export default function GeneratePage() {
       setTechStack([...techStack, trimmed]);
     }
     setCustomTech("");
+  };
+
+  const handleRandomCooldown = () => {
+    setRandomCooldown(5);
+    const interval = setInterval(() => {
+      setRandomCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleSurpriseMe = async () => {
+    if (randomCooldown > 0) return;
+    try {
+      setIsGeneratingRandom(true);
+      const token = await getToken();
+      const res = await apiClient<{ idea: string }>("/api/ideas/random", { 
+        method: "POST",
+        token 
+      });
+      if (res && res.idea) {
+        setInterests(res.idea);
+      }
+      handleRandomCooldown();
+    } catch (err) {
+      toast.error("Failed to generate a random idea. Please try again.");
+    } finally {
+      setIsGeneratingRandom(false);
+    }
   };
 
   const removeTech = (tech: string) => {
@@ -223,10 +258,27 @@ export default function GeneratePage() {
             <CardContent className="p-6 sm:p-8">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="interests" className="font-semibold flex items-center gap-2 text-base">
-                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">1</div>
-                    What do you want to build?
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="interests" className="font-semibold flex items-center gap-2 text-base">
+                      <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">1</div>
+                      What do you want to build?
+                    </Label>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      type="button" 
+                      onClick={handleSurpriseMe} 
+                      disabled={isGeneratingRandom || randomCooldown > 0}
+                      className="text-muted-foreground hover:text-primary h-8 px-2 transition-all w-[120px]"
+                    >
+                      {isGeneratingRandom ? (
+                        <Loader2 className="size-3.5 mr-1.5 animate-spin" />
+                      ) : (
+                        <Sparkles className={`size-3.5 mr-1.5 ${randomCooldown > 0 ? 'opacity-50' : ''}`} />
+                      )}
+                      {isGeneratingRandom ? "Thinking..." : randomCooldown > 0 ? `Wait ${randomCooldown}s` : "Random Idea"}
+                    </Button>
+                  </div>
                   <Input
                     id="interests"
                     placeholder="e.g. A game, an education app, a tool for doctors..."
