@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter, notFound } from "next/navigation";
 import { apiClient } from "@/lib/api/client";
@@ -7,8 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { ArrowLeft, Type, Clock } from "lucide-react";
+import { ArrowLeft, Type, Clock, Copy, Check } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { toast } from "sonner";
 
 interface Blog {
   _id: string;
@@ -34,6 +36,8 @@ export default function BlogDetailsPage() {
     enabled: !!id,
   });
 
+  const [copied, setCopied] = useState(false);
+
   if (isPending) {
     return (
       <div className="min-h-[60vh] py-12">
@@ -57,6 +61,30 @@ export default function BlogDetailsPage() {
 
   const { blog } = blogData;
 
+  const handleCopy = async () => {
+    const text = [
+      blog.title,
+      "",
+      `Template: ${blog.template} | Tone: ${blog.tone} | Length: ${blog.length}`,
+      `Published: ${new Date(blog.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`,
+      "",
+      blog.seoMetaDescription,
+      "",
+      "---",
+      "",
+      blog.content,
+    ].join("\n");
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      toast.success("Content copied to clipboard");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Failed to copy content");
+    }
+  };
+
   return (
     <div className="min-h-screen py-12 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -69,6 +97,15 @@ export default function BlogDetailsPage() {
             >
               <ArrowLeft className="mr-2 size-4" />
               Back
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleCopy}
+              className="gap-2"
+            >
+              {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+              {copied ? "Copied" : "Copy Content"}
             </Button>
           </div>
         </SlideUp>

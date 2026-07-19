@@ -1,10 +1,11 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -22,8 +23,11 @@ import {
   Target,
   CheckCircle2,
   Swords,
-  Rocket
+  Rocket,
+  Copy,
+  Check
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Idea {
   _id: string;
@@ -85,6 +89,8 @@ export default function IdeaDetailPage({
       ),
   });
 
+  const [copied, setCopied] = useState(false);
+
   if (isPending) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -99,16 +105,72 @@ export default function IdeaDetailPage({
 
   const { idea, related } = data;
 
+  const handleCopy = async () => {
+    const sections = [
+      `# ${idea.projectTitle}`,
+      idea.tagline,
+      "",
+      `**Estimated Duration:** ${idea.estimatedDuration}`,
+      `**Owner:** ${idea.ownerName}`,
+      "",
+      "---",
+      "",
+      "## The Problem",
+      idea.theProblem,
+      "",
+      "## Target Audience",
+      ...(idea.targetAudience || []).map((u) => `- ${u}`),
+      "",
+      "## The Solution",
+      idea.theSolution,
+      "",
+      "## Key Features",
+      ...(idea.keyFeatures || []).map((f) => `- **${f.name}:** ${f.description}`),
+      "",
+      "## Recommended Tech Stack",
+      ...(idea.recommendedTechStack || []).map((s) => `- **${s.category}:** ${s.details}`),
+      "",
+      "## Competitors",
+      ...(idea.competitors || []).map((c) => `- **${c.name}:** ${c.differentiation}`),
+      "",
+      "## Why Build This",
+      ...(idea.whyBuildThis || []).map((w) => `- **${w.title}:** ${w.description}`),
+      "",
+      "## First Steps",
+      ...(idea.firstSteps || []).map((s, i) => `${i + 1}. ${s}`),
+    ];
+
+    try {
+      await navigator.clipboard.writeText(sections.join("\n"));
+      setCopied(true);
+      toast.success("Idea copied to clipboard");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Failed to copy idea");
+    }
+  };
+
   return (
     <div className="min-h-[60vh] py-12 bg-muted/20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SlideUp>
-          <Link
-            href="/explore/ideas"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground mb-6 transition-colors"
-          >
-            <ArrowLeft className="size-4" /> Back to Explore
-          </Link>
+          <div className="flex items-center justify-between mb-6">
+            <Link
+              href="/explore/ideas"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="size-4" /> Back to Explore
+            </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleCopy}
+              className="gap-2"
+            >
+              {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+              {copied ? "Copied" : "Copy Idea"}
+            </Button>
+          </div>
         </SlideUp>
 
         <SlideUp delay={0.05}>
@@ -158,6 +220,19 @@ export default function IdeaDetailPage({
               </CardContent>
             </Card>
 
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
+                  <Lightbulb className="size-4 text-primary" /> The Solution
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {idea.theSolution}
+                </p>
+              </CardContent>
+            </Card>
+
             {idea.targetAudience?.length > 0 && (
               <Card>
                 <CardHeader className="pb-3">
@@ -177,19 +252,6 @@ export default function IdeaDetailPage({
                 </CardContent>
               </Card>
             )}
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
-                  <Lightbulb className="size-4 text-primary" /> The Solution
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {idea.theSolution}
-                </p>
-              </CardContent>
-            </Card>
           </TabsContent>
 
           <TabsContent value="architecture" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
