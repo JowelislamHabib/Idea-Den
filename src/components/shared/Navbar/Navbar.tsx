@@ -12,6 +12,7 @@ import {
   PenTool,
   BarChart3,
   ChevronDown,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -110,13 +111,15 @@ export default function Navbar() {
               <>
                 <DropdownMenu>
                   <DropdownMenuTrigger
-                    className={`px-3.5 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-1 outline-none ${
+                    className={`group px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-1.5 outline-none ${
                       pathname.startsWith("/generate")
                         ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                        : "border border-violet-500/30 text-foreground hover:bg-violet-500/10 hover:border-violet-500/50 shadow-sm"
                     }`}
                   >
-                    Generate <ChevronDown size={14} />
+                    <Sparkles size={14} className={pathname.startsWith("/generate") ? "text-primary" : "text-violet-500"} />
+                    Generate 
+                    <ChevronDown size={14} className={`transition-transform duration-200 group-data-[state=open]:rotate-180 opacity-70`} />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="start"
@@ -327,7 +330,8 @@ export default function Navbar() {
               {user && (
                 <>
                   <div className="space-y-1 mt-2">
-                    <div className="px-4 py-1.5 text-sm font-bold text-foreground">
+                    <div className="px-4 py-1.5 text-sm font-bold text-foreground flex items-center gap-2">
+                      <Sparkles size={16} className="text-violet-500" />
                       Generate
                     </div>
                     <Link

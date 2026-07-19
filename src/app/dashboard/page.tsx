@@ -21,8 +21,11 @@ import {
 } from "recharts";
 
 const COLORS = [
-  "#0066FF", "#00C49F", "#FFBB28", "#FF8042", "#8884D8",
-  "#82CA9D", "#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4",
+  "var(--color-chart-1)",
+  "var(--color-chart-2)",
+  "var(--color-chart-3)",
+  "var(--color-chart-4)",
+  "var(--color-chart-5)",
 ];
 
 interface DashboardIdea {
@@ -180,7 +183,7 @@ export default function DashboardOverviewPage() {
             </div>
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center gap-4">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-purple-500/20 text-purple-500 border border-purple-500/20 backdrop-blur-md">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-chart-1/20 text-chart-1 border border-chart-1/20 backdrop-blur-md">
                   <PenTool className="size-6" />
                 </div>
                 <div>
@@ -201,7 +204,7 @@ export default function DashboardOverviewPage() {
             </div>
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center gap-4">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-blue-500/20 text-blue-500 border border-blue-500/20 backdrop-blur-md">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-chart-2/20 text-chart-2 border border-chart-2/20 backdrop-blur-md">
                   <Layers className="size-6" />
                 </div>
                 <div>
@@ -222,7 +225,7 @@ export default function DashboardOverviewPage() {
             </div>
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center gap-4">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-500 border border-emerald-500/20 backdrop-blur-md">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-chart-3/20 text-chart-3 border border-chart-3/20 backdrop-blur-md">
                   <TrendingUp className="size-6" />
                 </div>
                 <div>
@@ -356,26 +359,26 @@ export default function DashboardOverviewPage() {
                 <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorIdeas" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#0066FF" stopOpacity={1} />
-                      <stop offset="95%" stopColor="#0066FF" stopOpacity={0.1} />
+                      <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={1} />
+                      <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0.1} />
                     </linearGradient>
                     <linearGradient id="colorBlogs" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8884D8" stopOpacity={1} />
-                      <stop offset="95%" stopColor="#8884D8" stopOpacity={0.1} />
+                      <stop offset="5%" stopColor="var(--color-chart-1)" stopOpacity={1} />
+                      <stop offset="95%" stopColor="var(--color-chart-1)" stopOpacity={0.1} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
                   <XAxis 
                     dataKey="date" 
                     fontSize={12} 
-                    stroke="rgba(255,255,255,0.5)" 
+                    stroke="var(--color-muted-foreground)" 
                     tickMargin={10} 
                     axisLine={false} 
                     tickLine={false} 
                   />
                   <YAxis 
                     fontSize={12} 
-                    stroke="rgba(255,255,255,0.5)" 
+                    stroke="var(--color-muted-foreground)" 
                     axisLine={false} 
                     tickLine={false}
                     tickFormatter={(val) => Math.floor(val) === val ? val : ""}
@@ -385,21 +388,21 @@ export default function DashboardOverviewPage() {
                     type="monotone"
                     dataKey="ideas"
                     name="Ideas Generated"
-                    stroke="#0066FF"
+                    stroke="var(--color-primary)"
                     strokeWidth={3}
                     fillOpacity={1}
                     fill="url(#colorIdeas)"
-                    activeDot={{ r: 6, strokeWidth: 0, fill: "#0066FF" }}
+                    activeDot={{ r: 6, strokeWidth: 0, fill: "var(--color-primary)" }}
                   />
                   <Area
                     type="monotone"
                     dataKey="blogs"
                     name="Blogs Generated"
-                    stroke="#8884D8"
+                    stroke="var(--color-chart-1)"
                     strokeWidth={3}
                     fillOpacity={1}
                     fill="url(#colorBlogs)"
-                    activeDot={{ r: 6, strokeWidth: 0, fill: "#8884D8" }}
+                    activeDot={{ r: 6, strokeWidth: 0, fill: "var(--color-chart-1)" }}
                   />
                 </AreaChart>
               </ResponsiveContainer>
