@@ -31,7 +31,7 @@ export function HeroSection() {
           <FadeIn delay={0.1}>
             <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] max-w-5xl text-foreground">
               Stop Staring at a{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-primary">
                 Blank Screen.
               </span>
               <span className="block">
@@ -72,8 +72,8 @@ export function HeroSection() {
           </FadeIn>
 
           <FadeIn delay={0.4}>
-            <p className="mt-6 text-sm text-muted-foreground/60 flex items-center gap-2">
-              <span className="flex size-2 rounded-full bg-primary/40 animate-pulse" />
+            <p className="mt-6 text-sm text-muted-foreground/60 text-center">
+              <span className="inline-block size-2 shrink-0 rounded-full bg-primary/40 animate-pulse mr-2 mb-0.5" />
               Free tier available &middot; No credit card required &middot; 50,000+ blueprints generated
             </p>
           </FadeIn>
