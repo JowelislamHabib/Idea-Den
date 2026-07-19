@@ -128,9 +128,6 @@
   html {
     @apply font-sans;
   }
-  a:hover, button:hover {
-    @apply cursor-pointer;
-  }
 }
 
 @keyframes float {

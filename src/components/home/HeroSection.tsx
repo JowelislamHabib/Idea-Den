@@ -13,11 +13,7 @@ const floatingBadges = [
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden min-h-[90vh] flex items-center">
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[600px] w-[600px] sm:h-[800px] sm:w-[1000px] rounded-full bg-primary/[0.04] blur-[150px]" />
-        <div className="absolute bottom-0 left-0 h-[300px] w-[300px] rounded-full bg-secondary/50 blur-[100px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--primary),0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--primary),0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
-      </div>
+
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 w-full py-20 sm:py-28">
         <div className="flex flex-col items-center text-center">

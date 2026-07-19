@@ -14,7 +14,7 @@ import {
   ChevronDown,
   Sparkles,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -94,15 +94,11 @@ export default function Navbar() {
                 align="start"
                 className="w-40 p-2 flex flex-col gap-1"
               >
-                <DropdownMenuItem className="cursor-pointer">
-                  <Link href="/explore/ideas" className="w-full">
-                    Ideas
-                  </Link>
+                <DropdownMenuItem className="cursor-pointer" render={<Link href="/explore/ideas" className="w-full" />}>
+                  Ideas
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  <Link href="/explore/blogs" className="w-full">
-                    Blogs
-                  </Link>
+                <DropdownMenuItem className="cursor-pointer" render={<Link href="/explore/blogs" className="w-full" />}>
+                  Blogs
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -125,15 +121,11 @@ export default function Navbar() {
                     align="start"
                     className="w-48 p-2 flex flex-col gap-1"
                   >
-                    <DropdownMenuItem className="cursor-pointer">
-                      <Link href="/generate/ideas" className="w-full">
-                        Project Idea
-                      </Link>
+                    <DropdownMenuItem className="cursor-pointer" render={<Link href="/generate/ideas" className="w-full" />}>
+                      Project Idea
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">
-                      <Link href="/generate/blogs" className="w-full">
-                        Blog Article
-                      </Link>
+                    <DropdownMenuItem className="cursor-pointer" render={<Link href="/generate/blogs" className="w-full" />}>
+                      Blog Article
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -205,41 +197,26 @@ export default function Navbar() {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup className="flex flex-col gap-1">
-                      <DropdownMenuItem className="cursor-pointer">
-                        <Link
-                          href="/dashboard/ideas"
-                          className="flex items-center w-full"
-                        >
-                          <Lightbulb
-                            size={16}
-                            className="mr-2.5 text-muted-foreground"
-                          />
-                          My Ideas
-                        </Link>
+                      <DropdownMenuItem className="cursor-pointer" render={<Link href="/dashboard/ideas" className="flex items-center w-full" />}>
+                        <Lightbulb
+                          size={16}
+                          className="mr-2.5 text-muted-foreground"
+                        />
+                        My Ideas
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
-                        <Link
-                          href="/dashboard/blogs"
-                          className="flex items-center w-full"
-                        >
-                          <PenTool
-                            size={16}
-                            className="mr-2.5 text-muted-foreground"
-                          />
-                          My Blogs
-                        </Link>
+                      <DropdownMenuItem className="cursor-pointer" render={<Link href="/dashboard/blogs" className="flex items-center w-full" />}>
+                        <PenTool
+                          size={16}
+                          className="mr-2.5 text-muted-foreground"
+                        />
+                        My Blogs
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
-                        <Link
-                          href="/dashboard"
-                          className="flex items-center w-full"
-                        >
-                          <BarChart3
-                            size={16}
-                            className="mr-2.5 text-muted-foreground"
-                          />
-                          Dashboard
-                        </Link>
+                      <DropdownMenuItem className="cursor-pointer" render={<Link href="/dashboard" className="flex items-center w-full" />}>
+                        <BarChart3
+                          size={16}
+                          className="mr-2.5 text-muted-foreground"
+                        />
+                        Dashboard
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
@@ -255,16 +232,18 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="rounded-full font-semibold"
+                <Link
+                  href={`/login${callbackQuery}`}
+                  className={`${buttonVariants({ variant: "ghost", size: "sm" })} rounded-full font-semibold`}
                 >
-                  <Link href={`/login${callbackQuery}`}>Sign in</Link>
-                </Button>
-                <Button size="sm" className="rounded-full font-semibold">
-                  <Link href={`/register${callbackQuery}`}>Get Started</Link>
-                </Button>
+                  Sign in
+                </Link>
+                <Link
+                  href={`/register${callbackQuery}`}
+                  className={`${buttonVariants({ size: "sm" })} rounded-full font-semibold`}
+                >
+                  Get Started
+                </Link>
               </div>
             )}
           </div>
@@ -413,19 +392,20 @@ export default function Navbar() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-2">
-                  <Button
-                    className="rounded-full font-semibold"
+                  <Link
+                    href={`/register${callbackQuery}`}
                     onClick={() => setMobileOpen(false)}
+                    className={`${buttonVariants()} rounded-full font-semibold`}
                   >
-                    <Link href={`/register${callbackQuery}`}>Get Started</Link>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="rounded-full font-semibold"
+                    Get Started
+                  </Link>
+                  <Link
+                    href={`/login${callbackQuery}`}
                     onClick={() => setMobileOpen(false)}
+                    className={`${buttonVariants({ variant: "outline" })} rounded-full font-semibold`}
                   >
-                    <Link href={`/login${callbackQuery}`}>Sign in</Link>
-                  </Button>
+                    Sign in
+                  </Link>
                 </div>
               )}
             </div>
