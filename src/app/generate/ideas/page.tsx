@@ -232,17 +232,28 @@ export default function GeneratePage() {
                     <CheckCircle2 className="size-3 mr-1.5" /> Pro Plan (Unlimited)
                   </Badge>
                 ) : (
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-background shadow-sm">
-                    <Zap className={isLimitReached ? "size-4 text-destructive" : "size-4 text-amber-500"} />
-                    <span className="text-sm font-medium">
-                      {isLimitReached ? "Daily Limit Reached" : `${quota.limit - quota.count} Generations Left`}
-                    </span>
-                    <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden ml-2 hidden sm:block">
-                      <div 
-                        className={isLimitReached ? "h-full rounded-full transition-all bg-destructive" : "h-full rounded-full transition-all bg-amber-500"} 
-                        style={{ width: `${(quota.count / quota.limit) * 100}%` }}
-                      />
+                  <div className="flex flex-wrap justify-center items-center gap-3">
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-background shadow-sm">
+                      <Zap className={isLimitReached ? "size-4 text-destructive" : "size-4 text-amber-500"} />
+                      <span className="text-sm font-medium">
+                        {isLimitReached ? "Daily Limit Reached" : `${quota.limit - quota.count} Generations Left`}
+                      </span>
+                      <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden ml-2 hidden sm:block">
+                        <div 
+                          className={isLimitReached ? "h-full rounded-full transition-all bg-destructive" : "h-full rounded-full transition-all bg-amber-500"} 
+                          style={{ width: `${(quota.count / quota.limit) * 100}%` }}
+                        />
+                      </div>
                     </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 h-8 rounded-full px-4"
+                      onClick={() => toast.info("Upgrade to Pro — coming soon!")}
+                    >
+                      <Crown className="mr-1.5 size-3.5" />
+                      Upgrade
+                    </Button>
                   </div>
                 )
               ) : null}
@@ -379,17 +390,6 @@ export default function GeneratePage() {
                 />
 
                 <div className="mt-4 space-y-3">
-                  {quota && !quota.isPro && (
-                    <Button
-                      variant="outline"
-                      className="w-full border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10"
-                      size="lg"
-                      onClick={() => toast.info("Upgrade to Pro — coming soon!")}
-                    >
-                      <Crown className="mr-2 size-5" />
-                      Upgrade to Pro
-                    </Button>
-                  )}
                   <Button
                     onClick={handleGenerate}
                     disabled={!isFormValid || cooldown > 0 || isLimitReached}
