@@ -13,8 +13,7 @@ import { SlideUp } from "@/components/ui/motion-wrapper";
 import { apiClient } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
 import { toast } from "sonner";
-import { VisibilityToggle } from "@/components/shared/VisibilityToggle";
-import { Sparkles, X, Plus, Clock, Loader2, CheckCircle2, Zap, Crown } from "lucide-react";
+import { Sparkles, X, Plus, Clock, Loader2, CheckCircle2, Zap } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 const SUGGESTED_STACKS = [
@@ -47,7 +46,6 @@ export default function GeneratePage() {
   const [timeAvailable, setTimeAvailable] = useState("");
   const [techStack, setTechStack] = useState<string[]>([]);
   const [customTech, setCustomTech] = useState("");
-  const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [cooldown, setCooldown] = useState(0);
   const [randomCooldown, setRandomCooldown] = useState(0);
   const [loadingStep, setLoadingStep] = useState(0);
@@ -71,7 +69,6 @@ export default function GeneratePage() {
           interests: interests.trim(),
           timeAvailable,
           techStack,
-          visibility,
         }),
         token,
       });
@@ -372,24 +369,7 @@ export default function GeneratePage() {
                   </div>
                 </div>
 
-                <VisibilityToggle
-                  visibility={visibility}
-                  onChange={setVisibility}
-                  isPro={quota?.isPro ?? false}
-                />
-
-                <div className="mt-4 space-y-3">
-                  {quota && !quota.isPro && (
-                    <Button
-                      variant="outline"
-                      className="w-full border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10"
-                      size="lg"
-                      onClick={() => toast.info("Upgrade to Pro — coming soon!")}
-                    >
-                      <Crown className="mr-2 size-5" />
-                      Upgrade to Pro
-                    </Button>
-                  )}
+                <div className="mt-4">
                   <Button
                     onClick={handleGenerate}
                     disabled={!isFormValid || cooldown > 0 || isLimitReached}
