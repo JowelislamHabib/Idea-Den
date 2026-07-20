@@ -32,7 +32,7 @@ export function VisibilityToggle({ visibility, onChange, isPro }: VisibilityTogg
           type="button"
           onClick={() => isPro && onChange("public")}
           disabled={!isPro}
-          className={`flex-1 flex items-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
+          className={`flex-1 flex items-center gap-2 rounded-3xl border px-4 py-3 text-sm font-medium transition-all ${
             visibility === "public" && isPro
               ? "border-primary bg-primary/10 text-primary"
               : "border-border bg-background text-muted-foreground hover:bg-muted/50"
@@ -48,7 +48,7 @@ export function VisibilityToggle({ visibility, onChange, isPro }: VisibilityTogg
           type="button"
           onClick={() => isPro && onChange("private")}
           disabled={!isPro}
-          className={`flex-1 flex items-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
+          className={`flex-1 flex items-center gap-2 rounded-3xl border px-4 py-3 text-sm font-medium transition-all ${
             visibility === "private" && isPro
               ? "border-primary bg-primary/10 text-primary"
               : "border-border bg-background text-muted-foreground hover:bg-muted/50"
