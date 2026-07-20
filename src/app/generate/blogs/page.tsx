@@ -14,7 +14,8 @@ import { SlideUp } from "@/components/ui/motion-wrapper";
 import { apiClient } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
 import { toast } from "sonner";
-import { Sparkles, X, Plus, Clock, Loader2, CheckCircle2, Type, FileText, Zap } from "lucide-react";
+import { VisibilityToggle } from "@/components/shared/VisibilityToggle";
+import { Sparkles, X, Plus, Clock, Loader2, CheckCircle2, Type, FileText, Zap, Crown } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 const TEMPLATE_OPTIONS = [
@@ -52,6 +53,7 @@ export default function BlogGeneratePage() {
   const [customKeyword, setCustomKeyword] = useState("");
   const [additionalInstructions, setAdditionalInstructions] = useState("");
   
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [cooldown, setCooldown] = useState(0);
   const [randomCooldown, setRandomCooldown] = useState(0);
   const [loadingStep, setLoadingStep] = useState(0);
@@ -78,6 +80,7 @@ export default function BlogGeneratePage() {
           length,
           keywords,
           additionalInstructions,
+          visibility,
         }),
         token,
       });
@@ -416,7 +419,24 @@ export default function BlogGeneratePage() {
                   />
                 </div>
 
-                <div className="mt-6">
+                <VisibilityToggle
+                  visibility={visibility}
+                  onChange={setVisibility}
+                  isPro={quota?.isPro ?? false}
+                />
+
+                <div className="mt-6 space-y-3">
+                  {quota && !quota.isPro && (
+                    <Button
+                      variant="outline"
+                      className="w-full border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10"
+                      size="lg"
+                      onClick={() => toast.info("Upgrade to Pro — coming soon!")}
+                    >
+                      <Crown className="mr-2 size-5" />
+                      Upgrade to Pro
+                    </Button>
+                  )}
                   <Button
                     onClick={handleGenerate}
                     disabled={!isFormValid || cooldown > 0 || isLimitReached}

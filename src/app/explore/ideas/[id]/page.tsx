@@ -3,6 +3,7 @@
 import { use, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/client";
+import { getToken } from "@/lib/api/get-token";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -83,10 +84,13 @@ export default function IdeaDetailPage({
 
   const { data, isPending, error } = useQuery({
     queryKey: ["project idea", id],
-    queryFn: () =>
-      apiClient<{ idea: Idea; related: Idea[] }>(
-        `/api/ideas/${id}`
-      ),
+    queryFn: async () => {
+      const token = await getToken();
+      return apiClient<{ idea: Idea; related: Idea[] }>(
+        `/api/ideas/${id}`,
+        { token }
+      );
+    },
   });
 
   const [copied, setCopied] = useState(false);

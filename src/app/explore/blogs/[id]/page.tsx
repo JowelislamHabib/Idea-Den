@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter, notFound } from "next/navigation";
 import { apiClient } from "@/lib/api/client";
+import { getToken } from "@/lib/api/get-token";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -32,7 +33,10 @@ export default function BlogDetailsPage() {
 
   const { data: blogData, isPending, error } = useQuery({
     queryKey: ["blog", id],
-    queryFn: () => apiClient<{ blog: Blog }>(`/api/blogs/${id}`),
+    queryFn: async () => {
+      const token = await getToken();
+      return apiClient<{ blog: Blog }>(`/api/blogs/${id}`, { token });
+    },
     enabled: !!id,
   });
 
