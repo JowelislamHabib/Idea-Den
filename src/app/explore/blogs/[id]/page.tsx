@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { ArrowLeft, Type, Clock, Copy, Check } from "lucide-react";
+import { ArrowLeft, Type, Clock, Copy, Check, Globe, Lock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 
@@ -25,6 +25,7 @@ interface Blog {
   ownerId: string;
   createdAt: string;
   seoMetaDescription: string;
+  visibility?: string;
 }
 
 export default function BlogDetailsPage() {
@@ -127,6 +128,15 @@ export default function BlogDetailsPage() {
               <Badge variant="outline" className="text-muted-foreground">
                 {blog.length} Length
               </Badge>
+              {blog.visibility === "private" ? (
+                <Badge variant="outline" className="border-amber-500/40 text-amber-600 dark:text-amber-400">
+                  <Lock className="size-3 mr-1" /> Private
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="text-muted-foreground">
+                  <Globe className="size-3 mr-1" /> Public
+                </Badge>
+              )}
               <span className="text-sm text-muted-foreground flex items-center ml-2">
                 <Clock className="size-3.5 mr-1" />
                 {new Date(blog.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
