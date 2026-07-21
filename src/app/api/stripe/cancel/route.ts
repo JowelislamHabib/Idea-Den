@@ -15,8 +15,13 @@ export async function POST() {
       cache: "no-store",
     });
 
-    const data = await res.json();
-    return NextResponse.json(data, { status: res.ok ? 200 : 400 });
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      data = { error: `Backend returned ${res.status}: ${res.statusText}` };
+    }
+    return NextResponse.json(data, { status: res.ok ? 200 : data.error ? 400 : res.status });
   } catch (err: any) {
     console.error("Cancel subscription error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });

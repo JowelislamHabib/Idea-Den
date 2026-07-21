@@ -1,23 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { Crown, Loader2, ExternalLink, Receipt, ArrowRight, Ban } from "lucide-react";
+import { Crown, Loader2, ExternalLink, Receipt, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -41,9 +30,6 @@ interface Invoice {
 
 export default function SubscriptionPage() {
   const { data: session } = useSession();
-  const queryClient = useQueryClient();
-  const [cancelOpen, setCancelOpen] = useState(false);
-  const [cancelling, setCancelling] = useState(false);
 
   const { data: sub, isPending: subLoading } = useQuery({
     queryKey: ["subscription"],
@@ -76,25 +62,6 @@ export default function SubscriptionPage() {
       }
     } catch {
       toast.error("Something went wrong");
-    }
-  };
-
-  const handleCancel = async () => {
-    setCancelling(true);
-    try {
-      const res = await fetch("/api/stripe/cancel", { method: "POST" });
-      const data = await res.json();
-      if (data.success) {
-        toast.success("Subscription will cancel at end of billing period");
-        queryClient.invalidateQueries({ queryKey: ["subscription"] });
-      } else {
-        toast.error(data.error || "Failed to cancel");
-      }
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setCancelling(false);
-      setCancelOpen(false);
     }
   };
 
@@ -164,57 +131,14 @@ export default function SubscriptionPage() {
               </div>
               <div className="flex gap-2">
                 {isPro ? (
-                  <>
-                    {sub?.status === "cancel_at_period_end" ? (
-                      <Badge className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30">
-                        Cancels at period end
-                      </Badge>
-                    ) : (
-                      sub?.status === "active" && (
-                        <Dialog open={cancelOpen} onOpenChange={setCancelOpen}>
-                          <DialogTrigger render={
-                            <Button variant="outline" className="rounded-full text-destructive border-destructive/30 hover:bg-destructive/10" />
-                          }>
-                            <Ban className="size-4 mr-1.5" />
-                            Cancel
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>Cancel Subscription?</DialogTitle>
-                              <DialogDescription>
-                                Your Pro features will continue until the end of the current billing period, then downgrade to Free.
-                                {sub?.currentPeriodEnd && (
-                                  <span className="block mt-2 font-medium">
-                                    Access until {new Date(sub.currentPeriodEnd).toLocaleDateString()}
-                                  </span>
-                                )}
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <DialogClose render={<Button variant="outline" />}>
-                                Keep Pro
-                              </DialogClose>
-                              <Button
-                                onClick={handleCancel}
-                                disabled={cancelling}
-                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                              >
-                                {cancelling ? "Cancelling..." : "Confirm Cancellation"}
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      )
-                    )}
-                    <Button
-                      variant="outline"
-                      className="rounded-full"
-                      onClick={handlePortal}
-                    >
-                      <ExternalLink className="size-4 mr-1.5" />
-                      Manage
-                    </Button>
-                  </>
+                  <Button
+                    variant="outline"
+                    className="rounded-full"
+                    onClick={handlePortal}
+                  >
+                    <ExternalLink className="size-4 mr-1.5" />
+                    Manage Subscription
+                  </Button>
                 ) : (
                   <Link href="/pricing">
                     <Button className="rounded-full">
