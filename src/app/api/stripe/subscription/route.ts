@@ -31,13 +31,17 @@ export async function GET() {
 
     if (subscriptionId) {
       try {
-        const sub: any = await stripe.subscriptions.retrieve(subscriptionId);
+        const raw = await stripe.subscriptions.retrieve(subscriptionId);
+        const sub = raw as any;
+        const periodEnd = sub.items?.data?.[0]?.current_period_end ?? sub.current_period_end;
         status = sub.status === "active"
           ? sub.cancel_at_period_end ? "cancel_at_period_end" : "active"
           : sub.status;
-        currentPeriodEnd = new Date(sub.current_period_end * 1000).toISOString();
+        if (periodEnd && periodEnd > 1000000000) {
+          currentPeriodEnd = new Date(periodEnd * 1000).toISOString();
+        }
       } catch {
-        // Stripe fetch failed — use DB values as fallback
+        // use DB fallback
       }
     }
 
