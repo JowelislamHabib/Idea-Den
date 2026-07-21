@@ -144,6 +144,16 @@ export default function Navbar() {
             )}
 
             <Link
+              href="/pricing"
+              className={`px-3.5 py-2 rounded-full text-sm font-medium transition-colors ${
+                pathname === "/pricing"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              Pricing
+            </Link>
+            <Link
               href="/about"
               className={`px-3.5 py-2 rounded-full text-sm font-medium transition-colors ${
                 pathname === "/about"
@@ -352,9 +362,20 @@ export default function Navbar() {
               )}
 
               <Link
+                href="/pricing"
+                onClick={() => setMobileOpen(false)}
+                className={`rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
+                  pathname === "/pricing"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                Pricing
+              </Link>
+              <Link
                 href="/about"
                 onClick={() => setMobileOpen(false)}
-                className={`mt-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
+                className={`rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
                   pathname === "/about"
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"

@@ -249,7 +249,7 @@ export default function GeneratePage() {
                       variant="outline"
                       size="sm"
                       className="border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 h-8 rounded-full px-4"
-                      onClick={() => toast.info("Upgrade to Pro — coming soon!")}
+                      onClick={() => router.push("/pricing")}
                     >
                       <Crown className="mr-1.5 size-3.5" />
                       Upgrade

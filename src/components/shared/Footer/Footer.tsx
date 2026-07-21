@@ -32,6 +32,7 @@ const footerGroups = [
   {
     title: "Product",
     links: [
+      { label: "Pricing", href: "/pricing" },
       { label: "Idea Engine", href: "/generate/ideas" },
       { label: "Blog Writer", href: "/generate/blogs" },
       { label: "Explore Ideas", href: "/explore/ideas" },
