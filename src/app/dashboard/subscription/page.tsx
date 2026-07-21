@@ -1,12 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { Crown, Loader2, ExternalLink, Receipt, ArrowRight } from "lucide-react";
+import { Crown, Loader2, ExternalLink, Receipt, ArrowRight, Ban } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -30,6 +41,9 @@ interface Invoice {
 
 export default function SubscriptionPage() {
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const [cancelOpen, setCancelOpen] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
 
   const { data: sub, isPending: subLoading } = useQuery({
     queryKey: ["subscription"],
@@ -65,6 +79,25 @@ export default function SubscriptionPage() {
     }
   };
 
+  const handleCancel = async () => {
+    setCancelling(true);
+    try {
+      const res = await fetch("/api/stripe/cancel", { method: "POST" });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Subscription will cancel at end of billing period");
+        queryClient.invalidateQueries({ queryKey: ["subscription"] });
+      } else {
+        toast.error(data.error || "Failed to cancel");
+      }
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setCancelling(false);
+      setCancelOpen(false);
+    }
+  };
+
   const glassCardClass = "bg-background/40 backdrop-blur-xl border-white/10 shadow-lg";
 
   if (subLoading) {
@@ -96,8 +129,22 @@ export default function SubscriptionPage() {
                     {isPro ? "Pro" : "Free"}
                   </span>
                   {isPro ? (
-                    <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
-                      Active
+                    <Badge
+                      className={
+                        sub?.status === "cancel_at_period_end"
+                          ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30"
+                          : sub?.status === "past_due"
+                            ? "bg-destructive/15 text-destructive border-destructive/30"
+                            : "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
+                      }
+                    >
+                      {sub?.status === "cancel_at_period_end"
+                        ? "Cancels at period end"
+                        : sub?.status === "past_due"
+                          ? "Past Due"
+                          : sub?.status === "canceled"
+                            ? "Canceled"
+                            : "Active"}
                     </Badge>
                   ) : (
                     <Badge variant="secondary">Current</Badge>
@@ -105,22 +152,69 @@ export default function SubscriptionPage() {
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {isPro
-                    ? sub?.currentPeriodEnd
-                      ? `Renews on ${new Date(sub.currentPeriodEnd).toLocaleDateString()}`
-                      : "Unlimited access to all features"
+                    ? sub?.status === "cancel_at_period_end"
+                      ? sub?.currentPeriodEnd
+                        ? `Access until ${new Date(sub.currentPeriodEnd).toLocaleDateString()}`
+                        : "Cancels at end of billing period"
+                      : sub?.currentPeriodEnd
+                        ? `Renews on ${new Date(sub.currentPeriodEnd).toLocaleDateString()}`
+                        : "Unlimited access to all features"
                     : "3 ideas/day, 3 blogs/day, public content only"}
                 </p>
               </div>
               <div className="flex gap-2">
                 {isPro ? (
-                  <Button
-                    variant="outline"
-                    className="rounded-full"
-                    onClick={handlePortal}
-                  >
-                    <ExternalLink className="size-4 mr-1.5" />
-                    Manage Subscription
-                  </Button>
+                  <>
+                    {sub?.status === "cancel_at_period_end" ? (
+                      <Badge className="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30">
+                        Cancels at period end
+                      </Badge>
+                    ) : (
+                      sub?.status === "active" && (
+                        <Dialog open={cancelOpen} onOpenChange={setCancelOpen}>
+                          <DialogTrigger render={
+                            <Button variant="outline" className="rounded-full text-destructive border-destructive/30 hover:bg-destructive/10" />
+                          }>
+                            <Ban className="size-4 mr-1.5" />
+                            Cancel
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Cancel Subscription?</DialogTitle>
+                              <DialogDescription>
+                                Your Pro features will continue until the end of the current billing period, then downgrade to Free.
+                                {sub?.currentPeriodEnd && (
+                                  <span className="block mt-2 font-medium">
+                                    Access until {new Date(sub.currentPeriodEnd).toLocaleDateString()}
+                                  </span>
+                                )}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <DialogClose render={<Button variant="outline" />}>
+                                Keep Pro
+                              </DialogClose>
+                              <Button
+                                onClick={handleCancel}
+                                disabled={cancelling}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              >
+                                {cancelling ? "Cancelling..." : "Confirm Cancellation"}
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      )
+                    )}
+                    <Button
+                      variant="outline"
+                      className="rounded-full"
+                      onClick={handlePortal}
+                    >
+                      <ExternalLink className="size-4 mr-1.5" />
+                      Manage
+                    </Button>
+                  </>
                 ) : (
                   <Link href="/pricing">
                     <Button className="rounded-full">

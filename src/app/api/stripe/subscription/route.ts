@@ -24,11 +24,19 @@ export async function GET() {
     const profileData = await profileRes.json();
     const user = profileData.user || {};
 
+    let currentPeriodEnd = user.currentPeriodEnd || null;
+
+    if (!currentPeriodEnd && user.role === "pro" && user.upgradedAt) {
+      const fallbackEnd = new Date(user.upgradedAt);
+      fallbackEnd.setDate(fallbackEnd.getDate() + 30);
+      currentPeriodEnd = fallbackEnd.toISOString();
+    }
+
     return NextResponse.json({
       isPro: user.role === "pro",
       subscriptionId: user.stripeSubscriptionId || null,
       status: user.subscriptionStatus || null,
-      currentPeriodEnd: user.currentPeriodEnd || null,
+      currentPeriodEnd,
       stripeCustomerId: user.stripeCustomerId || null,
     });
   } catch (err: any) {
