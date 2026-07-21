@@ -75,6 +75,7 @@ export default function PricingPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
+  const isPro = user?.role === "pro";
   const [proLoading, setProLoading] = useState(false);
 
   const handleProClick = async () => {
@@ -173,39 +174,47 @@ export default function PricingPage() {
                     </CardContent>
 
                     <CardFooter className="pt-2 pb-8">
-                      {isPro ? (
-                        <Button
-                          size="lg"
-                          className="w-full rounded-full font-semibold"
-                          onClick={handleProClick}
-                          disabled={proLoading}
-                        >
-                          {proLoading ? <Loader2 className="size-4 animate-spin mr-1" /> : null}
-                          {user ? "Upgrade to Pro" : "Get Pro"}
-                          {!proLoading && <ChevronRight className="size-4 ml-1" />}
-                        </Button>
-                      ) : (
-                        user ? (
-                          <Button
-                            size="lg"
-                            variant="outline"
-                            className="w-full rounded-full font-semibold"
-                            disabled
-                          >
+                      {(() => {
+                        const isPlanPro = plan.name === "Pro";
+
+                        if (isPro && isPlanPro) return (
+                          <Button size="lg" variant="outline" className="w-full rounded-full font-semibold" disabled>
                             Your Current Plan
                           </Button>
-                        ) : (
-                          <Button
-                            size="lg"
-                            variant="outline"
-                            className="w-full rounded-full font-semibold"
-                            onClick={() => router.push("/register?redirect=/pricing")}
-                          >
-                            Get Started Free
-                            <ChevronRight className="size-4 ml-1" />
+                        );
+
+                        if (isPro && !isPlanPro) return (
+                          <Button size="lg" variant="outline" className="w-full rounded-full font-semibold" disabled>
+                            Current
                           </Button>
-                        )
-                      )}
+                        );
+
+                        if (!isPlanPro && user) return (
+                          <Button size="lg" variant="outline" className="w-full rounded-full font-semibold" disabled>
+                            Your Current Plan
+                          </Button>
+                        );
+
+                        if (isPlanPro && !user) return (
+                          <Button size="lg" className="w-full rounded-full font-semibold" onClick={handleProClick} disabled={proLoading}>
+                            {proLoading ? <Loader2 className="size-4 animate-spin mr-1" /> : null}
+                            Get Pro{!proLoading && <ChevronRight className="size-4 ml-1" />}
+                          </Button>
+                        );
+
+                        if (!isPlanPro && !user) return (
+                          <Button size="lg" variant="outline" className="w-full rounded-full font-semibold" onClick={() => router.push("/register?redirect=/pricing")}>
+                            Get Started Free<ChevronRight className="size-4 ml-1" />
+                          </Button>
+                        );
+
+                        return (
+                          <Button size="lg" className="w-full rounded-full font-semibold" onClick={handleProClick} disabled={proLoading}>
+                            {proLoading ? <Loader2 className="size-4 animate-spin mr-1" /> : null}
+                            Upgrade to Pro{!proLoading && <ChevronRight className="size-4 ml-1" />}
+                          </Button>
+                        );
+                      })()}
                     </CardFooter>
                   </Card>
                 </StaggerItem>
