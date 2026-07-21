@@ -41,12 +41,6 @@ export async function GET() {
       }
     }
 
-    if (!currentPeriodEnd && user.role === "pro" && user.upgradedAt) {
-      const fallbackEnd = new Date(user.upgradedAt);
-      fallbackEnd.setDate(fallbackEnd.getDate() + 30);
-      currentPeriodEnd = fallbackEnd.toISOString();
-    }
-
     return NextResponse.json({
       isPro: user.role === "pro",
       subscriptionId,

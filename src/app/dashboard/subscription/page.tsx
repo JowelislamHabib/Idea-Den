@@ -121,10 +121,10 @@ export default function SubscriptionPage() {
                   {isPro
                     ? sub?.status === "cancel_at_period_end"
                       ? sub?.currentPeriodEnd
-                        ? `Access until ${new Date(sub.currentPeriodEnd).toLocaleDateString()}`
+                        ? `Access until ${new Date(sub.currentPeriodEnd).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`
                         : "Cancels at end of billing period"
                       : sub?.currentPeriodEnd
-                        ? `Renews on ${new Date(sub.currentPeriodEnd).toLocaleDateString()}`
+                        ? `Renews on ${new Date(sub.currentPeriodEnd).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`
                         : "Unlimited access to all features"
                     : "3 ideas/day, 3 blogs/day, public content only"}
                 </p>
@@ -161,7 +161,7 @@ export default function SubscriptionPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {invLoading ? (
+            {!isPro ? null : invLoading ? (
               <div className="flex items-center justify-center h-32">
                 <Loader2 className="size-5 animate-spin text-muted-foreground" />
               </div>
@@ -185,7 +185,7 @@ export default function SubscriptionPage() {
                   <tbody>
                     {invoices.map((inv) => (
                       <tr key={inv.id} className="border-b border-border/20">
-                        <td className="py-3">{new Date(inv.date).toLocaleDateString()}</td>
+                        <td className="py-3">{new Date(inv.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
                         <td className="py-3">${inv.amount.toFixed(2)}</td>
                         <td className="py-3">
                           <Badge
