@@ -1,0 +1,38 @@
+import { NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { getTokenServer } from "@/lib/getTokenServer";
+
+export async function GET() {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    const token = await getTokenServer();
+    const apiBase = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000";
+    const profileRes = await fetch(`${apiBase}/api/users/profile`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      cache: "no-store",
+    });
+
+    if (!profileRes.ok) {
+      return NextResponse.json({ error: "Failed to fetch profile" }, { status: 500 });
+    }
+
+    const profileData = await profileRes.json();
+    const user = profileData.user || {};
+
+    return NextResponse.json({
+      isPro: user.role === "pro",
+      subscriptionId: user.stripeSubscriptionId || null,
+      status: user.subscriptionStatus || null,
+      currentPeriodEnd: user.currentPeriodEnd || null,
+      stripeCustomerId: user.stripeCustomerId || null,
+    });
+  } catch (err: any) {
+    console.error("Subscription fetch error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}

@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Crown, Sparkles, Check, X, ChevronRight, DollarSign } from "lucide-react";
+import { Crown, Sparkles, Check, X, ChevronRight, DollarSign, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -74,13 +75,27 @@ export default function PricingPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
+  const [proLoading, setProLoading] = useState(false);
 
-  const handleProClick = () => {
+  const handleProClick = async () => {
     if (!user) {
       router.push("/register?redirect=/pricing");
       return;
     }
-    toast.info("Upgrade to Pro \u2014 coming soon!");
+    setProLoading(true);
+    try {
+      const res = await fetch("/api/stripe/create-checkout", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        router.push(data.url);
+      } else {
+        toast.error(data.error || "Failed to start checkout");
+        setProLoading(false);
+      }
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+      setProLoading(false);
+    }
   };
 
   return (
@@ -163,9 +178,11 @@ export default function PricingPage() {
                           size="lg"
                           className="w-full rounded-full font-semibold"
                           onClick={handleProClick}
+                          disabled={proLoading}
                         >
+                          {proLoading ? <Loader2 className="size-4 animate-spin mr-1" /> : null}
                           {user ? "Upgrade to Pro" : "Get Pro"}
-                          <ChevronRight className="size-4 ml-1" />
+                          {!proLoading && <ChevronRight className="size-4 ml-1" />}
                         </Button>
                       ) : (
                         user ? (

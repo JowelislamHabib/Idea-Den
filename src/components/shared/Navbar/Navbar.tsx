@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   LogOut,
   Menu,
@@ -13,6 +14,7 @@ import {
   BarChart3,
   ChevronDown,
   Sparkles,
+  Crown,
 } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -39,6 +41,18 @@ export default function Navbar() {
     : `?redirect=${encodeURIComponent(currentPath)}`;
   const { data: session, isPending } = useSession();
   const user = session?.user;
+
+  const { data: proData } = useQuery({
+    queryKey: ["nav-pro-status"],
+    queryFn: async () => {
+      const res = await fetch("/api/stripe/subscription");
+      if (!res.ok) return { isPro: false };
+      return res.json() as Promise<{ isPro: boolean }>;
+    },
+    enabled: !!user,
+    refetchInterval: 60000,
+  });
+  const isPro = proData?.isPro || false;
 
   const handleLogout = async () => {
     await authClient.signOut();
@@ -190,6 +204,12 @@ export default function Navbar() {
                     <span className="hidden lg:inline max-w-[120px] truncate">
                       {user.name}
                     </span>
+                    {isPro && (
+                      <span className="hidden lg:inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400 ml-1">
+                        <Crown className="size-3" />
+                        Pro
+                      </span>
+                    )}
                     <ChevronDown size={14} className="text-muted-foreground" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
@@ -199,7 +219,15 @@ export default function Navbar() {
                   >
                     <DropdownMenuGroup>
                       <DropdownMenuLabel className="font-normal p-3">
-                        <div className="text-sm font-semibold">{user.name}</div>
+                        <div className="text-sm font-semibold flex items-center gap-2">
+                          {user.name}
+                          {isPro && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400">
+                              <Crown className="size-3" />
+                              Pro
+                            </span>
+                          )}
+                        </div>
                         <div className="text-xs text-muted-foreground truncate">
                           {user.email}
                         </div>
@@ -393,7 +421,15 @@ export default function Navbar() {
                       <User size={16} className="text-primary" />
                     </div>
                     <div className="text-sm">
-                      <div className="font-semibold">{user.name}</div>
+                      <div className="font-semibold flex items-center gap-2">
+                        {user.name}
+                        {isPro && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400">
+                            <Crown className="size-3" />
+                            Pro
+                          </span>
+                        )}
+                      </div>
                       <div className="text-xs text-muted-foreground">
                         {user.email}
                       </div>
