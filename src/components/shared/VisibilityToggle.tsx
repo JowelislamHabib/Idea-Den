@@ -32,11 +32,11 @@ export function VisibilityToggle({ visibility, onChange, isPro }: VisibilityTogg
           type="button"
           onClick={() => isPro && onChange("public")}
           disabled={!isPro}
-          className={`flex-1 flex items-center gap-2 rounded-3xl border px-4 py-3 text-sm font-medium transition-all ${
-            visibility === "public" && isPro
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border bg-background text-muted-foreground hover:bg-muted/50"
-          } ${!isPro ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+           className={`flex-1 flex items-center gap-2 rounded-3xl border px-4 py-3 text-sm font-medium transition-all ${
+             visibility === "public"
+               ? "border-primary bg-primary/10 text-primary"
+               : "border-border bg-background text-muted-foreground hover:bg-muted/50"
+           } ${!isPro ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
         >
           <Globe className="size-4" />
           <div className="text-left">
@@ -48,11 +48,11 @@ export function VisibilityToggle({ visibility, onChange, isPro }: VisibilityTogg
           type="button"
           onClick={() => isPro && onChange("private")}
           disabled={!isPro}
-          className={`flex-1 flex items-center gap-2 rounded-3xl border px-4 py-3 text-sm font-medium transition-all ${
-            visibility === "private" && isPro
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border bg-background text-muted-foreground hover:bg-muted/50"
-          } ${!isPro ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+           className={`flex-1 flex items-center gap-2 rounded-3xl border px-4 py-3 text-sm font-medium transition-all ${
+             visibility === "private"
+               ? "border-primary bg-primary/10 text-primary"
+               : "border-border bg-background text-muted-foreground hover:bg-muted/50"
+           } ${!isPro ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
         >
           <Lock className="size-4" />
           <div className="text-left">
