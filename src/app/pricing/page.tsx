@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "@/components/ui/motion-wrapper";
 import { useSession } from "@/lib/auth-client";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const plans = [
@@ -75,8 +76,18 @@ export default function PricingPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
-  const isPro = user?.role === "pro";
   const [proLoading, setProLoading] = useState(false);
+
+  const { data: sub } = useQuery({
+    queryKey: ["subscription"],
+    queryFn: async () => {
+      const res = await fetch("/api/stripe/subscription");
+      if (!res.ok) return { isPro: false };
+      return res.json() as Promise<{ isPro: boolean }>;
+    },
+    enabled: !!user,
+  });
+  const isPro = sub?.isPro ?? user?.role === "pro";
 
   const handleProClick = async () => {
     if (!user) {
@@ -119,18 +130,18 @@ export default function PricingPage() {
           <StaggerContainer className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-24 lg:max-w-5xl">
             {plans.map((plan) => {
               const Icon = plan.icon;
-              const isPro = plan.name === "Pro";
+              const isPlanPro = plan.name === "Pro";
 
               return (
                 <StaggerItem key={plan.name}>
                   <Card
                     className={`relative flex flex-col h-full ${
-                      isPro
+                      isPlanPro
                         ? "border-primary/30 shadow-lg shadow-primary/5 ring-1 ring-primary/20"
                         : "border-border/50"
                     }`}
                   >
-                    {isPro && (
+                    {isPlanPro && (
                       <div className="flex justify-center">
                         <Badge className="bg-primary text-primary-foreground shadow-sm px-4 py-0.5 text-xs font-semibold rounded-full border-0 -mt-3">
                           Most Popular
@@ -140,9 +151,9 @@ export default function PricingPage() {
 
                     <CardHeader className="text-center pt-4 pb-0">
                       <div className={`mx-auto flex size-12 items-center justify-center rounded-2xl mb-4 ${
-                        isPro ? "bg-primary/10" : "bg-muted"
+                        isPlanPro ? "bg-primary/10" : "bg-muted"
                       }`}>
-                        <Icon className={`size-6 ${isPro ? "text-primary" : "text-muted-foreground"}`} />
+                        <Icon className={`size-6 ${isPlanPro ? "text-primary" : "text-muted-foreground"}`} />
                       </div>
                       <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
                       <div className="mt-2">
@@ -189,7 +200,7 @@ export default function PricingPage() {
                           </Button>
                         );
 
-                        if (!isPlanPro && user) return (
+                        if (!isPro && !isPlanPro && user) return (
                           <Button size="lg" variant="outline" className="w-full rounded-full font-semibold" disabled>
                             Your Current Plan
                           </Button>

@@ -108,10 +108,16 @@ export default function Navbar() {
                 align="start"
                 className="w-40 p-2 flex flex-col gap-1"
               >
-                <DropdownMenuItem className="cursor-pointer" render={<Link href="/explore/ideas" className="w-full" />}>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  render={<Link href="/explore/ideas" className="w-full" />}
+                >
                   Ideas
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" render={<Link href="/explore/blogs" className="w-full" />}>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  render={<Link href="/explore/blogs" className="w-full" />}
+                >
                   Blogs
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -127,18 +133,38 @@ export default function Navbar() {
                         : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     }`}
                   >
-                    <Sparkles size={14} className={pathname.startsWith("/generate") ? "text-primary" : "text-violet-500"} />
-                    Generate 
-                    <ChevronDown size={14} className={`transition-transform duration-200 group-data-[state=open]:rotate-180 opacity-70`} />
+                    <Sparkles
+                      size={14}
+                      className={
+                        pathname.startsWith("/generate")
+                          ? "text-primary"
+                          : "text-amber-600"
+                      }
+                    />
+                    Generate
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-200 group-data-[state=open]:rotate-180 opacity-70`}
+                    />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="start"
                     className="w-48 p-2 flex flex-col gap-1"
                   >
-                    <DropdownMenuItem className="cursor-pointer" render={<Link href="/generate/ideas" className="w-full" />}>
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      render={
+                        <Link href="/generate/ideas" className="w-full" />
+                      }
+                    >
                       Project Idea
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer" render={<Link href="/generate/blogs" className="w-full" />}>
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      render={
+                        <Link href="/generate/blogs" className="w-full" />
+                      }
+                    >
                       Blog Article
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -235,21 +261,45 @@ export default function Navbar() {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup className="flex flex-col gap-1">
-                      <DropdownMenuItem className="cursor-pointer" render={<Link href="/dashboard/ideas" className="flex items-center w-full" />}>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        render={
+                          <Link
+                            href="/dashboard/ideas"
+                            className="flex items-center w-full"
+                          />
+                        }
+                      >
                         <Lightbulb
                           size={16}
                           className="mr-2.5 text-muted-foreground"
                         />
                         My Ideas
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer" render={<Link href="/dashboard/blogs" className="flex items-center w-full" />}>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        render={
+                          <Link
+                            href="/dashboard/blogs"
+                            className="flex items-center w-full"
+                          />
+                        }
+                      >
                         <PenTool
                           size={16}
                           className="mr-2.5 text-muted-foreground"
                         />
                         My Blogs
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer" render={<Link href="/dashboard" className="flex items-center w-full" />}>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        render={
+                          <Link
+                            href="/dashboard"
+                            className="flex items-center w-full"
+                          />
+                        }
+                      >
                         <BarChart3
                           size={16}
                           className="mr-2.5 text-muted-foreground"
