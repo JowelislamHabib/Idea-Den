@@ -272,18 +272,18 @@ export default function GeneratePage() {
             <CardContent className="p-6 sm:p-8">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
                     <Label htmlFor="interests" className="font-semibold flex items-center gap-2 text-base">
                       <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">1</div>
                       What do you want to build?
                     </Label>
                     <Button 
-                      variant="ghost" 
+                      variant="secondary" 
                       size="sm" 
                       type="button" 
                       onClick={handleSurpriseMe} 
                       disabled={isGeneratingRandom || randomCooldown > 0}
-                      className="text-muted-foreground hover:text-primary h-8 px-4 transition-all w-auto min-w-[130px]"
+                      className="text-primary hover:bg-primary/20 bg-primary/10 border border-primary/20 h-8 px-4 transition-all w-full sm:w-auto min-w-[130px]"
                     >
                       {isGeneratingRandom ? (
                         <Loader2 className="size-3.5 mr-1.5 animate-spin" />
