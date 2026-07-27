@@ -13,8 +13,6 @@ const floatingBadges = [
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden min-h-[90vh] flex items-center">
-
-
       <div className="mx-auto max-w-7xl px-4 sm:px-6 w-full py-20 sm:py-28">
         <div className="flex flex-col items-center text-center">
           <FadeIn>
@@ -27,12 +25,10 @@ export function HeroSection() {
           <FadeIn delay={0.1}>
             <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] max-w-5xl text-foreground">
               Stop Staring at a{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-primary">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-500 to-primary">
                 Blank Screen.
               </span>
-              <span className="block">
-                Start Building with IdeaDen.
-              </span>
+              <span className="block">Start Building with IdeaDen.</span>
             </h1>
           </FadeIn>
 
@@ -49,7 +45,7 @@ export function HeroSection() {
                 href="/generate/ideas"
                 className={cn(
                   buttonVariants({ size: "lg" }),
-                  "rounded-full px-8 h-12 font-semibold text-base shadow-lg shadow-primary/30 transition-all hover:shadow-primary/40 group"
+                  "rounded-full px-8 h-12 font-semibold text-base shadow-lg shadow-primary/30 transition-all hover:shadow-primary/40 group",
                 )}
               >
                 Try IdeaDen Free
@@ -59,7 +55,7 @@ export function HeroSection() {
                 href="#how-it-works"
                 className={cn(
                   buttonVariants({ variant: "outline", size: "lg" }),
-                  "rounded-full px-8 h-12 font-semibold text-base border-border/40 hover:bg-background/80 transition-all"
+                  "rounded-full px-8 h-12 font-semibold text-base border-border/40 hover:bg-background/80 transition-all",
                 )}
               >
                 See How It Works
@@ -70,7 +66,8 @@ export function HeroSection() {
           <FadeIn delay={0.4}>
             <p className="mt-6 text-sm text-muted-foreground/60 text-center">
               <span className="inline-block size-2 shrink-0 rounded-full bg-primary/40 animate-pulse mr-2 mb-0.5" />
-              Free tier available &middot; No credit card required &middot; 50,000+ blueprints generated
+              Free tier available &middot; No credit card required &middot;
+              50,000+ blueprints generated
             </p>
           </FadeIn>
 

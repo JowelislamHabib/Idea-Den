@@ -162,20 +162,20 @@ export default function IdeaDetailPage({
 
         <Tabs defaultValue="overview" className="w-full">
           <SlideUp delay={0.1}>
-            <div className="flex justify-start mb-6">
-              <TabsList>
-                <TabsTrigger value="overview" className="text-sm">Strategy & Context</TabsTrigger>
-                <TabsTrigger value="architecture" className="text-sm">Requirements & Logic</TabsTrigger>
-                <TabsTrigger value="execution" className="text-sm">Planning & Execution</TabsTrigger>
+            <div className="w-full mb-6 overflow-x-auto pb-2 scrollbar-hide">
+              <TabsList className="inline-flex h-auto w-auto min-w-full sm:min-w-0 justify-start bg-muted/50 p-1">
+                <TabsTrigger value="overview" className="text-sm whitespace-nowrap px-4 py-2">Strategy & Context</TabsTrigger>
+                <TabsTrigger value="architecture" className="text-sm whitespace-nowrap px-4 py-2">Requirements & Logic</TabsTrigger>
+                <TabsTrigger value="execution" className="text-sm whitespace-nowrap px-4 py-2">Planning & Execution</TabsTrigger>
               </TabsList>
             </div>
           </SlideUp>
 
           <TabsContent value="overview" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
             <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <FileText className="size-5 text-primary" /> Executive Summary
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <FileText className="size-5" /> Executive Summary
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
@@ -186,9 +186,9 @@ export default function IdeaDetailPage({
             </Card>
 
             <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="size-5 text-primary" /> Strategy & Context
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <Target className="size-5" /> Strategy & Context
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
@@ -199,9 +199,9 @@ export default function IdeaDetailPage({
             </Card>
 
             <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Users className="size-5 text-primary" /> Users & Scope
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <Users className="size-5" /> Users & Scope
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
@@ -214,9 +214,9 @@ export default function IdeaDetailPage({
 
           <TabsContent value="architecture" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
             <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Settings className="size-5 text-primary" /> Requirements & Logic
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <Settings className="size-5" /> Requirements & Logic
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
@@ -227,9 +227,9 @@ export default function IdeaDetailPage({
             </Card>
 
             <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Layout className="size-5 text-primary" /> Design & Execution
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <Layout className="size-5" /> Design & Execution
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
@@ -242,9 +242,9 @@ export default function IdeaDetailPage({
 
           <TabsContent value="execution" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
             <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <AlertTriangle className="size-5 text-primary" /> Planning & Risk Management
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <AlertTriangle className="size-5" /> Planning & Risk Management
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
@@ -255,9 +255,9 @@ export default function IdeaDetailPage({
             </Card>
 
             <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Book className="size-5 text-primary" /> Appendix / Glossary
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <Book className="size-5" /> Appendix / Glossary
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
