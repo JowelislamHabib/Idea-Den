@@ -4,27 +4,18 @@ import { use, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ReactMarkdown from "react-markdown";
 import { Separator } from "@/components/ui/separator";
 import {
   Loader2,
   ArrowLeft,
-  Database,
-  Route,
-  Users,
-  Lightbulb,
   Clock,
-  BarChart3,
-  Target,
-  CheckCircle2,
-  Swords,
-  Rocket,
   Copy,
   Check,
   Globe,
@@ -36,47 +27,14 @@ interface Idea {
   _id: string;
   projectTitle: string;
   tagline: string;
-  theProblem: string;
-  targetAudience: string[];
-  theSolution: string;
-  keyFeatures: {
-    name: string;
-    description: string;
-  }[];
-  recommendedTechStack: {
-    category: string;
-    details: string;
-  }[];
-  competitors: {
-    name: string;
-    differentiation: string;
-  }[];
-  whyBuildThis: {
-    title: string;
-    description: string;
-  }[];
-  firstSteps: string[];
   techStack: string[];
   elevatorPitch: string;
   estimatedDuration: string;
   ownerName: string;
   createdAt: string;
   visibility?: string;
+  prd: string;
 }
-
-const METHOD_COLORS: Record<string, string> = {
-  GET: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-  POST: "bg-blue-500/10 text-blue-700 dark:text-blue-400",
-  PUT: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-  DELETE: "bg-red-500/10 text-red-700 dark:text-red-400",
-  PATCH: "bg-purple-500/10 text-purple-700 dark:text-purple-400",
-};
-
-const PRIORITY_COLORS: Record<string, string> = {
-  high: "bg-red-500/10 text-red-700 dark:text-red-400",
-  medium: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-  low: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-};
 
 export default function IdeaDetailPage({
   params,
@@ -113,42 +71,8 @@ export default function IdeaDetailPage({
   const { idea, related } = data;
 
   const handleCopy = async () => {
-    const sections = [
-      `# ${idea.projectTitle}`,
-      idea.tagline,
-      "",
-      `**Estimated Duration:** ${idea.estimatedDuration}`,
-      `**Owner:** ${idea.ownerName}`,
-      "",
-      "---",
-      "",
-      "## The Problem",
-      idea.theProblem,
-      "",
-      "## Target Audience",
-      ...(idea.targetAudience || []).map((u) => `- ${u}`),
-      "",
-      "## The Solution",
-      idea.theSolution,
-      "",
-      "## Key Features",
-      ...(idea.keyFeatures || []).map((f) => `- **${f.name}:** ${f.description}`),
-      "",
-      "## Recommended Tech Stack",
-      ...(idea.recommendedTechStack || []).map((s) => `- **${s.category}:** ${s.details}`),
-      "",
-      "## Competitors",
-      ...(idea.competitors || []).map((c) => `- **${c.name}:** ${c.differentiation}`),
-      "",
-      "## Why Build This",
-      ...(idea.whyBuildThis || []).map((w) => `- **${w.title}:** ${w.description}`),
-      "",
-      "## First Steps",
-      ...(idea.firstSteps || []).map((s, i) => `${i + 1}. ${s}`),
-    ];
-
     try {
-      await navigator.clipboard.writeText(sections.join("\n"));
+      await navigator.clipboard.writeText(idea.prd);
       setCopied(true);
       toast.success("Idea copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
@@ -211,168 +135,15 @@ export default function IdeaDetailPage({
 
         <Separator className="my-6" />
 
-        <Tabs defaultValue="overview" className="w-full">
-          <SlideUp delay={0.1}>
-            <div className="flex justify-start mb-6">
-              <TabsList>
-                <TabsTrigger value="overview" className="text-sm">Overview</TabsTrigger>
-                <TabsTrigger value="architecture" className="text-sm">Architecture</TabsTrigger>
-                <TabsTrigger value="execution" className="text-sm">Execution</TabsTrigger>
-              </TabsList>
-            </div>
-          </SlideUp>
-
-          <TabsContent value="overview" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
-                  <Target className="size-4 text-primary" /> The Problem
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {idea.theProblem}
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
-                  <Lightbulb className="size-4 text-primary" /> The Solution
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {idea.theSolution}
-                </p>
-              </CardContent>
-            </Card>
-
-            {idea.targetAudience?.length > 0 && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
-                    <Users className="size-4 text-primary" /> Target Audience
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="grid sm:grid-cols-2 gap-2">
-                    {idea.targetAudience.map((user, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <CheckCircle2 className="size-4 text-primary/70 shrink-0" />
-                        <span>{user}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          <TabsContent value="architecture" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
-                  <BarChart3 className="size-4 text-primary" /> Key Features
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {idea.keyFeatures?.map((feature, i) => (
-                    <div key={i} className="bg-muted/40 p-3 rounded-md border text-sm">
-                      <h4 className="font-semibold mb-1 text-foreground">{feature.name}</h4>
-                      <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
-                  <Database className="size-4 text-primary" /> Recommended Tech Stack
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {idea.recommendedTechStack?.map((stack, i) => (
-                    <div key={i} className="flex items-center gap-2 bg-muted/40 border rounded-md px-3 py-2 text-sm">
-                      <span className="font-semibold text-foreground">{stack.category}:</span>
-                      <span className="text-muted-foreground">{stack.details}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="execution" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
-            {idea.competitors?.length > 0 && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
-                    <Swords className="size-4 text-primary" /> Competitors & Differentiation
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {idea.competitors.map((comp, i) => (
-                      <div key={i} className="flex flex-col gap-1 border rounded-md p-3 bg-muted/40 text-sm">
-                        <span className="font-semibold text-foreground">{comp.name}</span>
-                        <span className="text-muted-foreground leading-relaxed">{comp.differentiation}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
-                  <Rocket className="size-4 text-primary" /> Why You Should Build This
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {idea.whyBuildThis?.map((reason, i) => (
-                    <div key={i} className="flex items-start gap-3 border rounded-md p-3 bg-muted/40 text-sm">
-                      <div className="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-[10px] font-bold mt-0.5">
-                        {i + 1}
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground">{reason.title}</h4>
-                        <p className="text-muted-foreground mt-0.5 leading-relaxed">{reason.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {idea.firstSteps?.length > 0 && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="font-heading flex items-center gap-2 text-base font-semibold">
-                    <Route className="size-4 text-primary" /> First Steps to Execute
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {idea.firstSteps.map((step, i) => (
-                      <li key={i} className="flex items-start gap-3 bg-muted/40 p-2.5 rounded-md border text-sm">
-                        <CheckCircle2 className="size-4 text-muted-foreground mt-0.5 shrink-0" />
-                        <span className="text-muted-foreground">{step}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-        </Tabs>
+        <SlideUp delay={0.1}>
+          <Card className="border bg-card shadow-sm">
+            <CardContent className="p-6 sm:p-10">
+              <div className="prose prose-slate dark:prose-invert max-w-none">
+                <ReactMarkdown>{idea.prd || "Generating PRD..."}</ReactMarkdown>
+              </div>
+            </CardContent>
+          </Card>
+        </SlideUp>
 
         {related?.length > 0 && (
           <SlideUp delay={0.35}>
