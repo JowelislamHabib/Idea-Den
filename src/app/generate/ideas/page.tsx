@@ -283,7 +283,7 @@ export default function GeneratePage() {
                       type="button" 
                       onClick={handleSurpriseMe} 
                       disabled={isGeneratingRandom || randomCooldown > 0}
-                      className="text-primary hover:bg-primary/20 bg-primary/10 border border-primary/20 h-8 px-4 transition-all w-full sm:w-auto min-w-[130px]"
+                      className="text-amber-600 dark:text-amber-500 hover:bg-amber-500/10 bg-amber-500/5 border border-amber-600 h-8 px-4 transition-all w-full sm:w-auto min-w-[130px]"
                     >
                       {isGeneratingRandom ? (
                         <Loader2 className="size-3.5 mr-1.5 animate-spin" />
