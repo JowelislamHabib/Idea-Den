@@ -172,100 +172,114 @@ export default function IdeaDetailPage({
           </SlideUp>
 
           <TabsContent value="overview" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
-            <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-4 border-b">
-                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
-                  <FileText className="size-5" /> Executive Summary
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
-                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
-                  <ReactMarkdown>{idea.prdSections?.executiveSummary || "Generating Executive Summary..."}</ReactMarkdown>
-                </div>
-              </CardContent>
-            </Card>
+            <SlideUp delay={0.1}>
+              <Card className="border bg-card shadow-sm">
+                <CardHeader className="pb-4 border-b">
+                  <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                    <FileText className="size-5" /> Executive Summary
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                  <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                    <ReactMarkdown>{idea.prdSections?.executiveSummary || "Generating Executive Summary..."}</ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
+            </SlideUp>
 
-            <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-4 border-b">
-                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
-                  <Target className="size-5" /> Strategy & Context
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
-                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
-                  <ReactMarkdown>{idea.prdSections?.strategyAndContext || "Generating Strategy & Context..."}</ReactMarkdown>
-                </div>
-              </CardContent>
-            </Card>
+            <SlideUp delay={0.2}>
+              <Card className="border bg-card shadow-sm">
+                <CardHeader className="pb-4 border-b">
+                  <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                    <Target className="size-5" /> Strategy & Context
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                  <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                    <ReactMarkdown>{idea.prdSections?.strategyAndContext || "Generating Strategy & Context..."}</ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
+            </SlideUp>
 
-            <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-4 border-b">
-                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
-                  <Users className="size-5" /> Users & Scope
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
-                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
-                  <ReactMarkdown>{idea.prdSections?.usersAndScope || "Generating Users & Scope..."}</ReactMarkdown>
-                </div>
-              </CardContent>
-            </Card>
+            <SlideUp delay={0.3}>
+              <Card className="border bg-card shadow-sm">
+                <CardHeader className="pb-4 border-b">
+                  <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                    <Users className="size-5" /> Users & Scope
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                  <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                    <ReactMarkdown>{idea.prdSections?.usersAndScope || "Generating Users & Scope..."}</ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
+            </SlideUp>
           </TabsContent>
 
           <TabsContent value="architecture" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
-            <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-4 border-b">
-                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
-                  <Settings className="size-5" /> Requirements & Logic
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
-                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
-                  <ReactMarkdown>{idea.prdSections?.requirementsAndLogic || "Generating Requirements & Logic..."}</ReactMarkdown>
-                </div>
-              </CardContent>
-            </Card>
+            <SlideUp delay={0.1}>
+              <Card className="border bg-card shadow-sm">
+                <CardHeader className="pb-4 border-b">
+                  <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                    <Settings className="size-5" /> Requirements & Logic
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                  <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                    <ReactMarkdown>{idea.prdSections?.requirementsAndLogic || "Generating Requirements & Logic..."}</ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
+            </SlideUp>
 
-            <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-4 border-b">
-                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
-                  <Layout className="size-5" /> Design & Execution
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
-                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
-                  <ReactMarkdown>{idea.prdSections?.designAndExecution || "Generating Design & Execution..."}</ReactMarkdown>
-                </div>
-              </CardContent>
-            </Card>
+            <SlideUp delay={0.2}>
+              <Card className="border bg-card shadow-sm">
+                <CardHeader className="pb-4 border-b">
+                  <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                    <Layout className="size-5" /> Design & Execution
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                  <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                    <ReactMarkdown>{idea.prdSections?.designAndExecution || "Generating Design & Execution..."}</ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
+            </SlideUp>
           </TabsContent>
 
           <TabsContent value="execution" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
-            <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-4 border-b">
-                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
-                  <AlertTriangle className="size-5" /> Planning & Risk Management
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
-                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
-                  <ReactMarkdown>{idea.prdSections?.planningAndRisk || "Generating Planning & Risk Management..."}</ReactMarkdown>
-                </div>
-              </CardContent>
-            </Card>
+            <SlideUp delay={0.1}>
+              <Card className="border bg-card shadow-sm">
+                <CardHeader className="pb-4 border-b">
+                  <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                    <AlertTriangle className="size-5" /> Planning & Risk Management
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                  <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                    <ReactMarkdown>{idea.prdSections?.planningAndRisk || "Generating Planning & Risk Management..."}</ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
+            </SlideUp>
 
-            <Card className="border bg-card shadow-sm">
-              <CardHeader className="pb-4 border-b">
-                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
-                  <Book className="size-5" /> Appendix / Glossary
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
-                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
-                  <ReactMarkdown>{idea.prdSections?.appendix || "Generating Appendix..."}</ReactMarkdown>
-                </div>
-              </CardContent>
-            </Card>
+            <SlideUp delay={0.2}>
+              <Card className="border bg-card shadow-sm">
+                <CardHeader className="pb-4 border-b">
+                  <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                    <Book className="size-5" /> Appendix / Glossary
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                  <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                    <ReactMarkdown>{idea.prdSections?.appendix || "Generating Appendix..."}</ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
+            </SlideUp>
           </TabsContent>
         </Tabs>
 
