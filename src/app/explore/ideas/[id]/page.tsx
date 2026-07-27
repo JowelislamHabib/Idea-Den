@@ -4,13 +4,14 @@ import { use, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import {
   Loader2,
@@ -19,7 +20,14 @@ import {
   Copy,
   Check,
   Globe,
-  Lock
+  Lock,
+  FileText,
+  Target,
+  Users,
+  Settings,
+  Layout,
+  AlertTriangle,
+  Book
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -33,7 +41,15 @@ interface Idea {
   ownerName: string;
   createdAt: string;
   visibility?: string;
-  prd: string;
+  prdSections?: {
+    executiveSummary: string;
+    strategyAndContext: string;
+    usersAndScope: string;
+    requirementsAndLogic: string;
+    designAndExecution: string;
+    planningAndRisk: string;
+    appendix: string;
+  };
 }
 
 export default function IdeaDetailPage({
@@ -72,7 +88,16 @@ export default function IdeaDetailPage({
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(idea.prd);
+      const sections = idea.prdSections ? [
+        idea.prdSections.executiveSummary,
+        idea.prdSections.strategyAndContext,
+        idea.prdSections.usersAndScope,
+        idea.prdSections.requirementsAndLogic,
+        idea.prdSections.designAndExecution,
+        idea.prdSections.planningAndRisk,
+        idea.prdSections.appendix
+      ] : [];
+      await navigator.clipboard.writeText(sections.filter(Boolean).join("\\n\\n---\\n\\n"));
       setCopied(true);
       toast.success("Idea copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
@@ -135,15 +160,114 @@ export default function IdeaDetailPage({
 
         <Separator className="my-6" />
 
-        <SlideUp delay={0.1}>
-          <Card className="border bg-card shadow-sm">
-            <CardContent className="p-6 sm:p-10">
-              <div className="prose prose-slate dark:prose-invert max-w-none">
-                <ReactMarkdown>{idea.prd || "Generating PRD..."}</ReactMarkdown>
-              </div>
-            </CardContent>
-          </Card>
-        </SlideUp>
+        <Tabs defaultValue="overview" className="w-full">
+          <SlideUp delay={0.1}>
+            <div className="flex justify-start mb-6">
+              <TabsList>
+                <TabsTrigger value="overview" className="text-sm">Strategy & Context</TabsTrigger>
+                <TabsTrigger value="architecture" className="text-sm">Requirements & Logic</TabsTrigger>
+                <TabsTrigger value="execution" className="text-sm">Planning & Execution</TabsTrigger>
+              </TabsList>
+            </div>
+          </SlideUp>
+
+          <TabsContent value="overview" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
+            <Card className="border bg-card shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <FileText className="size-5 text-primary" /> Executive Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                  <ReactMarkdown>{idea.prdSections?.executiveSummary || "Generating Executive Summary..."}</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border bg-card shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="size-5 text-primary" /> Strategy & Context
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                  <ReactMarkdown>{idea.prdSections?.strategyAndContext || "Generating Strategy & Context..."}</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border bg-card shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Users className="size-5 text-primary" /> Users & Scope
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                  <ReactMarkdown>{idea.prdSections?.usersAndScope || "Generating Users & Scope..."}</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="architecture" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
+            <Card className="border bg-card shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Settings className="size-5 text-primary" /> Requirements & Logic
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                  <ReactMarkdown>{idea.prdSections?.requirementsAndLogic || "Generating Requirements & Logic..."}</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border bg-card shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Layout className="size-5 text-primary" /> Design & Execution
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                  <ReactMarkdown>{idea.prdSections?.designAndExecution || "Generating Design & Execution..."}</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="execution" className="space-y-4 focus-visible:outline-none focus-visible:ring-0">
+            <Card className="border bg-card shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <AlertTriangle className="size-5 text-primary" /> Planning & Risk Management
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                  <ReactMarkdown>{idea.prdSections?.planningAndRisk || "Generating Planning & Risk Management..."}</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border bg-card shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Book className="size-5 text-primary" /> Appendix / Glossary
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                  <ReactMarkdown>{idea.prdSections?.appendix || "Generating Appendix..."}</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         {related?.length > 0 && (
           <SlideUp delay={0.35}>
