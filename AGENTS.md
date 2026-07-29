@@ -30,7 +30,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - **Protected routes:** `<AuthRequired>` wrapper + `useSession()` from `@/lib/auth-client`.
 - **JWT for Express API:** Server-side: `@/lib/getTokenServer.ts` reads JWT from httpOnly cookie. Client-side: `fetch("/api/auth/get-token")` retrieves JWT. Pass as `{ token }` option to `apiClient()` which sets `Authorization: Bearer <token>` header.
 - **State:** TanStack Query (React Query v5) via `src/app/providers.tsx`.
-- **Env:** `.env` gitignored (`.gitignore` has `.env*`). Required vars: `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `MONGODB_URI`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `NEXT_PUBLIC_BASE_URL`, `NEXT_PUBLIC_IMAGE_UPLOAD_API` (ImgBB key), `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`. Do NOT commit env files.
+- **Env:** `.env` gitignored (`.gitignore` has `.env*`). Required vars: `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `MONGODB_URI`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `NEXT_PUBLIC_BASE_URL`, `NEXT_PUBLIC_IMAGE_UPLOAD_API` (ImgBB key). Server-side: `STRIPE_SECRET_KEY`. Do NOT commit env files.
 - **Daily quota:** Free users limited to **3 ideas/day** AND **3 blogs/day** (separate per-type quotas). Server-side, checked after rate limit.
 - **User lookup:** Dual query `${or: [{_id: ObjectId(userId)}, {id: userId}]}` — Better Auth stores `id` as string, not ObjectId.
 
@@ -48,7 +48,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Notable
 
-- **Gemini:** Uses `gemini-flash-lite` with `responseMimeType: "application/json"` via raw `fetch()` (not Google SDK). Two services: `services/gemini.ts` (ideas, JSON) and `services/gemini-blog.ts` (blogs, JSON with markdown content field).
+- **Gemini:** Uses `gemini-flash-lite-latest` with `responseMimeType: "application/json"` via raw `fetch()` (not Google SDK). Two services: `services/gemini.ts` (ideas, JSON) and `services/gemini-blog.ts` (blogs, JSON with markdown content field).
 - **Server build:** `esbuild index.ts --bundle --platform=node --outfile=api/index.js --external:express --external:cors --external:mongodb --external:dotenv`
 - **Two rate limits per generation:** 15s client-side (`handleCooldown` in generate pages) AND 15s server-side per `userId` (in-memory Map in `routes/{generate,blogs}.ts`). Both needed.
 - **Icon hover pattern:** Home section icon boxes use `transition-transform group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground` (container has `group`, icon box has `bg-primary/10 border border-primary/20`, icon has `text-primary`).

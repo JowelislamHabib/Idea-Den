@@ -25,6 +25,16 @@
 
 ---
 
+## The Problem
+
+**For Developers:** Staring at a blank screen wondering what to build next is frustrating. You have specific technologies you want to learn, a limited amount of free time, and specific interests. Finding an idea that perfectly matches these constraints is hard. Even when you find one, writing a structured Product Requirements Document (PRD) to plan the architecture, scope, and user flows takes hours of tedious work. As a result, developers often skip planning and jump straight to coding, leading to scope creep and abandoned projects.
+
+**For Content Creators:** Producing high-quality, SEO-optimized content consistently is difficult and time-consuming. You need to adapt to different tones (professional, casual, persuasive) and formats (listicles, case studies, how-to guides) while ensuring target keywords are naturally integrated.
+
+IdeaDen solves both problems by leveraging AI to generate highly customized project PRDs and SEO-ready blog content in seconds.
+
+---
+
 ## Features
 
 ### AI Idea & PRD Generator
