@@ -7,7 +7,7 @@ const steps = [
     number: "01",
     title: "Tell IdeaDen What You Need",
     description:
-      "Choose your tool (Blueprint or Blog), fill in a few simple inputs — your interests, tone, topic, or tech stack. It takes less than 60 seconds.",
+      "Choose your tool (Project Idea or Article), fill in a few simple inputs — your interests, tone, topic, or tech stack. It takes less than 60 seconds.",
   },
   {
     icon: Zap,
@@ -21,7 +21,7 @@ const steps = [
     number: "03",
     title: "Launch, Publish, Build with IdeaDen",
     description:
-      "Copy your blog straight into your CMS. Take your blueprint and start coding. Everything IdeaDen produces is yours — use it however you want.",
+      "Copy your article straight into your CMS. Take your PRD and start coding. Everything IdeaDen produces is yours — use it however you want.",
   },
 ];
 

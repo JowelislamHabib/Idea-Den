@@ -12,7 +12,7 @@ const valueProps = [
     icon: User,
     title: "Actually Human Output",
     description:
-      "IdeaDen's team has obsessed over tone, flow, and readability. Blog content passes the 'would I actually publish this?' test. Blueprints read like they came from a senior PM.",
+      "IdeaDen's team has obsessed over tone, flow, and readability. Articles pass the 'would I actually publish this?' test. PRDs read like they came from a senior PM.",
   },
   {
     icon: RefreshCcw,

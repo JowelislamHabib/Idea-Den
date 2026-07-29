@@ -24,7 +24,7 @@ const personas = [
     name: "Startup Founders",
     icon: Building2,
     painPoint: "I need to explore multiple directions quickly.",
-    solution: "Generate and compare multiple project blueprints to find the most promising direction.",
+    solution: "Generate and compare multiple PRDs to find the most promising direction.",
   },
   {
     name: "Technical Bloggers",
@@ -36,7 +36,7 @@ const personas = [
     name: "Students & Learners",
     icon: GraduationCap,
     painPoint: "I need project ideas to practice new technologies.",
-    solution: "Beginner-appropriate project blueprints matched to your learning goals and time constraints.",
+    solution: "Beginner-appropriate PRDs matched to your learning goals and time constraints.",
   },
   {
     name: "Marketing Teams",

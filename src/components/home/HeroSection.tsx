@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { FadeIn, SlideUp } from "@/components/ui/motion-wrapper";
 
 const floatingBadges = [
-  { icon: Code2, label: "Project Blueprints" },
+  { icon: Code2, label: "Project PRDs" },
   { icon: FileText, label: "Blog Content" },
   { icon: Lightbulb, label: "Smart Ideas" },
 ];
@@ -35,7 +35,7 @@ export function HeroSection() {
           <FadeIn delay={0.2}>
             <p className="mt-8 max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed font-medium">
               IdeaDen uses advanced AI to help you generate fully-formed project
-              blueprints and publish-ready blog content — in minutes, not weeks.
+              PRDs and publish-ready blog content — in minutes, not weeks.
             </p>
           </FadeIn>
 
@@ -67,7 +67,7 @@ export function HeroSection() {
             <p className="mt-6 text-sm text-muted-foreground/60 text-center">
               <span className="inline-block size-2 shrink-0 rounded-full bg-primary/40 animate-pulse mr-2 mb-0.5" />
               Free tier available &middot; No credit card required &middot;
-              50,000+ blueprints generated
+              50,000+ PRDs generated
             </p>
           </FadeIn>
 

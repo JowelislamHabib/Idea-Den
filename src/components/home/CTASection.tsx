@@ -39,7 +39,7 @@ export function CTASection() {
 
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground mb-12 leading-relaxed">
             Join thousands of creators who have eliminated the blank page forever.
-            Get full access to the Blueprint Engine and Content Engine — no credit
+            Get full access to the Idea Engine and Content Engine — no credit
             card required.
           </p>
 
@@ -61,7 +61,7 @@ export function CTASection() {
                 "rounded-full px-8 h-12 font-semibold text-base border-border/40 hover:bg-background/80 transition-all w-full sm:w-auto"
               )}
             >
-              Try a Blueprint First
+              Try an Idea First
             </Link>
           </div>
 

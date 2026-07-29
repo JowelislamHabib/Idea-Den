@@ -46,7 +46,7 @@ const plans = [
 ];
 
 const features = [
-  { label: "Project Ideas", free: "3 / day", pro: "Unlimited" },
+  { label: "Ideas & PRDs", free: "3 / day", pro: "Unlimited" },
   { label: "Blog Articles", free: "3 / day", pro: "Unlimited" },
   { label: "Content Visibility", free: "Public only", pro: "Can protect from public" },
   { label: "Generation Speed", free: "Standard", pro: "Priority" },

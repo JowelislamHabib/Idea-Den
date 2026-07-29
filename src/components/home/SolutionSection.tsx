@@ -47,7 +47,7 @@ export function SolutionSection() {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-primary/60 uppercase tracking-widest">Engine One</div>
-                    <h3 className="text-xl font-bold">The Blueprint Engine</h3>
+                    <h3 className="text-xl font-bold">The Idea Engine</h3>
                   </div>
                 </div>
 
@@ -76,7 +76,7 @@ export function SolutionSection() {
                     "rounded-full w-full sm:w-auto group/btn shadow-lg shadow-primary/20"
                   )}
                 >
-                  Generate a Blueprint
+                  Generate an Idea & PRD
                   <ArrowRight className="ml-2 size-4 transition-transform group-hover/btn:translate-x-1" />
                 </Link>
               </div>

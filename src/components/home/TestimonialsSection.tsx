@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/motion-wrapper";
 
 const stats = [
-  { value: "50,000+", label: "Blueprints Generated", icon: Rocket },
+  { value: "50,000+", label: "Ideas Generated", icon: Rocket },
   { value: "100,000+", label: "Blog Posts Written", icon: PenTool },
   { value: "4.8/5", label: "Average Rating", icon: Award },
   { value: "12 Hrs", label: "Avg Time Saved Per Project", icon: Clock },

@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     question: "Do I own the content IdeaDen generates?",
-    answer: "Absolutely. 100%. Every blueprint, every blog post, every word generated — it's yours. Use it commercially, publish it under your name, modify it however you want. No attribution required. No strings attached.",
+    answer: "Absolutely. 100%. Every project idea, every article, every word generated — it's yours. Use it commercially, publish it under your name, modify it however you want. No attribution required. No strings attached.",
   },
   {
     question: "How is IdeaDen different from just using ChatGPT?",

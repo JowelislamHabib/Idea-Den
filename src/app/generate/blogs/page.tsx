@@ -164,7 +164,7 @@ export default function BlogGeneratePage() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center py-16">
         <AuthRequired
-          title="Sign in to generate blogs"
+          title="Sign in to generate articles & blogs"
           description="Create an account to start writing AI-powered articles with Idea AI."
           redirectUrl="/blogs/generate"
         />
@@ -258,7 +258,7 @@ export default function BlogGeneratePage() {
             <Type className="size-8 text-primary animate-pulse" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight font-heading mb-2">
-            Writing your article...
+            Generating your article...
           </h2>
           <div className="text-muted-foreground h-6 overflow-hidden relative w-64 text-center">
             {LOADING_STATES.map((state, idx) => (
@@ -339,19 +339,34 @@ export default function BlogGeneratePage() {
               ) : null}
             </div>
             <h1 className="font-heading scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              Write a Blog Article
+              Generate an Article or Blog
             </h1>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Configure your topic, tone, and length, and let AI write a highly
-              engaging, SEO-optimized article.
+              Designed for content writers. Configure your topic, tone, and length, and let AI write a highly
+              engaging, SEO-optimized article or blog post.
             </p>
           </div>
         </SlideUp>
 
         <SlideUp delay={0.1}>
-          <Card
-            className={isLimitReached ? "opacity-75 pointer-events-none" : ""}
-          >
+          <Card className="relative overflow-hidden">
+            {isLimitReached && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/60 backdrop-blur-[2px]">
+                <div className="bg-background border shadow-lg rounded-xl p-6 text-center max-w-sm mx-4 flex flex-col items-center">
+                  <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mb-4">
+                     <Zap className="size-6 text-destructive" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Daily Limit Reached</h3>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    You've reached your free limit for today. Upgrade to Pro for unlimited access and priority generation.
+                  </p>
+                  <Button onClick={() => router.push("/pricing")} className="w-full">
+                    <Crown className="size-4 mr-2" />
+                    Upgrade to Pro
+                  </Button>
+                </div>
+              </div>
+            )}
             <CardContent className="p-6 sm:p-8">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-3">
@@ -553,7 +568,7 @@ export default function BlogGeneratePage() {
                     ) : (
                       <>
                         <Sparkles className="mr-2 size-5" />
-                        Generate Article
+                        Generate Article / Blog
                       </>
                     )}
                   </Button>
