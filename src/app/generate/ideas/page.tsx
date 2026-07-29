@@ -56,7 +56,7 @@ const LOADING_STATES = [
   "Analyzing your interests...",
   "Finding the perfect tech stack...",
   "Matching the deadline...",
-  "Writing the project blueprint...",
+  "Writing the project PRD...",
   "Finalizing your PRD...",
 ];
 

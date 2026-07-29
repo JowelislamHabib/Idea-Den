@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>AI-powered project idea & blog content generator</strong>
+  <strong>AI-Powered Project PRD & Blog Content Generator</strong>
 </p>
 
 <p align="center">
@@ -21,31 +21,25 @@
 
 ## Overview
 
-**IdeaDen** is a full-stack AI-powered platform that transforms vague ideas into structured project ideas and publish-ready blog content. Built with **Next.js 16** and a **Node.js/Express backend**, it leverages **Google Gemini AI** to generate comprehensive project specs, technical roadmaps, and SEO-optimized articles in seconds.
-
-### The Problem
-
-Every developer faces the blank screen problem — you want to build something but can't decide what. Hours are wasted brainstorming, researching tech stacks, and structuring project plans. Content creators struggle with writer's block, topic research, and SEO optimization. IdeaDen eliminates these bottlenecks with AI-powered generation tailored to your preferences and tech stack.
+**IdeaDen** is an AI-powered platform for developers and content creators. Developers can generate project ideas on demand and produce full PRDs from any idea. Content creators can generate SEO-optimized blog posts and articles with customizable templates, tones, and lengths. Built with **Next.js 16** + **Express 5**, powered by **Google Gemini AI**.
 
 ---
 
 ## Features
 
-### AI Project Idea Generator
+### AI Idea & PRD Generator
 
-- Complete project ideas with problem statement, solution, target audience, and key features
-- Recommended tech stack with rationale per category
-- Competitive analysis and differentiation points
-- Step-by-step implementation first steps
-- De-duplication against previously generated ideas
-- Developer preference-aware (stack, experience, focus)
+- Generate project ideas from your interests, available time, and preferred tech stack
+- Turn any idea into a full PRD — 7 sections: Executive Summary, Strategy & Context, Users & Scope, Requirements & Logic, Design & Execution, Planning & Risk, Appendix
+- Adapts to developer preferences (stack, experience level, focus area)
+- Avoids duplicates by tracking previously generated ideas
 
 ### AI Blog Content Generator
 
 - 6 templates: Standard, How-To Guide, Listicle, Thought Leadership, Case Study, Review
 - 6 tones: Professional, Casual, Humorous, Persuasive, Inspirational, Educational
 - 3 lengths: Short (~500 words), Medium (~1000 words), Long (~1500 words)
-- Custom SEO keyword integration for better ranking
+- Custom SEO keyword integration
 - Regeneration support with content de-duplication
 
 ### Explore Community Ideas

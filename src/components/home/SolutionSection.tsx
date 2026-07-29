@@ -4,7 +4,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const blueprintFeatures = [
+const prdFeatures = [
   "Catchy project name & tagline",
   "Problem statement & 4+ target personas",
   "Core feature specifications",
@@ -61,7 +61,7 @@ export function SolutionSection() {
                 </div>
 
                 <ul className="space-y-3 mb-8">
-                  {blueprintFeatures.map((f, i) => (
+                  {prdFeatures.map((f, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-foreground/80">
                       <CheckCircle2 className="size-4 text-primary shrink-0 mt-0.5" />
                       <span>{f}</span>

@@ -10,7 +10,7 @@ const icons = [Users, Sparkles, Shield, HelpCircle, RefreshCcw, Briefcase, Globe
 const faqs = [
   {
     question: "Who is IdeaDen built for?",
-    answer: "It's built specifically for two roles: Developers looking for project blueprints, and Content Writers needing high-quality article drafts.",
+    answer: "It's built specifically for two roles: Developers looking for project PRDs, and Content Writers needing high-quality article drafts.",
   },
   {
     question: "Is the content from IdeaDen actually unique, or does it repeat itself?",
