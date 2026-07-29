@@ -552,6 +552,7 @@ export default function BlogGeneratePage() {
           </Card>
         </SlideUp>
       </div>
+    </div>
     </>
   );
 }

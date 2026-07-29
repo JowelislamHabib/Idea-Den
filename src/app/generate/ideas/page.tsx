@@ -499,6 +499,7 @@ export default function GeneratePage() {
           </Card>
         </SlideUp>
       </div>
+    </div>
     </>
   );
 }
