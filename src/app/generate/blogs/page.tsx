@@ -83,6 +83,7 @@ export default function BlogGeneratePage() {
   const [randomCooldown, setRandomCooldown] = useState(0);
   const [loadingStep, setLoadingStep] = useState(0);
   const [isGeneratingRandom, setIsGeneratingRandom] = useState(false);
+  const [errors, setErrors] = useState<{ topic?: string }>({});
 
   const { data: quota, isLoading: quotaLoading } = useQuery({
     queryKey: ["userBlogQuota", session?.user?.id],
@@ -137,7 +138,10 @@ export default function BlogGeneratePage() {
   });
 
   useEffect(() => {
-    if (!generateMutation.isPending && !isRouting) {
+    if (generateMutation.isPending || isRouting) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
       setLoadingStep(0);
       return;
     }
@@ -146,7 +150,10 @@ export default function BlogGeneratePage() {
         prev + 1 < LOADING_STATES.length ? prev + 1 : prev,
       );
     }, 3000); // slightly slower for blogs as generation takes longer
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      document.body.style.overflow = "";
+    };
   }, [generateMutation.isPending, isRouting]);
 
   if (sessionPending) {
@@ -225,9 +232,10 @@ export default function BlogGeneratePage() {
 
   const handleGenerate = () => {
     if (!topic.trim()) {
-      toast.error("Please enter a topic");
+      setErrors({ topic: "Enter a topic for your article" });
       return;
     }
+    setErrors({});
     if (quota && !quota.isPro && quota.count >= quota.limit) {
       toast.error(
         "You have reached your daily generation limit. Upgrade to Pro for unlimited generation.",
@@ -383,8 +391,9 @@ export default function BlogGeneratePage() {
                     id="topic"
                     placeholder="e.g. The Future of AI in Web Development"
                     value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
+                    onChange={(e) => { setTopic(e.target.value); setErrors(prev => ({ ...prev, topic: undefined })); }}
                   />
+                  {errors.topic && <p className="text-sm text-destructive mt-1">{errors.topic}</p>}
                 </div>
 
                 <div className="flex flex-col gap-3 mt-2">
@@ -527,7 +536,7 @@ export default function BlogGeneratePage() {
                 <div className="mt-6 space-y-3">
                   <Button
                     onClick={handleGenerate}
-                    disabled={!isFormValid || cooldown > 0 || isLimitReached}
+                    disabled={cooldown > 0 || isLimitReached}
                     className="w-full font-semibold"
                     size="lg"
                   >

@@ -76,6 +76,7 @@ export default function GeneratePage() {
   const [randomCooldown, setRandomCooldown] = useState(0);
   const [loadingStep, setLoadingStep] = useState(0);
   const [isGeneratingRandom, setIsGeneratingRandom] = useState(false);
+  const [errors, setErrors] = useState<{ interests?: string; timeAvailable?: string; techStack?: string }>({});
 
   const { data: quota, isLoading: quotaLoading } = useQuery({
     queryKey: ["userQuota", session?.user?.id],
@@ -127,7 +128,10 @@ export default function GeneratePage() {
   });
 
   useEffect(() => {
-    if (!generateMutation.isPending && !isRouting) {
+    if (generateMutation.isPending || isRouting) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
       setLoadingStep(0);
       return;
     }
@@ -136,7 +140,10 @@ export default function GeneratePage() {
         prev + 1 < LOADING_STATES.length ? prev + 1 : prev,
       );
     }, 2500);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      document.body.style.overflow = "";
+    };
   }, [generateMutation.isPending, isRouting]);
 
   if (sessionPending) {
@@ -214,10 +221,12 @@ export default function GeneratePage() {
   };
 
   const handleGenerate = () => {
-    if (!interests.trim() || !timeAvailable || techStack.length === 0) {
-      toast.error("Please fill in all fields");
-      return;
-    }
+    const newErrors: typeof errors = {};
+    if (!interests.trim()) newErrors.interests = "Enter what you want to build";
+    if (!timeAvailable) newErrors.timeAvailable = "Select how much time you have";
+    if (techStack.length === 0) newErrors.techStack = "Add at least one technology";
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
     if (quota && !quota.isPro && quota.count >= quota.limit) {
       toast.error(
         "You have reached your daily generation limit. Upgrade to Pro for unlimited generation.",
@@ -369,13 +378,14 @@ export default function GeneratePage() {
                           : "Random Idea"}
                     </Button>
                   </div>
-                  <Input
-                    id="interests"
-                    placeholder="e.g. A game, an education app, a tool for doctors..."
-                    value={interests}
-                    onChange={(e) => setInterests(e.target.value)}
-                  />
-                </div>
+                    <Input
+                      id="interests"
+                      placeholder="e.g. A game, an education app, a tool for doctors..."
+                      value={interests}
+                      onChange={(e) => { setInterests(e.target.value); setErrors(prev => ({ ...prev, interests: undefined })); }}
+                    />
+                    {errors.interests && <p className="text-sm text-destructive mt-1">{errors.interests}</p>}
+                  </div>
 
                 <div className="flex flex-col gap-3 mt-2">
                   <Label className="font-semibold flex items-center gap-2 text-base">
@@ -392,7 +402,7 @@ export default function GeneratePage() {
                         variant={
                           timeAvailable === option.value ? "default" : "outline"
                         }
-                        onClick={() => setTimeAvailable(option.value)}
+                        onClick={() => { setTimeAvailable(option.value); setErrors(prev => ({ ...prev, timeAvailable: undefined })); }}
                         className="w-full"
                       >
                         <Clock className="size-4 mr-2" />
@@ -400,6 +410,7 @@ export default function GeneratePage() {
                       </Button>
                     ))}
                   </div>
+                  {errors.timeAvailable && <p className="text-sm text-destructive mt-1">{errors.timeAvailable}</p>}
                 </div>
 
                 <div className="flex flex-col gap-3 mt-2">
@@ -419,7 +430,7 @@ export default function GeneratePage() {
                         {tech}
                         <button
                           type="button"
-                          onClick={() => removeTech(tech)}
+                          onClick={() => { removeTech(tech); setErrors(prev => ({ ...prev, techStack: undefined })); }}
                           className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
                         >
                           <X className="size-3" />
@@ -436,6 +447,7 @@ export default function GeneratePage() {
                         if (e.key === "Enter") {
                           e.preventDefault();
                           addTech(customTech);
+                      setErrors(prev => ({ ...prev, techStack: undefined }));
                         }
                       }}
                     />
@@ -443,7 +455,7 @@ export default function GeneratePage() {
                       type="button"
                       variant="outline"
                       size="icon"
-                      onClick={() => addTech(customTech)}
+                      onClick={() => { addTech(customTech); setErrors(prev => ({ ...prev, techStack: undefined })); }}
                       disabled={!customTech.trim()}
                     >
                       <Plus className="size-4" />
@@ -456,13 +468,14 @@ export default function GeneratePage() {
                           key={tech}
                           variant="outline"
                           className="cursor-pointer hover:bg-secondary transition-colors"
-                          onClick={() => addTech(tech)}
+                          onClick={() => { addTech(tech); setErrors(prev => ({ ...prev, techStack: undefined })); }}
                         >
                           + {tech}
                         </Badge>
                       ),
                     )}
                   </div>
+                  {errors.techStack && <p className="text-sm text-destructive mt-1">{errors.techStack}</p>}
                 </div>
 
                 <VisibilityToggle
@@ -474,7 +487,7 @@ export default function GeneratePage() {
                 <div className="mt-4 space-y-3">
                   <Button
                     onClick={handleGenerate}
-                    disabled={!isFormValid || cooldown > 0 || isLimitReached}
+                    disabled={cooldown > 0 || isLimitReached}
                     className="w-full font-semibold"
                     size="lg"
                   >
