@@ -6,6 +6,7 @@ import { getToken } from "@/lib/api/get-token";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlideUp } from "@/components/ui/motion-wrapper";
+import { PageLoading } from "@/components/shared/PageLoading";
 import { Loader2, Lightbulb, Layers, TrendingUp, PenTool } from "lucide-react";
 import {
   PieChart,
@@ -88,11 +89,7 @@ export default function DashboardOverviewPage() {
   });
 
   if (sessionPending || ideasPending || blogsPending) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   const ideas = ideasData?.ideas || [];

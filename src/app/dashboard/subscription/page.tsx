@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SlideUp } from "@/components/ui/motion-wrapper";
+import { PageLoading } from "@/components/shared/PageLoading";
 import { Crown, Loader2, ExternalLink, Receipt, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -68,11 +69,7 @@ export default function SubscriptionPage() {
   const glassCardClass = "bg-background/40 backdrop-blur-xl border-white/10 shadow-lg";
 
   if (subLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   const isPro = sub?.isPro || false;

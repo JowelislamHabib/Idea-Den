@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
-import { AuthRequired } from "@/components/shared/AuthRequired";
 import { Button } from "@/components/ui/button";
+import { PageLoading } from "@/components/shared/PageLoading";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,15 +15,36 @@ import { apiClient } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
 import { toast } from "sonner";
 import { VisibilityToggle } from "@/components/shared/VisibilityToggle";
-import { Sparkles, X, Plus, Clock, Loader2, CheckCircle2, Type, FileText, Zap, Crown } from "lucide-react";
+import {
+  Sparkles,
+  X,
+  Plus,
+  Clock,
+  Loader2,
+  CheckCircle2,
+  Type,
+  FileText,
+  Zap,
+  Crown,
+} from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 const TEMPLATE_OPTIONS = [
-  "Standard Article", "How-To Guide", "Listicle", "Thought Leadership", "Case Study", "Review"
+  "Standard Article",
+  "How-To Guide",
+  "Listicle",
+  "Thought Leadership",
+  "Case Study",
+  "Review",
 ];
 
 const TONE_OPTIONS = [
-  "Professional", "Casual", "Humorous", "Persuasive", "Inspirational", "Educational"
+  "Professional",
+  "Casual",
+  "Humorous",
+  "Persuasive",
+  "Inspirational",
+  "Educational",
 ];
 
 const LENGTH_OPTIONS = [
@@ -38,12 +59,14 @@ const LOADING_STATES = [
   "Writing engaging content...",
   "Optimizing for SEO...",
   "Applying the selected tone...",
-  "Polishing the final draft..."
+  "Polishing the final draft...",
 ];
 
 export default function BlogGeneratePage() {
   const { data: session, isPending: sessionPending } = useSession();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [isRouting, setIsRouting] = useState(false);
 
   const [topic, setTopic] = useState("");
   const [template, setTemplate] = useState("Standard Article");
@@ -52,7 +75,7 @@ export default function BlogGeneratePage() {
   const [keywords, setKeywords] = useState<string[]>([]);
   const [customKeyword, setCustomKeyword] = useState("");
   const [additionalInstructions, setAdditionalInstructions] = useState("");
-  
+
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [cooldown, setCooldown] = useState(0);
   const [randomCooldown, setRandomCooldown] = useState(0);
@@ -63,7 +86,10 @@ export default function BlogGeneratePage() {
     queryKey: ["userBlogQuota", session?.user?.id],
     queryFn: async () => {
       const token = await getToken();
-      return apiClient<{ count: number; limit: number; isPro: boolean }>("/api/blogs/quota", { token });
+      return apiClient<{ count: number; limit: number; isPro: boolean }>(
+        "/api/blogs/quota",
+        { token },
+      );
     },
     enabled: !!session?.user?.id,
   });
@@ -71,46 +97,54 @@ export default function BlogGeneratePage() {
   const generateMutation = useMutation({
     mutationFn: async () => {
       const token = await getToken();
-      return apiClient<{ success: boolean; blog: { _id: string } }>("/api/blogs/generate", {
-        method: "POST",
-        body: JSON.stringify({
-          topic,
-          template,
-          tone,
-          length,
-          keywords,
-          additionalInstructions,
-          visibility,
-        }),
-        token,
-      });
+      return apiClient<{ success: boolean; blog: { _id: string } }>(
+        "/api/blogs/generate",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            topic,
+            template,
+            tone,
+            length,
+            keywords,
+            additionalInstructions,
+            visibility,
+          }),
+          token,
+        },
+      );
     },
     onSuccess: (data) => {
+      setIsRouting(true);
       toast.success("Blog generated successfully!");
-      router.push(`/explore/blogs/${data.blog._id}`);
+      startTransition(() => {
+        router.push(`/explore/blogs/${data.blog._id}`, { scroll: false });
+      });
     },
     onError: (error) => {
-      toast.error(error instanceof Error ? error.message : "Generation failed. Please try again.");
-    }
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Generation failed. Please try again.",
+      );
+    },
   });
 
   useEffect(() => {
-    if (!generateMutation.isPending) {
+    if (!generateMutation.isPending && !isRouting) {
       setLoadingStep(0);
       return;
     }
     const interval = setInterval(() => {
-      setLoadingStep((prev) => (prev + 1 < LOADING_STATES.length ? prev + 1 : prev));
+      setLoadingStep((prev) =>
+        prev + 1 < LOADING_STATES.length ? prev + 1 : prev,
+      );
     }, 3000); // slightly slower for blogs as generation takes longer
     return () => clearInterval(interval);
-  }, [generateMutation.isPending]);
+  }, [generateMutation.isPending, isRouting]);
 
   if (sessionPending) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   if (!session?.user) {
@@ -168,9 +202,9 @@ export default function BlogGeneratePage() {
     try {
       setIsGeneratingRandom(true);
       const token = await getToken();
-      const res = await apiClient<{ topic: string }>("/api/blogs/random", { 
+      const res = await apiClient<{ topic: string }>("/api/blogs/random", {
         method: "POST",
-        token 
+        token,
       });
       if (res && res.topic) {
         setTopic(res.topic);
@@ -189,7 +223,9 @@ export default function BlogGeneratePage() {
       return;
     }
     if (quota && !quota.isPro && quota.count >= quota.limit) {
-      toast.error("You have reached your daily generation limit. Upgrade to Pro for unlimited generation.");
+      toast.error(
+        "You have reached your daily generation limit. Upgrade to Pro for unlimited generation.",
+      );
       return;
     }
     handleCooldown();
@@ -197,9 +233,9 @@ export default function BlogGeneratePage() {
   };
 
   const isFormValid = topic.trim().length > 0;
-  const isLimitReached = quota && !quota.isPro && quota.count >= quota.limit; 
+  const isLimitReached = quota && !quota.isPro && quota.count >= quota.limit;
 
-  if (generateMutation.isPending) {
+  if (generateMutation.isPending || isRouting) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center py-12 bg-muted/20">
         <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
@@ -213,7 +249,10 @@ export default function BlogGeneratePage() {
             <div
               key={idx}
               className="absolute inset-0 transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateY(${(idx - loadingStep) * 100}%)`, opacity: idx === loadingStep ? 1 : 0 }}
+              style={{
+                transform: `translateY(${(idx - loadingStep) * 100}%)`,
+                opacity: idx === loadingStep ? 1 : 0,
+              }}
             >
               {state}
             </div>
@@ -237,20 +276,38 @@ export default function BlogGeneratePage() {
                 <div className="h-5 w-32 bg-muted rounded animate-pulse" />
               ) : quota ? (
                 quota.isPro ? (
-                  <Badge variant="outline" className="text-emerald-500 border-emerald-500/30">
-                    <CheckCircle2 className="size-3 mr-1.5" /> Pro Plan (Unlimited)
+                  <Badge
+                    variant="outline"
+                    className="text-emerald-500 border-emerald-500/30"
+                  >
+                    <CheckCircle2 className="size-3 mr-1.5" /> Pro Plan
+                    (Unlimited)
                   </Badge>
                 ) : (
                   <div className="flex flex-wrap justify-center items-center gap-3">
                     <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-background shadow-sm">
-                      <Zap className={isLimitReached ? "size-4 text-destructive" : "size-4 text-amber-500"} />
+                      <Zap
+                        className={
+                          isLimitReached
+                            ? "size-4 text-destructive"
+                            : "size-4 text-amber-500"
+                        }
+                      />
                       <span className="text-sm font-medium">
-                        {isLimitReached ? "Daily Limit Reached" : `${quota.limit - quota.count} Generations Left`}
+                        {isLimitReached
+                          ? "Daily Limit Reached"
+                          : `${quota.limit - quota.count} Generations Left`}
                       </span>
                       <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden ml-2 hidden sm:block">
-                        <div 
-                          className={isLimitReached ? "h-full rounded-full transition-all bg-destructive" : "h-full rounded-full transition-all bg-amber-500"} 
-                          style={{ width: `${(quota.count / quota.limit) * 100}%` }}
+                        <div
+                          className={
+                            isLimitReached
+                              ? "h-full rounded-full transition-all bg-destructive"
+                              : "h-full rounded-full transition-all bg-amber-500"
+                          }
+                          style={{
+                            width: `${(quota.count / quota.limit) * 100}%`,
+                          }}
                         />
                       </div>
                     </div>
@@ -258,7 +315,7 @@ export default function BlogGeneratePage() {
                       variant="outline"
                       size="sm"
                       className="border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 h-8 rounded-full px-4"
-                      onClick={() => router.push("/pricing")}
+                      onClick={() => router.push("/pricing", { scroll: false })}
                     >
                       <Crown className="mr-1.5 size-3.5" />
                       Upgrade
@@ -271,36 +328,49 @@ export default function BlogGeneratePage() {
               Write a Blog Article
             </h1>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              Configure your topic, tone, and length, and let AI write a highly engaging, SEO-optimized article.
+              Configure your topic, tone, and length, and let AI write a highly
+              engaging, SEO-optimized article.
             </p>
           </div>
         </SlideUp>
 
         <SlideUp delay={0.1}>
-          <Card className={isLimitReached ? "opacity-75 pointer-events-none" : ""}>
+          <Card
+            className={isLimitReached ? "opacity-75 pointer-events-none" : ""}
+          >
             <CardContent className="p-6 sm:p-8">
               <div className="flex flex-col gap-6">
-                
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-                    <Label htmlFor="topic" className="font-semibold flex items-center gap-2 text-base">
-                      <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">1</div>
+                    <Label
+                      htmlFor="topic"
+                      className="font-semibold flex items-center gap-2 text-base"
+                    >
+                      <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">
+                        1
+                      </div>
                       What is the topic?
                     </Label>
-                    <Button 
-                      variant="secondary" 
-                      size="sm" 
-                      type="button" 
-                      onClick={handleSurpriseMe} 
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      type="button"
+                      onClick={handleSurpriseMe}
                       disabled={isGeneratingRandom || randomCooldown > 0}
                       className="text-amber-600 dark:text-amber-500 hover:bg-amber-500/10 bg-amber-500/5 border border-amber-600 h-8 px-4 transition-all w-full sm:w-auto min-w-[130px]"
                     >
                       {isGeneratingRandom ? (
                         <Loader2 className="size-3.5 mr-1.5 animate-spin" />
                       ) : (
-                        <Sparkles className={`size-3.5 mr-1.5 ${randomCooldown > 0 ? 'opacity-50' : ''}`} />
+                        <Sparkles
+                          className={`size-3.5 mr-1.5 ${randomCooldown > 0 ? "opacity-50" : ""}`}
+                        />
                       )}
-                      {isGeneratingRandom ? "Thinking..." : randomCooldown > 0 ? `Wait ${randomCooldown}s` : "Random Topic"}
+                      {isGeneratingRandom
+                        ? "Thinking..."
+                        : randomCooldown > 0
+                          ? `Wait ${randomCooldown}s`
+                          : "Random Topic"}
                     </Button>
                   </div>
                   <Input
@@ -313,7 +383,9 @@ export default function BlogGeneratePage() {
 
                 <div className="flex flex-col gap-3 mt-2">
                   <Label className="font-semibold flex items-center gap-2 text-base">
-                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">2</div>
+                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">
+                      2
+                    </div>
                     Template / Style
                   </Label>
                   <div className="flex flex-wrap gap-2">
@@ -332,7 +404,9 @@ export default function BlogGeneratePage() {
 
                 <div className="flex flex-col gap-3 mt-2">
                   <Label className="font-semibold flex items-center gap-2 text-base">
-                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">3</div>
+                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">
+                      3
+                    </div>
                     Tone of Voice
                   </Label>
                   <div className="flex flex-wrap gap-2">
@@ -351,7 +425,9 @@ export default function BlogGeneratePage() {
 
                 <div className="flex flex-col gap-3 mt-2">
                   <Label className="font-semibold flex items-center gap-2 text-base">
-                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">4</div>
+                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">
+                      4
+                    </div>
                     Article Length
                   </Label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -359,7 +435,9 @@ export default function BlogGeneratePage() {
                       <Button
                         key={option.value}
                         type="button"
-                        variant={length === option.value ? "default" : "outline"}
+                        variant={
+                          length === option.value ? "default" : "outline"
+                        }
                         onClick={() => setLength(option.value)}
                         className="w-full"
                       >
@@ -372,7 +450,9 @@ export default function BlogGeneratePage() {
 
                 <div className="flex flex-col gap-3 mt-2">
                   <Label className="font-semibold flex items-center gap-2 text-base">
-                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">5</div>
+                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">
+                      5
+                    </div>
                     SEO Keywords (Optional)
                   </Label>
                   <div className="flex flex-wrap gap-2 mb-2">
@@ -419,7 +499,9 @@ export default function BlogGeneratePage() {
 
                 <div className="flex flex-col gap-3 mt-2">
                   <Label className="font-semibold flex items-center gap-2 text-base">
-                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">6</div>
+                    <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-sm">
+                      6
+                    </div>
                     Additional Instructions (Optional)
                   </Label>
                   <Textarea

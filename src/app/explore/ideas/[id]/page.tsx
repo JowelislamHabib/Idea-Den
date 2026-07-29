@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PageLoading } from "@/components/shared/PageLoading";
 import ReactMarkdown from "react-markdown";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
@@ -73,11 +74,7 @@ export default function IdeaDetailPage({
   const [copied, setCopied] = useState(false);
 
   if (isPending) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   if (error || !data?.idea) {

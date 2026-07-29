@@ -8,17 +8,14 @@ import { Loader2, LayoutDashboard, Lightbulb, PenTool, Crown, Plus } from "lucid
 import { SlideUp } from "@/components/ui/motion-wrapper";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { PageLoading } from "@/components/shared/PageLoading";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { data: session, isPending: sessionPending } = useSession();
 
   if (sessionPending) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   if (!session?.user) {

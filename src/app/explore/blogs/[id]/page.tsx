@@ -7,8 +7,8 @@ import { apiClient } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { SlideUp } from "@/components/ui/motion-wrapper";
+import { PageLoading } from "@/components/shared/PageLoading";
 import { ArrowLeft, Type, Clock, Copy, Check, Globe, Lock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
@@ -44,20 +44,7 @@ export default function BlogDetailsPage() {
   const [copied, setCopied] = useState(false);
 
   if (isPending) {
-    return (
-      <div className="min-h-[60vh] py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 space-y-6">
-          <Skeleton className="h-8 w-32" />
-          <Skeleton className="h-12 w-3/4" />
-          <Skeleton className="h-6 w-1/2" />
-          <div className="space-y-4 pt-8">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-5/6" />
-          </div>
-        </div>
-      </div>
-    );
+    return <PageLoading />;
   }
 
   if (error || !blogData?.blog) {

@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -32,7 +39,11 @@ export function IdeaCard({
             {projectTitle}
           </CardTitle>
           <CardDescription className="text-xs">
-            {new Date(createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+            {new Date(createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col">
@@ -43,7 +54,11 @@ export function IdeaCard({
           )}
           <div className="flex flex-wrap gap-1.5 mt-auto">
             {techStack?.slice(0, 4).map((tech) => (
-              <Badge key={tech} variant="secondary" className="text-xs font-normal">
+              <Badge
+                key={tech}
+                variant="secondary"
+                className="text-xs font-normal"
+              >
                 {tech}
               </Badge>
             ))}
@@ -55,11 +70,15 @@ export function IdeaCard({
           </div>
         </CardContent>
         <CardFooter className="pt-0">
-          <Link 
-            href={`/explore/ideas/${_id}`} 
-            className={buttonVariants({ variant: "default", size: "sm" }) + " w-full flex items-center justify-center group"}
+          <Link
+            scroll={false}
+            href={`/explore/ideas/${_id}`}
+            className={
+              buttonVariants({ variant: "default", size: "sm" }) +
+              " w-full flex items-center justify-center group"
+            }
           >
-            Explore Idea 
+            Explore Idea
             <motion.div
               className="ml-2 flex items-center justify-center"
               whileHover={{ x: 3 }}

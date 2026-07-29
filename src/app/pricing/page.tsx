@@ -91,7 +91,7 @@ export default function PricingPage() {
 
   const handleProClick = async () => {
     if (!user) {
-      router.push("/register?redirect=/pricing");
+      router.push("/register?redirect=/pricing", { scroll: false });
       return;
     }
     setProLoading(true);
@@ -99,7 +99,7 @@ export default function PricingPage() {
       const res = await fetch("/api/stripe/create-checkout", { method: "POST" });
       const data = await res.json();
       if (data.url) {
-        router.push(data.url);
+        router.push(data.url, { scroll: false });
       } else {
         toast.error(data.error || "Failed to start checkout");
         setProLoading(false);
@@ -214,7 +214,7 @@ export default function PricingPage() {
                         );
 
                         if (!isPlanPro && !user) return (
-                          <Button size="lg" variant="outline" className="w-full rounded-full font-semibold" onClick={() => router.push("/register?redirect=/pricing")}>
+                          <Button size="lg" variant="outline" className="w-full rounded-full font-semibold" onClick={() => router.push("/register?redirect=/pricing", { scroll: false })}>
                             Get Started Free<ChevronRight className="size-4 ml-1" />
                           </Button>
                         );
