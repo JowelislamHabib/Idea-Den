@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Loader2 } from "lucide-react";
+
 
 export function PageLoading() {
   return (
@@ -15,9 +15,8 @@ export function PageLoading() {
             priority
           />
         </div>
-        <div className="flex items-center gap-3 text-muted-foreground">
-          <Loader2 className="size-4 animate-spin" />
-          <span className="text-sm font-medium">Loading...</span>
+        <div className="flex items-center text-muted-foreground mt-2">
+          <span className="text-sm font-medium">Loading<span className="animate-ellipsis">...</span></span>
         </div>
       </div>
     </div>
