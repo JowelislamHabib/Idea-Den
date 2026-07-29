@@ -24,7 +24,7 @@ import {
   Zap,
   Crown,
 } from "lucide-react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const SUGGESTED_STACKS = [
   "React",
@@ -64,6 +64,7 @@ export default function GeneratePage() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isRouting, setIsRouting] = useState(false);
+  const queryClient = useQueryClient();
 
   const [interests, setInterests] = useState("");
   const [timeAvailable, setTimeAvailable] = useState("");
@@ -105,6 +106,9 @@ export default function GeneratePage() {
       );
     },
     onSuccess: (data) => {
+      if (data.idea) {
+        queryClient.setQueryData(["project idea", data.idea._id], { idea: data.idea });
+      }
       setIsRouting(true);
       toast.success("Idea generated successfully!");
       startTransition(() => {
@@ -219,41 +223,41 @@ export default function GeneratePage() {
       return;
     }
     handleCooldown();
+    window.scrollTo({ top: 0, behavior: "smooth" });
     generateMutation.mutate();
   };
 
   const isFormValid = interests.trim() && timeAvailable && techStack.length > 0;
   const isLimitReached = quota && !quota.isPro && quota.count >= quota.limit;
 
-  if (generateMutation.isPending || isRouting) {
-    return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center py-12 bg-muted/20">
-        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-          <Sparkles className="size-8 text-primary animate-pulse" />
-        </div>
-        <h2 className="text-2xl font-bold tracking-tight font-heading mb-2">
-          Generating your idea...
-        </h2>
-        <div className="text-muted-foreground h-6 overflow-hidden relative w-64 text-center">
-          {LOADING_STATES.map((state, idx) => (
-            <div
-              key={idx}
-              className="absolute inset-0 transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateY(${(idx - loadingStep) * 100}%)`,
-                opacity: idx === loadingStep ? 1 : 0,
-              }}
-            >
-              {state}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-[60vh] py-12 bg-muted/20">
+    <>
+      {(generateMutation.isPending || isRouting) && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/95 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 shadow-xl">
+            <Sparkles className="size-8 text-primary animate-pulse" />
+          </div>
+          <h2 className="text-2xl font-bold tracking-tight font-heading mb-2">
+            Generating your idea...
+          </h2>
+          <div className="text-muted-foreground h-6 overflow-hidden relative w-64 text-center">
+            {LOADING_STATES.map((state, idx) => (
+              <div
+                key={idx}
+                className="absolute inset-0 transition-transform duration-500 ease-in-out"
+                style={{
+                  transform: `translateY(${(idx - loadingStep) * 100}%)`,
+                  opacity: idx === loadingStep ? 1 : 0,
+                }}
+              >
+                {state}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+    <div className={`min-h-[60vh] py-12 bg-muted/20 ${(generateMutation.isPending || isRouting) ? 'pointer-events-none' : ''}`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SlideUp>
           <div className="text-center mb-10">
@@ -495,6 +499,6 @@ export default function GeneratePage() {
           </Card>
         </SlideUp>
       </div>
-    </div>
+    </>
   );
 }
