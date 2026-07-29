@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>AI-Powered Project PRD & Blog Content Generator</strong>
+  <strong>AI-powered Project Ideas, PRDs, and Article Generation</strong>
 </p>
 
 <p align="center">
