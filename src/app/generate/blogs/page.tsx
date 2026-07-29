@@ -3,6 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
+import { AuthRequired } from "@/components/shared/AuthRequired";
 import { Button } from "@/components/ui/button";
 import { PageLoading } from "@/components/shared/PageLoading";
 import { Input } from "@/components/ui/input";
