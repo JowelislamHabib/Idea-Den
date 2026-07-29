@@ -71,7 +71,6 @@ export function IdeaCard({
         </CardContent>
         <CardFooter className="pt-0">
           <Link
-            scroll={false}
             href={`/explore/ideas/${_id}`}
             className={
               buttonVariants({ variant: "default", size: "sm" }) +
