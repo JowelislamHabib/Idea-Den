@@ -123,7 +123,8 @@ export default function BlogGeneratePage() {
       setIsRouting(true);
       toast.success("Blog generated successfully!");
       startTransition(() => {
-        router.push(`/explore/blogs/${data.blog._id}`, { scroll: false });
+        window.scrollTo(0, 0);
+        router.push(`/explore/blogs/${data.blog._id}`);
       });
     },
     onError: (error) => {

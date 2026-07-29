@@ -113,7 +113,8 @@ export default function GeneratePage() {
       setIsRouting(true);
       toast.success("Idea generated successfully!");
       startTransition(() => {
-        router.push(`/explore/ideas/${data.idea._id}`, { scroll: false });
+        window.scrollTo(0, 0);
+        router.push(`/explore/ideas/${data.idea._id}`);
       });
     },
     onError: (error) => {
