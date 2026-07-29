@@ -6,7 +6,7 @@ const valueProps = [
     icon: Target,
     title: "Purpose-Built, Not Generic",
     description:
-      "Unlike general-purpose chatbots, IdeaDen's engines are specifically fine-tuned for project ideation and blog writing. The prompts, outputs, and structure are optimized for these exact use cases.",
+      "Unlike general-purpose chatbots, IdeaDen is specifically fine-tuned for Developer and Content Writer workflows. The prompts, outputs, and structure are optimized for building PRDs and writing articles.",
   },
   {
     icon: User,
@@ -46,7 +46,7 @@ export function WhyChooseSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <FadeIn className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight">
-            Why Creators Choose IdeaDen
+            Why Developers & Writers Choose IdeaDen
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
             Over everything else. Here&apos;s what makes the difference.

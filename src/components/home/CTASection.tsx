@@ -38,7 +38,7 @@ export function CTASection() {
           </h2>
 
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground mb-12 leading-relaxed">
-            Join thousands of creators who have eliminated the blank page forever.
+            Join thousands of developers and content writers who have eliminated the blank page forever.
             Get full access to the Idea Engine and Content Engine — no credit
             card required.
           </p>

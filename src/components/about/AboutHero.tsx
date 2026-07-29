@@ -15,7 +15,7 @@ export function AboutHero() {
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             IdeaDen was built to eliminate the most expensive part of any
-            creative project: the gap between having an idea and acting on it.
+            creative project: the gap between having an idea and acting on it. Whether you are a developer planning your next build, or a writer staring at a blank document.
           </p>
         </FadeIn>
       </div>

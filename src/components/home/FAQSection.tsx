@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion-wrapper";
-import { ChevronDown, HelpCircle, Shield, Sparkles, RefreshCcw, Briefcase, Globe, Search, Lock, Save, Rocket as RocketIcon } from "lucide-react";
+import { ChevronDown, HelpCircle, Shield, Sparkles, RefreshCcw, Briefcase, Globe, Search, Lock, Save, Rocket as RocketIcon, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const icons = [Sparkles, Shield, HelpCircle, RefreshCcw, Briefcase, Globe, Search, Lock, Save, RocketIcon];
+const icons = [Users, Sparkles, Shield, HelpCircle, RefreshCcw, Briefcase, Globe, Search, Lock, Save, RocketIcon];
 
 const faqs = [
+  {
+    question: "Who is IdeaDen built for?",
+    answer: "It's built specifically for two roles: Developers looking for project blueprints, and Content Writers needing high-quality article drafts.",
+  },
   {
     question: "Is the content from IdeaDen actually unique, or does it repeat itself?",
     answer: "IdeaDen uses a regeneration-aware system. When you ask for a fresh version, the AI is explicitly instructed to produce something different from what it showed you before. Plus, temperature settings and prompt engineering ensure natural variety. You'll rarely see the same idea twice.",

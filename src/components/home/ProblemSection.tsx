@@ -46,7 +46,7 @@ export function ProblemSection() {
               </span>
             </h2>
             <p className="mt-6 text-base text-muted-foreground leading-relaxed max-w-sm">
-              Every creator hits the same wall — the gap between having a spark of
+              Every developer and content writer hits the same wall — the gap between having a spark of
               inspiration and bringing it to life. That gap is exactly what IdeaDen
               eliminates.
             </p>

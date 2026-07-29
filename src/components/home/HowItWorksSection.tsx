@@ -5,23 +5,23 @@ const steps = [
   {
     icon: Target,
     number: "01",
-    title: "Tell IdeaDen What You Need",
+    title: "Choose Your Path",
     description:
-      "Choose your tool (Project Idea or Article), fill in a few simple inputs — your interests, tone, topic, or tech stack. It takes less than 60 seconds.",
+      "Select your workflow: Developer (Idea & PRD) or Content Writer (Article & Blog). Fill in your parameters like tech stack, time constraints, or SEO tone.",
   },
   {
     icon: Zap,
     number: "02",
-    title: "IdeaDen's AI Works Its Magic",
+    title: "AI Crafts Your Output",
     description:
-      "Specially-tuned AI models analyze your inputs and generate comprehensive, context-aware output. Structured, actionable, human-quality results in seconds.",
+      "Our specialized engines get to work. Developers get a complete PRD with feature specs. Writers get a fully formatted, SEO-optimized markdown article.",
   },
   {
     icon: Rocket,
     number: "03",
-    title: "Launch, Publish, Build with IdeaDen",
+    title: "Launch, Build, or Publish",
     description:
-      "Copy your article straight into your CMS. Take your PRD and start coding. Everything IdeaDen produces is yours — use it however you want.",
+      "Developers: take your PRD and start coding immediately. Writers: copy your article straight into your CMS. Everything generated is yours to own.",
   },
 ];
 

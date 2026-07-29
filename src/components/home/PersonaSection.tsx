@@ -3,53 +3,17 @@ import { Users, Code2, Lightbulb, Building2, PenTool, GraduationCap, Megaphone, 
 
 const personas = [
   {
-    name: "Solo Developers",
+    name: "The Developer",
     icon: Code2,
-    painPoint: "I need portfolio projects but can't think of anything original.",
-    solution: "IdeaDen generates unique, scoped project ideas with complete PRDs and tech stack recommendations.",
+    painPoint: "I want to build something to learn a new stack, but I can't think of a good idea, and writing a spec takes too long.",
+    solution: "Generates unique project ideas and compiles them into complete, actionable PRDs based on your time and tech stack constraints.",
   },
   {
-    name: "Indie Hackers",
-    icon: Lightbulb,
-    painPoint: "I have limited time to validate ideas before building.",
-    solution: "Market analysis, competitor research, and differentiation strategy in one output.",
-  },
-  {
-    name: "Content Creators",
+    name: "The Content Writer",
     icon: PenTool,
-    painPoint: "Publishing consistently drains my creative energy.",
-    solution: "Publish-ready blog posts in any tone and format, optimized for SEO.",
-  },
-  {
-    name: "Startup Founders",
-    icon: Building2,
-    painPoint: "I need to explore multiple directions quickly.",
-    solution: "Generate and compare multiple PRDs to find the most promising direction.",
-  },
-  {
-    name: "Technical Bloggers",
-    icon: PenTool,
-    painPoint: "I want to share knowledge but hate the writing process.",
-    solution: "Converts your expertise into structured, readable articles without the writing grind.",
-  },
-  {
-    name: "Students & Learners",
-    icon: GraduationCap,
-    painPoint: "I need project ideas to practice new technologies.",
-    solution: "Beginner-appropriate PRDs matched to your learning goals and time constraints.",
-  },
-  {
-    name: "Marketing Teams",
-    icon: Megaphone,
-    painPoint: "We need content at scale without hiring an army of writers.",
-    solution: "Diverse content formats with consistent quality and SEO optimization.",
-  },
-  {
-    name: "Agencies",
-    icon: Briefcase,
-    painPoint: "Clients want fresh ideas fast.",
-    solution: "Rapidly prototype project concepts and content strategies for client pitches.",
-  },
+    painPoint: "Drafting engaging, SEO-optimized articles from scratch takes hours of research and structuring.",
+    solution: "Transforms topics into fully formatted markdown articles with perfectly integrated keywords and tone matching.",
+  }
 ];
 
 export function PersonaSection() {
@@ -62,14 +26,14 @@ export function PersonaSection() {
             Who It&apos;s For
           </div>
           <h2 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight">
-            IdeaDen — Made for Makers
+            Built For Two Distinct Workflows
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            No matter what you&apos;re building, IdeaDen accelerates your creative workflow.
+          <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto text-balance">
+            Whether you&apos;re writing code or writing copy, IdeaDen is engineered for your specific needs.
           </p>
         </FadeIn>
 
-        <StaggerContainer className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <StaggerContainer className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
           {personas.map((persona, i) => {
             const Icon = persona.icon;
             return (

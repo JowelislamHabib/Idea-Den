@@ -46,13 +46,13 @@ export function SolutionSection() {
                     <Lightbulb className="size-6 text-primary transition-colors duration-300 group-hover/card:text-primary-foreground" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-primary/60 uppercase tracking-widest">Engine One</div>
+                    <div className="text-xs font-bold text-primary/60 uppercase tracking-widest">For Developers</div>
                     <h3 className="text-xl font-bold">The Idea Engine</h3>
                   </div>
                 </div>
 
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  Tell IdeaDen all your interests, tech stack, and time constraints. It acts like a senior PM, generating a complete PRD with market analysis, feature specs, competitor insights, and a clear, actionable roadmap — all in under sixty seconds.
+                  Tell IdeaDen your project idea, preferred tech stack, and time constraints. It acts like a senior PM, generating a complete PRD with market analysis, feature specs, competitor insights, and a clear, actionable roadmap — all in under sixty seconds.
                 </p>
 
                 <div className="flex items-center gap-2 mb-5 text-sm font-semibold text-foreground/70">
@@ -92,13 +92,13 @@ export function SolutionSection() {
                     <PenTool className="size-6 text-foreground transition-colors duration-300 group-hover/card:text-background" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-foreground/40 uppercase tracking-widest">Engine Two</div>
+                    <div className="text-xs font-bold text-foreground/40 uppercase tracking-widest">For Content Writers</div>
                     <h3 className="text-xl font-bold">The Content Engine</h3>
                   </div>
                 </div>
 
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  Feed a topic into IdeaDen, choose your format and tone, and watch it craft a complete, SEO-optimized, markdown-formatted blog post. It organically integrates keywords and structures headers so you never waste hours editing AI texts again.
+                  Feed a topic into IdeaDen, choose your format, length, and tone, and watch it craft a complete, SEO-optimized, markdown-formatted article or blog post. It organically integrates keywords and structures headers so you never waste hours editing AI texts again.
                 </p>
 
                 <div className="flex items-center gap-2 mb-5 text-sm font-semibold text-foreground/70">
