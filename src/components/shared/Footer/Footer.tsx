@@ -81,8 +81,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-sm">
-              AI-powered project blueprints and blog articles. From idea to
-              architecture, and thought to post, in seconds.
+              AI-powered project idea & blog content generator. Transforms vague ideas into structured project specs, technical roadmaps, and publish-ready SEO-optimized articles in seconds. Built for developers and creators to eliminate brainstorming bottlenecks and writer's block.
             </p>
             <div className="flex items-center gap-3">
               {socialLinks.map((link) => {
