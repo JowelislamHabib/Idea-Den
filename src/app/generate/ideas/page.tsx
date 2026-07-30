@@ -171,7 +171,7 @@ export default function GeneratePage() {
   };
 
   const handleRandomCooldown = () => {
-    setRandomCooldown(5);
+    setRandomCooldown(15);
     const interval = setInterval(() => {
       setRandomCooldown((prev) => {
         if (prev <= 1) {
