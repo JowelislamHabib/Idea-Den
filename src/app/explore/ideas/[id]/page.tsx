@@ -1,9 +1,11 @@
 "use client";
 
-import { use, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { use, useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
+import { useSession } from "@/lib/auth-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,6 +16,13 @@ import { PageLoading } from "@/components/shared/PageLoading";
 import ReactMarkdown from "react-markdown";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Loader2,
   ArrowLeft,
@@ -28,7 +37,9 @@ import {
   Settings,
   Layout,
   AlertTriangle,
-  Book
+  Book,
+  Sparkles,
+  Crown,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -40,6 +51,7 @@ interface Idea {
   elevatorPitch: string;
   estimatedDuration: string;
   ownerName: string;
+  ownerId?: string;
   createdAt: string;
   visibility?: string;
   prdSections?: {
@@ -51,7 +63,35 @@ interface Idea {
     planningAndRisk: string;
     appendix: string;
   };
+  docs?: {
+    technicalDesign?: string;
+    appFlow?: string;
+    designBrief?: string;
+    schema?: string;
+    engineeringPlan?: string;
+    status?: string;
+    generatedAt?: string;
+  };
 }
+
+const DOC_TITLES: Record<string, string> = {
+  prd: "PRD",
+  technicalDesign: "Technical Design",
+  appFlow: "App-Flow Map",
+  designBrief: "Design Brief",
+  schema: "Schema Plan",
+  engineeringPlan: "Engineering Plan",
+};
+
+const DOC_LOADING_STATES = [
+  "Analyzing your PRD...",
+  "Writing Technical Design...",
+  "Mapping the App Flow...",
+  "Sketching the Design Brief...",
+  "Planning the Schema...",
+  "Building the Engineering Plan...",
+  "Finalizing your docs...",
+];
 
 export default function IdeaDetailPage({
   params,
@@ -59,6 +99,9 @@ export default function IdeaDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
   const { data, isPending, error } = useQuery({
     queryKey: ["project idea", id],
@@ -72,6 +115,49 @@ export default function IdeaDetailPage({
   });
 
   const [copied, setCopied] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState("prd");
+  const [loadingStep, setLoadingStep] = useState(0);
+
+  const generateDocsMutation = useMutation({
+    mutationFn: async () => {
+      const token = await getToken();
+      return apiClient<{ success: boolean; idea: Idea }>(
+        `/api/ideas/${id}/generate-docs`,
+        { method: "POST", token }
+      );
+    },
+    onMutate: () => setLoadingStep(0),
+    onSuccess: () => {
+      setSelectedDoc("prd");
+      queryClient.invalidateQueries({ queryKey: ["project idea", id] });
+      toast.success("Project docs generated successfully!");
+    },
+    onError: (error) => {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to generate docs. Please try again."
+      );
+    },
+  });
+
+  useEffect(() => {
+    if (generateDocsMutation.isPending) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      return;
+    }
+    const interval = setInterval(() => {
+      setLoadingStep((prev) =>
+        prev + 1 < DOC_LOADING_STATES.length ? prev + 1 : prev,
+      );
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+      document.body.style.overflow = "";
+    };
+  }, [generateDocsMutation.isPending]);
 
   if (isPending) {
     return <PageLoading />;
@@ -83,28 +169,82 @@ export default function IdeaDetailPage({
 
   const { idea, related } = data;
 
-  const handleCopy = async () => {
-    try {
-      const sections = idea.prdSections ? [
+  const isOwner =
+    !!session?.user?.id && !!idea.ownerId && session.user.id === idea.ownerId;
+  const isPro = session?.user?.role === "pro";
+  const docs = idea.docs;
+
+  const generatedDocs = (
+    ["technicalDesign", "appFlow", "designBrief", "schema", "engineeringPlan"] as const
+  ).filter((key) => docs?.[key]);
+  const allDocsGenerated = generatedDocs.length === 5;
+
+  const prdMarkdown = idea.prdSections
+    ? [
         idea.prdSections.executiveSummary,
         idea.prdSections.strategyAndContext,
         idea.prdSections.usersAndScope,
         idea.prdSections.requirementsAndLogic,
         idea.prdSections.designAndExecution,
         idea.prdSections.planningAndRisk,
-        idea.prdSections.appendix
-      ] : [];
-      await navigator.clipboard.writeText(sections.filter(Boolean).join("\\n\\n---\\n\\n"));
+        idea.prdSections.appendix,
+      ]
+        .filter(Boolean)
+        .join("\n\n---\n\n")
+    : "";
+
+  const docEntries = [
+    { key: "prd", title: DOC_TITLES.prd, content: prdMarkdown },
+    ...generatedDocs.map((key) => ({
+      key,
+      title: DOC_TITLES[key],
+      content: docs?.[key] || "",
+    })),
+  ].filter((entry) => entry.content);
+
+  const selectedEntry =
+    docEntries.find((entry) => entry.key === selectedDoc) ?? docEntries[0];
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(selectedEntry?.content || "");
       setCopied(true);
-      toast.success("Idea copied to clipboard");
+      toast.success("Copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error("Failed to copy idea");
+      toast.error("Failed to copy");
     }
   };
 
   return (
-    <div className="min-h-[60vh] py-12 bg-muted/20">
+    <div className={`min-h-[60vh] py-12 bg-muted/20 ${generateDocsMutation.isPending ? "pointer-events-none" : ""}`}>
+      {generateDocsMutation.isPending && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/95 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 shadow-xl">
+            <Sparkles className="size-8 text-primary animate-pulse" />
+          </div>
+          <h2 className="text-2xl font-bold tracking-tight font-heading mb-2">
+            Generating Project Docs...
+          </h2>
+          <div className="text-muted-foreground h-6 overflow-hidden relative w-80 text-center">
+            {DOC_LOADING_STATES.map((state, idx) => (
+              <div
+                key={idx}
+                className="absolute inset-0 transition-transform duration-500 ease-in-out"
+                style={{
+                  transform: `translateY(${(idx - loadingStep) * 100}%)`,
+                  opacity: idx === loadingStep ? 1 : 0,
+                }}
+              >
+                {state}
+              </div>
+            ))}
+          </div>
+          <p className="mt-6 text-sm text-muted-foreground">
+            This may take a minute or two.
+          </p>
+        </div>
+      )}
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SlideUp>
           <div className="flex items-center justify-between mb-6">
@@ -157,6 +297,69 @@ export default function IdeaDetailPage({
 
         <Separator className="my-6" />
 
+        {(isOwner || generatedDocs.length > 0) && (
+          <SlideUp delay={0.05}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+              {generatedDocs.length > 0 ? (
+                <div className="flex items-center gap-3">
+                  <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0" />
+                  <Select
+                    value={selectedEntry?.key}
+                    onValueChange={(value) => setSelectedDoc(value as string)}
+                  >
+                    <SelectTrigger className="w-full sm:w-72">
+                      <FileText className="size-4" />
+                      <SelectValue placeholder="Select a document" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {docEntries.map((entry) => (
+                        <SelectItem key={entry.key} value={entry.key}>
+                          {entry.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0" />
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Generate build-ready docs for this project
+                  </span>
+                </div>
+              )}
+              {isOwner && !allDocsGenerated && (
+                isPro ? (
+                  <Button
+                    onClick={() => generateDocsMutation.mutate()}
+                    disabled={generateDocsMutation.isPending}
+                    className="gap-2"
+                  >
+                    {generateDocsMutation.isPending ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="size-4" />
+                    )}
+                    {generatedDocs.length > 0
+                      ? "Resume Generating Docs"
+                      : "Generate Project Docs"}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    onClick={() => router.push("/pricing")}
+                    className="gap-2 border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10"
+                  >
+                    <Crown className="size-4" />
+                    Upgrade to Pro to Generate Docs
+                  </Button>
+                )
+              )}
+            </div>
+          </SlideUp>
+        )}
+
+        {selectedDoc === "prd" ? (
         <Tabs defaultValue="overview" className="w-full">
           <SlideUp delay={0.1}>
             <div className="w-full mb-6 overflow-x-auto pb-2 scrollbar-hide">
@@ -279,6 +482,22 @@ export default function IdeaDetailPage({
             </SlideUp>
           </TabsContent>
         </Tabs>
+        ) : (
+          <SlideUp delay={0.1}>
+            <Card className="border bg-card shadow-sm">
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <FileText className="size-5" /> {selectedEntry?.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
+                  <ReactMarkdown>{selectedEntry?.content}</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+          </SlideUp>
+        )}
 
         {related?.length > 0 && (
           <SlideUp delay={0.35}>
