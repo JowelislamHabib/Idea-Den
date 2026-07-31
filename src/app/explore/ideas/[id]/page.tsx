@@ -19,12 +19,14 @@ import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Loader2,
   ArrowLeft,
   Clock,
   Copy,
@@ -119,18 +121,30 @@ export default function IdeaDetailPage({
   const [loadingStep, setLoadingStep] = useState(0);
 
   const generateDocsMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (docKey?: string) => {
       const token = await getToken();
       return apiClient<{ success: boolean; idea: Idea }>(
         `/api/ideas/${id}/generate-docs`,
-        { method: "POST", token }
+        {
+          method: "POST",
+          token,
+          body: docKey ? JSON.stringify({ docKey }) : undefined,
+        }
       );
     },
     onMutate: () => setLoadingStep(0),
-    onSuccess: () => {
-      setSelectedDoc("prd");
+    onSuccess: (data, docKey) => {
+      if (docKey) {
+        setSelectedDoc(docKey);
+      } else {
+        setSelectedDoc("prd");
+      }
       queryClient.invalidateQueries({ queryKey: ["project idea", id] });
-      toast.success("Project docs generated successfully!");
+      toast.success(
+        docKey
+          ? `${DOC_TITLES[docKey]} generated successfully!`
+          : "Project docs generated successfully!"
+      );
     },
     onError: (error) => {
       toast.error(
@@ -178,6 +192,9 @@ export default function IdeaDetailPage({
     ["technicalDesign", "appFlow", "designBrief", "schema", "engineeringPlan"] as const
   ).filter((key) => docs?.[key]);
   const allDocsGenerated = generatedDocs.length === 5;
+  const missingDocs = (
+    ["technicalDesign", "appFlow", "designBrief", "schema", "engineeringPlan"] as const
+  ).filter((key) => !docs?.[key]);
 
   const prdMarkdown = idea.prdSections
     ? [
@@ -208,6 +225,18 @@ export default function IdeaDetailPage({
   const allDocsMarkdown = docEntries
     .map((entry) => `# ${entry.title}\n\n${entry.content}`)
     .join("\n\n---\n\n");
+
+  const handleDocSelect = (value: string) => {
+    if (value === "generate-all") {
+      generateDocsMutation.mutate(undefined);
+      return;
+    }
+    if (value.startsWith("generate-")) {
+      generateDocsMutation.mutate(value.slice("generate-".length));
+      return;
+    }
+    setSelectedDoc(value);
+  };
 
   const handleCopy = async () => {
     try {
@@ -304,72 +333,58 @@ export default function IdeaDetailPage({
         {(isOwner || generatedDocs.length > 0) && (
           <SlideUp delay={0.05}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-              {generatedDocs.length > 0 ? (
-                <div className="flex items-center gap-3">
-                  <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0" />
-                  <Select
-                    value={selectedEntry?.key}
-                    onValueChange={(value) => setSelectedDoc(value as string)}
-                  >
-                    <SelectTrigger className="w-full sm:w-72">
-                      <FileText className="size-4" />
-                      <SelectValue placeholder="Select a document">
-                        {selectedEntry?.title}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
+              <div className="flex items-center gap-3">
+                <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0" />
+                <Select
+                  value={selectedEntry?.key}
+                  onValueChange={(value) => handleDocSelect(value as string)}
+                >
+                  <SelectTrigger className="w-full sm:w-72">
+                    <FileText className="size-4" />
+                    <SelectValue placeholder="Select a document">
+                      {selectedEntry?.title}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {isOwner && isPro && missingDocs.length > 0 && (
+                      <>
+                        <SelectGroup>
+                          <SelectLabel>Generate</SelectLabel>
+                          {missingDocs.map((key) => (
+                            <SelectItem key={key} value={`generate-${key}`}>
+                              <Sparkles className="size-4 text-primary" />
+                              Generate {DOC_TITLES[key]}
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="generate-all">
+                            <Sparkles className="size-4 text-primary" />
+                            Generate All Docs
+                          </SelectItem>
+                        </SelectGroup>
+                        <SelectSeparator />
+                      </>
+                    )}
+                    <SelectGroup>
+                      <SelectLabel>Documents</SelectLabel>
                       {docEntries.map((entry) => (
                         <SelectItem key={entry.key} value={entry.key}>
+                          <FileText className="size-4" />
                           {entry.title}
                         </SelectItem>
                       ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              ) : (
-                <div className="flex items-start gap-2">
-                  <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
-                  <div className="text-sm text-muted-foreground">
-                    <p className="font-medium">Generate 5 build-ready docs for this project:</p>
-                    <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
-                      {(["technicalDesign", "appFlow", "designBrief", "schema", "engineeringPlan"] as const).map(
-                        (key, idx, arr) => (
-                          <span key={key}>
-                            {DOC_TITLES[key]}
-                            {idx < arr.length - 1 && ","}
-                          </span>
-                        ),
-                      )}
-                    </p>
-                  </div>
-                </div>
-              )}
-              {isOwner && !allDocsGenerated && (
-                isPro ? (
-                  <Button
-                    onClick={() => generateDocsMutation.mutate()}
-                    disabled={generateDocsMutation.isPending}
-                    className="gap-2"
-                  >
-                    {generateDocsMutation.isPending ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Sparkles className="size-4" />
-                    )}
-                    {generatedDocs.length > 0
-                      ? "Resume Generating Docs"
-                      : "Generate Project Docs"}
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    onClick={() => router.push("/pricing")}
-                    className="gap-2 border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10"
-                  >
-                    <Crown className="size-4" />
-                    Upgrade to Pro to Generate Docs
-                  </Button>
-                )
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              {isOwner && !isPro && !allDocsGenerated && (
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/pricing")}
+                  className="gap-2 border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10"
+                >
+                  <Crown className="size-4" />
+                  Upgrade to Pro to Generate Docs
+                </Button>
               )}
             </div>
           </SlideUp>
