@@ -227,11 +227,20 @@ export default function IdeaDetailPage({
     .join("\n\n---\n\n");
 
   const handleDocSelect = (value: string) => {
-    if (value === "generate-all") {
-      generateDocsMutation.mutate(undefined);
-      return;
-    }
-    if (value.startsWith("generate-")) {
+    if (value === "generate-all" || value.startsWith("generate-")) {
+      if (!isPro) {
+        toast.error("Upgrade to Pro to unlock project docs", {
+          action: {
+            label: "Upgrade",
+            onClick: () => router.push("/pricing"),
+          },
+        });
+        return;
+      }
+      if (value === "generate-all") {
+        generateDocsMutation.mutate(undefined);
+        return;
+      }
       generateDocsMutation.mutate(value.slice("generate-".length));
       return;
     }
@@ -350,18 +359,28 @@ export default function IdeaDetailPage({
                     align="start"
                     alignItemWithTrigger={false}
                   >
-                    {isOwner && isPro && missingDocs.length > 0 && (
+                    {isOwner && missingDocs.length > 0 && (
                       <>
                         <SelectGroup>
-                          <SelectLabel>Generate</SelectLabel>
+                          <SelectLabel>
+                            {isPro ? "Generate" : "Generate · Pro"}
+                          </SelectLabel>
                           {missingDocs.map((key) => (
                             <SelectItem key={key} value={`generate-${key}`}>
-                              <Sparkles className="size-4 text-primary" />
+                              {isPro ? (
+                                <Sparkles className="size-4 text-primary" />
+                              ) : (
+                                <Crown className="size-4 text-amber-500" />
+                              )}
                               Generate {DOC_TITLES[key]}
                             </SelectItem>
                           ))}
                           <SelectItem value="generate-all">
-                            <Sparkles className="size-4 text-primary" />
+                            {isPro ? (
+                              <Sparkles className="size-4 text-primary" />
+                            ) : (
+                              <Crown className="size-4 text-amber-500" />
+                            )}
                             Generate All Docs
                           </SelectItem>
                         </SelectGroup>
