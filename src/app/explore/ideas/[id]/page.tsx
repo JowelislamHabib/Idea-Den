@@ -210,26 +210,32 @@ export default function IdeaDetailPage({
         .join("\n\n---\n\n")
     : "";
 
-  const docEntries = [
-    { key: "prd", title: DOC_TITLES.prd, content: prdMarkdown },
-    ...generatedDocs.map((key) => ({
-      key,
-      title: DOC_TITLES[key],
-      content: docs?.[key] || "",
-    })),
-  ].filter((entry) => entry.content);
+  const docEntries = (
+    ["prd", "technicalDesign", "appFlow", "designBrief", "schema", "engineeringPlan"] as const
+  ).map((key) => ({
+    key,
+    title: DOC_TITLES[key],
+    content: key === "prd" ? prdMarkdown : docs?.[key] || "",
+  }));
 
   const selectedEntry =
     docEntries.find((entry) => entry.key === selectedDoc) ?? docEntries[0];
 
+  const viewerDocEntries = isOwner
+    ? docEntries.filter((entry) => entry.content)
+    : docEntries;
+
   const allDocsMarkdown = docEntries
-    .filter((entry) => isPro || entry.key === "prd")
+    .filter((entry) => entry.content && (isPro || entry.key === "prd"))
     .map((entry) => `# ${entry.title}\n\n${entry.content}`)
     .join("\n\n---\n\n");
 
   const handleDocSelect = (value: string) => {
     if (value === "generate-all" || value.startsWith("generate-")) {
       if (!isPro) {
+        if (value.startsWith("generate-") && value !== "generate-all") {
+          setSelectedDoc(value.slice("generate-".length));
+        }
         toast.error("Upgrade to Pro to unlock project docs", {
           action: {
             label: "Upgrade",
@@ -340,10 +346,9 @@ export default function IdeaDetailPage({
 
         <Separator className="my-6" />
 
-        {(isOwner || generatedDocs.length > 0) && (
-          <SlideUp delay={0.05}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-              <div className="flex items-center gap-3">
+        <SlideUp delay={0.05}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div className="flex items-center gap-3">
                 <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0" />
                 <Select
                   value={selectedEntry?.key}
@@ -364,7 +369,7 @@ export default function IdeaDetailPage({
                       <>
                         <SelectGroup>
                           <SelectLabel>
-                            {isPro ? "Generate" : "Generate · Pro"}
+                            {isPro ? "Generate Docs" : "Generate Docs · Pro"}
                           </SelectLabel>
                           {missingDocs.map((key) => (
                             <SelectItem key={key} value={`generate-${key}`}>
@@ -385,18 +390,25 @@ export default function IdeaDetailPage({
                             Generate All Docs
                           </SelectItem>
                         </SelectGroup>
-                        <SelectSeparator />
                       </>
                     )}
-                    <SelectGroup>
-                      <SelectLabel>Documents</SelectLabel>
-                      {docEntries.map((entry) => (
-                        <SelectItem key={entry.key} value={entry.key}>
-                          <FileText className="size-4" />
-                          {entry.title}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
+                    {!(isOwner && !isPro) && (
+                      <>
+                        {isOwner && missingDocs.length > 0 && <SelectSeparator />}
+                        <SelectGroup>
+                          <SelectLabel>View Docs</SelectLabel>
+                          {viewerDocEntries.map((entry) => (
+                            <SelectItem key={entry.key} value={entry.key}>
+                              <FileText className="size-4" />
+                              {entry.title}
+                              {!isPro && entry.key !== "prd" && (
+                                <Crown className="size-3.5 text-amber-500" />
+                              )}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -412,7 +424,6 @@ export default function IdeaDetailPage({
               )}
             </div>
           </SlideUp>
-        )}
 
         {selectedDoc === "prd" ? (
         <Tabs defaultValue="overview" className="w-full">
@@ -537,7 +548,7 @@ export default function IdeaDetailPage({
             </SlideUp>
           </TabsContent>
         </Tabs>
-        ) : isPro ? (
+        ) : isPro && selectedEntry?.content ? (
           <SlideUp delay={0.1}>
             <Card className="border bg-card shadow-sm">
               <CardHeader className="pb-4 border-b">
@@ -549,6 +560,21 @@ export default function IdeaDetailPage({
                 <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
                   <ReactMarkdown>{selectedEntry?.content}</ReactMarkdown>
                 </div>
+              </CardContent>
+            </Card>
+          </SlideUp>
+        ) : isPro ? (
+          <SlideUp delay={0.1}>
+            <Card className="border bg-card shadow-sm">
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <FileText className="size-5" /> {selectedEntry?.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0 sm:p-10 sm:pt-0">
+                <p className="text-sm text-muted-foreground">
+                  This document has not been generated for this idea yet.
+                </p>
               </CardContent>
             </Card>
           </SlideUp>
