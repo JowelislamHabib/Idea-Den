@@ -223,6 +223,7 @@ export default function IdeaDetailPage({
     docEntries.find((entry) => entry.key === selectedDoc) ?? docEntries[0];
 
   const allDocsMarkdown = docEntries
+    .filter((entry) => isPro || entry.key === "prd")
     .map((entry) => `# ${entry.title}\n\n${entry.content}`)
     .join("\n\n---\n\n");
 
@@ -303,7 +304,7 @@ export default function IdeaDetailPage({
               className="gap-2"
             >
               {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-              {copied ? "Copied" : generatedDocs.length > 0 ? "Copy All Docs" : "Copy Idea"}
+              {copied ? "Copied" : isPro && generatedDocs.length > 0 ? "Copy All Docs" : "Copy Idea"}
             </Button>
           </div>
         </SlideUp>
@@ -536,7 +537,7 @@ export default function IdeaDetailPage({
             </SlideUp>
           </TabsContent>
         </Tabs>
-        ) : (
+        ) : isPro ? (
           <SlideUp delay={0.1}>
             <Card className="border bg-card shadow-sm">
               <CardHeader className="pb-4 border-b">
@@ -550,6 +551,47 @@ export default function IdeaDetailPage({
                 </div>
               </CardContent>
             </Card>
+          </SlideUp>
+        ) : (
+          <SlideUp delay={0.1}>
+            <div className="relative overflow-hidden rounded-xl border bg-card shadow-sm">
+              <div className="border-b px-6 py-4 sm:px-10 sm:py-5">
+                <h3 className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
+                  <FileText className="size-5" /> {selectedEntry?.title}
+                </h3>
+              </div>
+              <div className="space-y-3 p-6 sm:p-10 blur-sm select-none pointer-events-none" aria-hidden>
+                <div className="h-4 w-2/3 bg-muted rounded animate-pulse" />
+                <div className="h-3 w-full bg-muted rounded animate-pulse" />
+                <div className="h-3 w-full bg-muted rounded animate-pulse" />
+                <div className="h-3 w-5/6 bg-muted rounded animate-pulse" />
+                <div className="h-4 w-1/3 bg-muted rounded animate-pulse mt-6" />
+                <div className="h-3 w-full bg-muted rounded animate-pulse" />
+                <div className="h-3 w-full bg-muted rounded animate-pulse" />
+                <div className="h-3 w-4/6 bg-muted rounded animate-pulse" />
+                <div className="h-4 w-2/5 bg-muted rounded animate-pulse mt-6" />
+                <div className="h-3 w-full bg-muted rounded animate-pulse" />
+                <div className="h-3 w-3/6 bg-muted rounded animate-pulse" />
+              </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-[2px] p-6 text-center">
+                <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center mb-4">
+                  <Crown className="size-6 text-amber-500" />
+                </div>
+                <h3 className="text-xl font-heading font-bold mb-1">
+                  Unlock with Pro
+                </h3>
+                <p className="text-sm text-muted-foreground mb-6 max-w-sm">
+                  Upgrade to Pro to view this document.
+                </p>
+                <Button
+                  onClick={() => router.push("/pricing")}
+                  className="gap-2"
+                >
+                  <Crown className="size-4" />
+                  Upgrade to Pro
+                </Button>
+              </div>
+            </div>
           </SlideUp>
         )}
 
