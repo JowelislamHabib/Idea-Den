@@ -205,11 +205,15 @@ export default function IdeaDetailPage({
   const selectedEntry =
     docEntries.find((entry) => entry.key === selectedDoc) ?? docEntries[0];
 
+  const allDocsMarkdown = docEntries
+    .map((entry) => `# ${entry.title}\n\n${entry.content}`)
+    .join("\n\n---\n\n");
+
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(selectedEntry?.content || "");
+      await navigator.clipboard.writeText(allDocsMarkdown);
       setCopied(true);
-      toast.success("Copied to clipboard");
+      toast.success("All docs copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error("Failed to copy");
@@ -261,7 +265,7 @@ export default function IdeaDetailPage({
               className="gap-2"
             >
               {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-              {copied ? "Copied" : "Copy Idea"}
+              {copied ? "Copied" : generatedDocs.length > 0 ? "Copy All Docs" : "Copy Idea"}
             </Button>
           </div>
         </SlideUp>
@@ -309,7 +313,9 @@ export default function IdeaDetailPage({
                   >
                     <SelectTrigger className="w-full sm:w-72">
                       <FileText className="size-4" />
-                      <SelectValue placeholder="Select a document" />
+                      <SelectValue placeholder="Select a document">
+                        {selectedEntry?.title}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {docEntries.map((entry) => (
@@ -321,11 +327,21 @@ export default function IdeaDetailPage({
                   </Select>
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
-                  <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0" />
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Generate build-ready docs for this project
-                  </span>
+                <div className="flex items-start gap-2">
+                  <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
+                  <div className="text-sm text-muted-foreground">
+                    <p className="font-medium">Generate 5 build-ready docs for this project:</p>
+                    <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
+                      {(["technicalDesign", "appFlow", "designBrief", "schema", "engineeringPlan"] as const).map(
+                        (key, idx, arr) => (
+                          <span key={key}>
+                            {DOC_TITLES[key]}
+                            {idx < arr.length - 1 && ","}
+                          </span>
+                        ),
+                      )}
+                    </p>
+                  </div>
                 </div>
               )}
               {isOwner && !allDocsGenerated && (
