@@ -345,7 +345,11 @@ export default function IdeaDetailPage({
                       {selectedEntry?.title}
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent
+                    side="bottom"
+                    align="start"
+                    alignItemWithTrigger={false}
+                  >
                     {isOwner && isPro && missingDocs.length > 0 && (
                       <>
                         <SelectGroup>
