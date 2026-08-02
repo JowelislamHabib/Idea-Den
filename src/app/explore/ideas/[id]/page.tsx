@@ -78,20 +78,20 @@ interface Idea {
 
 const DOC_TITLES: Record<string, string> = {
   prd: "PRD",
-  technicalDesign: "Technical Design",
-  appFlow: "App-Flow Map",
-  designBrief: "Design Brief",
-  schema: "Schema Plan",
-  engineeringPlan: "Engineering Plan",
+  technicalDesign: "System Design",
+  appFlow: "Site Map & User Flow",
+  designBrief: "UI/UX Guidelines",
+  schema: "Data Model",
+  engineeringPlan: "Implementation Plan",
 };
 
 const DOC_LOADING_STATES = [
   "Analyzing your PRD...",
-  "Writing Technical Design...",
-  "Mapping the App Flow...",
-  "Sketching the Design Brief...",
-  "Planning the Schema...",
-  "Building the Engineering Plan...",
+  "Writing System Design...",
+  "Mapping the Site Map & User Flow...",
+  "Sketching the UI/UX Guidelines...",
+  "Planning the Data Model...",
+  "Building the Implementation Plan...",
   "Finalizing your docs...",
 ];
 
