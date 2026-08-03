@@ -24,7 +24,7 @@ export function FadeIn({ children, className, delay = 0 }: MotionProps) {
           observer.unobserve(el);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0, rootMargin: "100px" }
     );
 
     observer.observe(el);
@@ -62,7 +62,7 @@ export function SlideUp({ children, className, delay = 0 }: MotionProps) {
           observer.unobserve(el);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0, rootMargin: "100px" }
     );
 
     observer.observe(el);
@@ -111,7 +111,7 @@ export function StaggerItem({
           observer.unobserve(el);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0, rootMargin: "100px" }
     );
 
     observer.observe(el);

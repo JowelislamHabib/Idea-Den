@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import {
   ArrowLeft,
+  ArrowRight,
   Clock,
   Copy,
   Check,
@@ -643,21 +644,33 @@ export default function IdeaDetailPage({
               </h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((r) => (
-                  <Link key={r._id} href={`/explore/ideas/${r._id}`}>
-                    <Card className="h-full hover:shadow-md transition-shadow">
-                      <CardContent className="p-5">
-                        <h3 className="font-semibold line-clamp-1 mb-1">{r.projectTitle}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2">{r.elevatorPitch}</p>
-                        <div className="flex flex-wrap gap-1 mt-2">
+                  <Link key={r._id} href={`/explore/ideas/${r._id}`} className="group block h-full">
+                    <Card className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 bg-gradient-to-br from-card to-card/50">
+                      <CardContent className="p-5 flex flex-col h-full">
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <h3 className="font-semibold line-clamp-1 text-foreground group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors">
+                            {r.projectTitle}
+                          </h3>
+                          <ArrowRight className="size-4 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 shrink-0" />
+                        </div>
+                        <p className="text-sm text-muted-foreground line-clamp-2 flex-grow mb-4">
+                          {r.elevatorPitch}
+                        </p>
+                        <div className="flex flex-wrap gap-1.5 mt-auto">
                           {r.techStack?.slice(0, 3).map((t) => (
                             <Badge
                               key={t}
-                              variant="outline"
-                              className="text-xs"
+                              variant="secondary"
+                              className="text-[10px] sm:text-xs font-medium"
                             >
                               {t}
                             </Badge>
                           ))}
+                          {r.techStack && r.techStack.length > 3 && (
+                            <Badge variant="outline" className="text-[10px] sm:text-xs">
+                              +{r.techStack.length - 3}
+                            </Badge>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
