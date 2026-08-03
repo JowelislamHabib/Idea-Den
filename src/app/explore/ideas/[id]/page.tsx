@@ -118,7 +118,7 @@ export default function IdeaDetailPage({
   });
 
   const [copied, setCopied] = useState(false);
-  const [selectedDoc, setSelectedDoc] = useState("prd");
+  const [selectedDoc, setSelectedDoc] = useState("");
   const [loadingStep, setLoadingStep] = useState(0);
 
   const generateDocsMutation = useMutation({
@@ -220,7 +220,7 @@ export default function IdeaDetailPage({
   }));
 
   const selectedEntry =
-    docEntries.find((entry) => entry.key === selectedDoc) ?? docEntries[0];
+    docEntries.find((entry) => entry.key === selectedDoc);
 
   const viewerDocEntries = isOwner
     ? docEntries.filter((entry) => entry.content)
@@ -352,12 +352,12 @@ export default function IdeaDetailPage({
             <div className="flex items-center gap-3">
                 <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0" />
                 <Select
-                  value={selectedEntry?.key}
+                  value={selectedDoc || undefined}
                   onValueChange={(value) => handleDocSelect(value as string)}
                 >
                   <SelectTrigger className="w-full sm:w-72">
                     <FileText className="size-4" />
-                    <SelectValue placeholder="Select a document">
+                    <SelectValue placeholder="Select a Document type">
                       {selectedEntry?.title}
                     </SelectValue>
                   </SelectTrigger>
@@ -426,7 +426,7 @@ export default function IdeaDetailPage({
             </div>
           </SlideUp>
 
-        {selectedDoc === "prd" ? (
+        {selectedDoc === "" || selectedDoc === "prd" ? (
         <Tabs defaultValue="overview" className="w-full">
           <SlideUp delay={0.1}>
             <div className="w-full mb-6 overflow-x-auto pb-2 scrollbar-hide">
