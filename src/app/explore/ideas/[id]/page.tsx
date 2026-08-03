@@ -352,7 +352,7 @@ export default function IdeaDetailPage({
             <div className="flex items-center gap-3">
                 <Book className="size-5 text-amber-600 dark:text-amber-500 shrink-0" />
                 <Select
-                  value={selectedDoc || undefined}
+                  value={selectedDoc}
                   onValueChange={(value) => handleDocSelect(value as string)}
                 >
                   <SelectTrigger className="w-full sm:w-72">

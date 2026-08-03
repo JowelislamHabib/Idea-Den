@@ -26,14 +26,16 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: {
-    default: "IdeaDen - AI-powered Project Ideas, PRDs, and Article Generation",
+    default: "IdeaDen - AI-Powered Project Ideas, Full Architectural Docs, and Article Generation",
     template: "%s | IdeaDen",
   },
   description:
-    "IdeaDen is a purpose-built creative environment with two specialized engines for generating comprehensive Project Ideas/PRDs and SEO-optimized articles.",
+    "IdeaDen is a purpose-built creative environment with two specialized engines for generating comprehensive Project Ideas, complete System Architectures, and SEO-optimized articles.",
   keywords: [
     "AI",
     "Project Ideas",
+    "System Design",
+    "Architecture",
     "PRD Generator",
     "Blog Generator",
     "IdeaDen",
