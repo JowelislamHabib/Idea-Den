@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { AuthRequired } from "@/components/shared/AuthRequired";
@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { apiClient } from "@/lib/api/client";
+import { apiClient, ApiError } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
 import { toast } from "sonner";
 import { VisibilityToggle } from "@/components/shared/VisibilityToggle";
@@ -74,9 +74,27 @@ export default function GeneratePage() {
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [cooldown, setCooldown] = useState(0);
   const [randomCooldown, setRandomCooldown] = useState(0);
+  const randomCooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [loadingStep, setLoadingStep] = useState(0);
   const [isGeneratingRandom, setIsGeneratingRandom] = useState(false);
   const [errors, setErrors] = useState<{ interests?: string; timeAvailable?: string; techStack?: string }>({});
+
+  const startRandomCooldown = useCallback((seconds: number) => {
+    if (randomCooldownRef.current) clearInterval(randomCooldownRef.current);
+    if (seconds <= 0) { setRandomCooldown(0); return; }
+    setRandomCooldown(seconds);
+    const interval = setInterval(() => {
+      setRandomCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          randomCooldownRef.current = null;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    randomCooldownRef.current = interval;
+  }, []);
 
   const { data: quota, isLoading: quotaLoading } = useQuery({
     queryKey: ["userQuota", session?.user?.id],
@@ -88,6 +106,21 @@ export default function GeneratePage() {
       );
     },
     enabled: !!session?.user?.id,
+  });
+
+  useQuery({
+    queryKey: ["randomIdeaCooldown", session?.user?.id],
+    queryFn: async () => {
+      const token = await getToken();
+      const res = await apiClient<{ retryAfter: number }>("/api/ideas/random/cooldown", { token });
+      if (res.retryAfter > 0) {
+        startRandomCooldown(res.retryAfter);
+      }
+      return res;
+    },
+    enabled: !!session?.user?.id,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
   });
 
   const generateMutation = useMutation({
@@ -170,18 +203,6 @@ export default function GeneratePage() {
     setCustomTech("");
   };
 
-  const handleRandomCooldown = () => {
-    setRandomCooldown(15);
-    const interval = setInterval(() => {
-      setRandomCooldown((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
 
   const handleSurpriseMe = async () => {
     if (randomCooldown > 0) return;
@@ -195,9 +216,13 @@ export default function GeneratePage() {
       if (res && res.idea) {
         setInterests(res.idea);
       }
-      handleRandomCooldown();
+      startRandomCooldown(15);
     } catch (err) {
-      toast.error("Failed to generate a random idea. Please try again.");
+      if (err instanceof ApiError && err.status === 429 && typeof err.data.retryAfter === "number") {
+        startRandomCooldown(err.data.retryAfter as number);
+      } else {
+        toast.error("Failed to generate a random idea. Please try again.");
+      }
     } finally {
       setIsGeneratingRandom(false);
     }

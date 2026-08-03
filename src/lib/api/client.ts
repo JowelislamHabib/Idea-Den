@@ -4,6 +4,17 @@ interface FetchOptions extends RequestInit {
   token?: string | null;
 }
 
+export class ApiError extends Error {
+  data: Record<string, unknown>;
+  status: number;
+  constructor(message: string, status: number, data: Record<string, unknown>) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.data = data;
+  }
+}
+
 export async function apiClient<T>(
   endpoint: string,
   options: FetchOptions = {}
@@ -23,7 +34,7 @@ export async function apiClient<T>(
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ error: "Request failed" }));
-    throw new Error(error.error || `HTTP ${res.status}`);
+    throw new ApiError(error.error || `HTTP ${res.status}`, res.status, error);
   }
 
   return res.json();
