@@ -126,7 +126,8 @@ export default function BlogGeneratePage() {
       return res;
     },
     enabled: !!session?.user?.id,
-    staleTime: Infinity,
+    staleTime: 0,
+    gcTime: 0,
     refetchOnWindowFocus: false,
   });
 

@@ -119,7 +119,8 @@ export default function GeneratePage() {
       return res;
     },
     enabled: !!session?.user?.id,
-    staleTime: Infinity,
+    staleTime: 0,
+    gcTime: 0,
     refetchOnWindowFocus: false,
   });
 
