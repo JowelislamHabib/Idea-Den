@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>AI-powered Project Ideas, PRDs, and Article Generation</strong>
+  <strong>AI-Powered Project Ideas, Full Architectural Docs, and Article Generation</strong>
 </p>
 
 <p align="center">
@@ -21,17 +21,17 @@
 
 ## Overview
 
-**IdeaDen** is an AI-powered platform for developers and content creators. Developers can generate project ideas on demand, produce full PRDs from any idea, and expand PRDs into 5 build-ready project docs (Pro). Content creators can generate SEO-optimized blog posts and articles with customizable templates, tones, and lengths. Built with **Next.js 16** + **Express 5**, powered by **Google Gemini AI** and monetized via **Stripe** subscriptions.
+**IdeaDen** is an AI-powered platform for developers and content creators. Developers can generate project ideas on demand, produce full PRDs from any idea, and expand PRDs into 5 build-ready project docs (System Design, Site Map & User Flow, UI/UX Guidelines, Data Model, and Implementation Plan). Content creators can generate SEO-optimized blog posts and articles with customizable templates, tones, and lengths. Built with **Next.js 16** + **Express 5**, powered by **Google Gemini AI** and monetized via **Stripe** subscriptions.
 
 ---
 
 ## The Problem
 
-**For Developers:** Staring at a blank screen wondering what to build next is frustrating. You have specific technologies you want to learn, a limited amount of free time, and specific interests. Finding an idea that perfectly matches these constraints is hard. Even when you find one, writing a structured Product Requirements Document (PRD) to plan the architecture, scope, and user flows takes hours of tedious work. As a result, developers often skip planning and jump straight to coding, leading to scope creep and abandoned projects.
+**For Developers:** Staring at a blank screen wondering what to build next is frustrating. You have specific technologies you want to learn, a limited amount of free time, and specific interests. Finding an idea that perfectly matches these constraints is hard. Even when you find one, writing a structured Product Requirements Document (PRD) and expanding it into a complete System Design, Data Model, and Implementation Plan takes hours of tedious work. As a result, developers often skip planning and jump straight to coding, leading to scope creep and abandoned projects.
 
 **For Content Creators:** Producing high-quality, SEO-optimized content consistently is difficult and time-consuming. You need to adapt to different tones (professional, casual, persuasive) and formats (listicles, case studies, how-to guides) while ensuring target keywords are naturally integrated.
 
-IdeaDen solves both problems by leveraging AI to generate highly customized project PRDs and SEO-ready blog content in seconds.
+IdeaDen solves both problems by leveraging AI to generate highly customized project PRDs, comprehensive architectural docs, and SEO-ready blog content in seconds.
 
 ---
 
@@ -41,6 +41,7 @@ IdeaDen solves both problems by leveraging AI to generate highly customized proj
 
 - Generate project ideas from your interests, available time, and preferred tech stack
 - Turn any idea into a full PRD — 7 sections: Executive Summary, Strategy & Context, Users & Scope, Requirements & Logic, Design & Execution, Planning & Risk, Appendix
+- Instantly generate 5 complete project execution documents from your PRD: System Design, Site Map & User Flow, UI/UX Guidelines, Data Model, and Implementation Plan (Pro)
 - Adapts to developer preferences (stack, experience level, focus area)
 - Avoids duplicates by tracking previously generated ideas
 
@@ -54,7 +55,7 @@ IdeaDen solves both problems by leveraging AI to generate highly customized proj
 
 ### Project Docs (Pro)
 
-- Turn any PRD into 5 build-ready documents: Technical Design, App-Flow Map, Design Brief, Schema Plan, Engineering Plan
+- Turn any PRD into 5 build-ready documents: System Design, Site Map & User Flow, UI/UX Guidelines, Data Model, Implementation Plan
 - Generate docs one-by-one or all at once from a dropdown on the idea detail page
 - Pro owners generate docs; free owners see the feature with an upgrade prompt
 - Free users browsing a Pro user's public idea see a blurred preview of each doc with an "Unlock with Pro" upgrade CTA
