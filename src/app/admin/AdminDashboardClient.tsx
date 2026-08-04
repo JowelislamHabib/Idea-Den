@@ -130,20 +130,20 @@ export default function AdminDashboardClient({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.06 * i, duration: 0.35 }}
           >
-            <Card className="overflow-hidden">
+            <Card className="overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardDescription>{m.title}</CardDescription>
-                <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <CardDescription className="min-w-0 truncate pr-2">{m.title}</CardDescription>
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <m.icon className="size-4" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold tabular-nums">{m.value}</div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <div className="text-2xl sm:text-3xl font-bold tabular-nums">{m.value}</div>
+                <p className="mt-1 text-xs text-muted-foreground">
                   {m.description}
                 </p>
               </CardContent>
-              <CardFooter className="flex items-center justify-between pt-2">
+              <CardFooter className="flex flex-wrap items-center justify-between gap-2 pt-2">
                 <Badge
                   variant="outline"
                   className={`text-xs ${
@@ -253,7 +253,7 @@ export default function AdminDashboardClient({
                     key={idea._id}
                     className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                         <Lightbulb className="size-4" />
                       </div>
@@ -308,7 +308,7 @@ export default function AdminDashboardClient({
                     key={blog._id}
                     className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                         <FileText className="size-4" />
                       </div>
