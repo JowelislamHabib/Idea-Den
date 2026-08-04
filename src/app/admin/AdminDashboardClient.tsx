@@ -1,162 +1,347 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Activity, MessageSquare, ShieldAlert, ShieldCheck, UserCog, Users } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { StatCard } from "./StatCard";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  TrendingUp,
+  TrendingDown,
+  Users,
+  Lightbulb,
+  PenTool,
+  Crown,
+  PlusCircle,
+  FileText,
+  ShieldCheck,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 const AdminChart = dynamic(() => import("./AdminChart"), { ssr: false });
-const AdminPieChart = dynamic(() => import("./AdminPieChart"), { ssr: false });
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } }
-};
-
-export default function AdminDashboardClient({ 
-  firstName, 
-  totalUsers, 
-  totalIdeas, 
-  totalBlogs, 
-  totalSubscriptions, 
-  registrationActivity, 
-  userRolesData, 
-  recentIdeas = []
+export default function AdminDashboardClient({
+  firstName,
+  totalUsers,
+  totalIdeas,
+  totalBlogs,
+  totalSubscriptions,
+  registrationActivity,
+  recentIdeas = [],
+  recentBlogs = [],
+  recentUsers = [],
 }: any) {
+  const metrics = [
+    {
+      title: "Total Users",
+      value: typeof totalUsers === "number" ? totalUsers.toLocaleString() : totalUsers,
+      description: "Registered members",
+      icon: Users,
+      trend: { value: 12, direction: "up" as const },
+      href: "/admin/users",
+      actionLabel: "Manage",
+    },
+    {
+      title: "Ideas Generated",
+      value: typeof totalIdeas === "number" ? totalIdeas.toLocaleString() : totalIdeas,
+      description: "Project blueprints",
+      icon: Lightbulb,
+      trend: { value: 8, direction: "up" as const },
+      href: "/admin/ideas",
+      actionLabel: "View",
+    },
+    {
+      title: "Blogs Published",
+      value: typeof totalBlogs === "number" ? totalBlogs.toLocaleString() : totalBlogs,
+      description: "SEO articles",
+      icon: PenTool,
+      trend: { value: 15, direction: "up" as const },
+      href: "/admin/blogs",
+      actionLabel: "Manage",
+    },
+    {
+      title: "Pro Members",
+      value: typeof totalSubscriptions === "number" ? totalSubscriptions.toLocaleString() : totalSubscriptions,
+      description: "Active subscribers",
+      icon: Crown,
+      trend: { value: 5, direction: "up" as const },
+      href: "/admin/users",
+      actionLabel: "View",
+    },
+  ];
+
   return (
-    <motion.div 
-      variants={containerVariants} 
-      initial="hidden" 
-      animate="show" 
-      className="space-y-8"
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
     >
-      
-      {/* Hero Welcome Section */}
-      <motion.section variants={itemVariants} className="relative overflow-hidden rounded-3xl bg-slate-900 px-8 py-10 text-white shadow-lg">
-        <div className="relative z-10">
-          <h1 className="font-heading text-4xl sm:text-5xl font-medium">
-            Welcome back, {firstName}.
-          </h1>
-          <p className="mt-2 text-slate-300 text-lg max-w-2xl">
-            System operations are running smoothly. You have {totalIdeas} ideas generated and {totalBlogs} blogs created.
-          </p>
+      {/* Page Header */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+          <Badge variant="outline" className="text-xs font-medium">
+            <ShieldCheck className="size-3 mr-1" />
+            Admin
+          </Badge>
         </div>
-        <div className="absolute -right-10 -top-24 size-64 rounded-full bg-white/5 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 right-32 size-48 rounded-full bg-red-500/10 blur-2xl pointer-events-none" />
-      </motion.section>
+        <p className="text-muted-foreground text-sm">
+          Welcome back, {firstName}. Here&apos;s what&apos;s happening with IdeaDen.
+        </p>
+      </div>
 
-      {/* Unified Stats & Action Cards */}
-      <motion.section variants={itemVariants} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Users"
-          value={totalUsers}
-          description="Total registered members"
-          icon={Users}
-          color="blue"
-          link={{ href: "/admin/users", text: "Manage Users" }}
-        />
+      {/* Quick Actions */}
+      <div className="flex flex-wrap gap-2">
+        <Link href="/admin/ideas">
+          <Button size="sm" className="gap-1.5">
+            <PlusCircle className="size-4" /> New Idea
+          </Button>
+        </Link>
+        <Link href="/admin/blogs">
+          <Button size="sm" variant="outline" className="gap-1.5">
+            <FileText className="size-4" /> New Blog
+          </Button>
+        </Link>
+        <Link href="/admin/users">
+          <Button size="sm" variant="outline" className="gap-1.5">
+            <Users className="size-4" /> Manage Users
+          </Button>
+        </Link>
+      </div>
 
-        <StatCard
-          title="Ideas"
-          value={totalIdeas}
-          description="Generated project blueprints"
-          icon={Activity}
-          color="emerald"
-          link={{ href: "/admin/ideas", text: "View Ideas" }}
-        />
+      <Separator />
 
-        <StatCard
-          title="Blogs"
-          value={totalBlogs}
-          description="SEO optimized blogs created"
-          icon={MessageSquare}
-          color="orange"
-          link={{ href: "/admin/blogs", text: "Manage Blogs" }}
-        />
-
-        <StatCard
-          title="Subscriptions"
-          value={totalSubscriptions}
-          description="Active pro users"
-          icon={UserCog}
-          color="purple"
-          link={{ href: "/admin/subscriptions", text: "View Subs" }}
-        />
-      </motion.section>
-
-      {/* Main Content Layout */}
-      <motion.section variants={itemVariants} className="grid gap-4 lg:grid-cols-4">
-        {/* Bar Chart - Spans 2 columns */}
-        <article className="lg:col-span-2 rounded-2xl border bg-card p-6 shadow-sm flex flex-col">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-4">
-            New Registrations (Last 7 Days)
-          </h2>
-          <div className="h-[250px] mt-auto">
-            <AdminChart data={registrationActivity} />
-          </div>
-        </article>
-
-        {/* Users Pie Chart */}
-        <article className="rounded-2xl border bg-card p-6 shadow-sm flex flex-col items-center">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-2 text-center">
-            Users by Role
-          </h2>
-          <div className="h-[250px] w-full mt-auto">
-            <AdminPieChart data={userRolesData} dataKey="count" nameKey="role" />
-          </div>
-        </article>
-      </motion.section>
-
-      {/* Bottom Section - Recent Ideas */}
-      <motion.section variants={itemVariants} className="grid gap-4 lg:grid-cols-2">
-        {/* Recent Ideas */}
-        <article className="min-w-0 rounded-2xl border bg-card p-6 shadow-sm flex flex-col max-h-[400px] lg:h-[400px]">
-          <div className="flex items-center justify-between mb-4 shrink-0">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">
-              Recent Ideas Generated
-            </h2>
-            <Link href="/admin/ideas" className="text-[10px] font-bold uppercase tracking-wider text-red-600 hover:text-red-700 transition-colors">View All</Link>
-          </div>
-          <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-            {recentIdeas.length > 0 ? (
-              recentIdeas.map((idea: any) => (
-                <div key={idea._id} className="flex items-center justify-between gap-3 rounded-xl border bg-slate-50/50 p-3 dark:bg-slate-900/20 hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-colors">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-                      <Activity className="size-4" />
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="truncate text-sm font-semibold text-foreground">
-                        {idea.title || "Untitled Idea"}
-                      </p>
-                      <p className="truncate text-xs text-muted-foreground">
-                        {idea.niche || "Unknown Niche"}
-                      </p>
-                    </div>
-                  </div>
+      {/* Metric Cards */}
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {metrics.map((m, i) => (
+          <motion.div
+            key={m.title}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.06 * i, duration: 0.35 }}
+          >
+            <Card className="overflow-hidden">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardDescription>{m.title}</CardDescription>
+                <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <m.icon className="size-4" />
                 </div>
-              ))
-            ) : (
-              <div className="flex h-full flex-col items-center justify-center rounded-xl border border-dashed p-6 text-center bg-slate-50/50 dark:bg-slate-900/10">
-                <ShieldCheck className="size-8 text-emerald-500/50 mb-3" />
-                <p className="text-sm font-medium text-foreground">All caught up!</p>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold tabular-nums">{m.value}</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  No ideas generated recently.
+                  {m.description}
+                </p>
+              </CardContent>
+              <CardFooter className="flex items-center justify-between pt-2">
+                <Badge
+                  variant="outline"
+                  className={`text-xs ${
+                    m.trend.direction === "up"
+                      ? "text-emerald-600 border-emerald-200 dark:text-emerald-400 dark:border-emerald-900"
+                      : "text-red-600 border-red-200 dark:text-red-400 dark:border-red-900"
+                  }`}
+                >
+                  {m.trend.direction === "up" ? (
+                    <TrendingUp className="size-3 mr-1" />
+                  ) : (
+                    <TrendingDown className="size-3 mr-1" />
+                  )}
+                  {m.trend.value}%
+                </Badge>
+                <Link
+                  href={m.href}
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  {m.actionLabel} <ArrowRight className="size-3 inline ml-0.5" />
+                </Link>
+              </CardFooter>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Charts Row */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        {/* Area Chart */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>User Registrations</CardTitle>
+            <CardDescription>New sign-ups over the last 7 days</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[260px]">
+              <AdminChart data={registrationActivity} />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Users */}
+        {recentUsers.length > 0 && (
+          <Card className="border-primary/20 bg-primary/5">
+            <CardHeader>
+              <CardTitle className="text-sm">Recent Users</CardTitle>
+              <CardDescription>Latest registered members</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {recentUsers.map((user: any) => (
+                  <div
+                    key={user._id}
+                    className="flex items-center justify-between rounded-lg border p-2.5 transition-colors hover:bg-primary/10"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary text-[10px] font-bold">
+                        {(user.name || "?").charAt(0)}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate text-xs font-semibold">
+                          {user.name || "Unknown"}
+                        </p>
+                        <p className="truncate text-[10px] text-muted-foreground">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-widest shrink-0 ${
+                      user.role === "admin"
+                        ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                        : user.role === "pro"
+                        ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400"
+                        : "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    }`}>
+                      {user.role || "free"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Recent Ideas & Blogs */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* Recent Ideas */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Recent Ideas</CardTitle>
+              <CardDescription>Latest project blueprints</CardDescription>
+            </div>
+            <Link href="/admin/ideas">
+              <Button variant="outline" size="sm">
+                View All
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            {recentIdeas.length > 0 ? (
+              <div className="space-y-2">
+                {recentIdeas.map((idea: any) => (
+                  <div
+                    key={idea._id}
+                    className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <Lightbulb className="size-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold">
+                          {idea.projectTitle || idea.title || "Untitled Idea"}
+                        </p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {idea.tagline || "General"}
+                        </p>
+                      </div>
+                    </div>
+                    <Link
+                      href={`/explore/ideas/${idea._id}`}
+                      className="shrink-0 text-xs font-semibold text-primary hover:underline"
+                    >
+                      View
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <ShieldCheck className="size-10 text-muted-foreground/30 mb-3" />
+                <p className="text-sm font-medium">No ideas yet</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Create your first idea to get started.
                 </p>
               </div>
             )}
-          </div>
-        </article>
-      </motion.section>
+          </CardContent>
+        </Card>
+
+        {/* Recent Blogs */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Recent Blogs</CardTitle>
+              <CardDescription>Latest articles published</CardDescription>
+            </div>
+            <Link href="/admin/blogs">
+              <Button variant="outline" size="sm">
+                View All
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            {recentBlogs.length > 0 ? (
+              <div className="space-y-2">
+                {recentBlogs.map((blog: any) => (
+                  <div
+                    key={blog._id}
+                    className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <FileText className="size-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold">
+                          {blog.title || blog.topic || "Untitled Blog"}
+                        </p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {blog.topic || blog.title || "No topic"}
+                        </p>
+                      </div>
+                    </div>
+                    <Link
+                      href={`/explore/blogs/${blog._id}`}
+                      className="shrink-0 text-xs font-semibold text-primary hover:underline"
+                    >
+                      View
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <ShieldCheck className="size-10 text-muted-foreground/30 mb-3" />
+                <p className="text-sm font-medium">No blogs yet</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Create your first blog to get started.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </motion.div>
   );
 }

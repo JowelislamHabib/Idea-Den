@@ -1,28 +1,30 @@
 import { headers } from "next/headers";
 import AdminDashboardClient from "./AdminDashboardClient";
-import { auth } from "@/lib/auth"; // You might need to check how to get server session for Better Auth.
+import { auth } from "@/lib/auth";
+import { MongoClient } from "mongodb";
+import { redirect } from "next/navigation";
 
 export default async function AdminDashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   
+  if (!session || session.user.role !== "admin") {
+    redirect("/");
+  }
+  
   const user = session?.user;
   const firstName = user?.name?.split(" ")[0] || "Admin";
 
-  // Mocking data since backend endpoints don't exist yet
-  const users = [
-    { _id: "1", role: "admin", createdAt: new Date() },
-    { _id: "2", role: "free", createdAt: new Date() },
-    { _id: "3", role: "pro", createdAt: new Date() },
-  ];
-  const ideas = [
-    { _id: "1", title: "AI Fitness App", niche: "Health", createdAt: new Date() },
-    { _id: "2", title: "SaaS Starter Kit", niche: "Developer Tools", createdAt: new Date() },
-  ];
-  const blogs = [
-    { _id: "1", title: "How to build SaaS", createdAt: new Date() },
-  ];
+  const client = new MongoClient(process.env.MONGODB_URI as string);
+  await client.connect();
+  const db = client.db("IdeaDen");
+
+  const [users, ideas, blogs] = await Promise.all([
+    db.collection("user").find().sort({ createdAt: -1 }).toArray(),
+    db.collection("ideas").find().sort({ createdAt: -1 }).toArray(),
+    db.collection("blogs").find().sort({ createdAt: -1 }).toArray(),
+  ]);
 
   const totalUsers = users.length;
   const totalIdeas = ideas.length;
@@ -53,14 +55,27 @@ export default async function AdminDashboardPage() {
     };
   });
 
-  const userRolesData = [
-    { role: "Admin", count: users.filter(u => u.role === "admin").length, color: "#ef4444" },
-    { role: "Pro", count: users.filter(u => u.role === "pro").length, color: "#10b981" },
-    { role: "Free", count: users.filter(u => u.role === "free" || !u.role).length, color: "#a855f7" },
-  ];
+  // Convert ObjectIds to strings for serialization
+  const serializedIdeas = ideas.map(idea => ({
+    ...idea,
+    _id: idea._id.toString(),
+    createdAt: idea.createdAt?.toISOString() || null,
+  })).slice(0, 5);
+
+  const serializedBlogs = blogs.map(blog => ({
+    ...blog,
+    _id: blog._id.toString(),
+    createdAt: blog.createdAt?.toISOString() || null,
+  })).slice(0, 5);
+
+  const recentUsers = users.slice(0, 5).map(u => ({
+    ...u,
+    _id: u._id.toString(),
+    createdAt: u.createdAt?.toISOString() || null,
+  }));
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 lg:p-8 pt-20">
+    <div className="container">
       <AdminDashboardClient
         firstName={firstName}
         totalUsers={totalUsers}
@@ -68,8 +83,9 @@ export default async function AdminDashboardPage() {
         totalBlogs={totalBlogs}
         totalSubscriptions={totalSubscriptions}
         registrationActivity={registrationActivity}
-        userRolesData={userRolesData}
-        recentIdeas={ideas}
+        recentIdeas={serializedIdeas}
+        recentBlogs={serializedBlogs}
+        recentUsers={recentUsers}
       />
     </div>
   );
