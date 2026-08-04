@@ -21,7 +21,16 @@ export default async function DashboardBlogsPage({
   }
 
   if (session.user.role !== "admin") {
-    return <UserBlogsClient />;
+    const token = await getTokenServer();
+    let initialBlogs = [];
+    
+    try {
+      const blogsData = await apiClient<{ blogs: any[] }>("/api/blogs/mine", { token });
+      initialBlogs = blogsData.blogs || [];
+    } catch (e) {
+      console.error("Error fetching user blogs:", e);
+    }
+    return <UserBlogsClient initialBlogs={initialBlogs} user={session.user} />;
   }
 
   const { page } = await searchParams;

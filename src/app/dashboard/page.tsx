@@ -4,6 +4,8 @@ import UserDashboardClient from "./UserDashboardClient";
 import { auth } from "@/lib/auth";
 import { MongoClient } from "mongodb";
 import { redirect } from "next/navigation";
+import { getTokenServer } from "@/lib/getTokenServer";
+import { apiClient } from "@/lib/api/client";
 
 export default async function AdminDashboardPage() {
   const session = await auth.api.getSession({
@@ -17,9 +19,27 @@ export default async function AdminDashboardPage() {
   const user = session?.user;
 
   if (user.role !== "admin") {
+    const token = await getTokenServer();
+    let initialIdeas = [];
+    let initialBlogs = [];
+    
+    try {
+      const ideasData = await apiClient<{ ideas: any[] }>("/api/ideas/mine", { token });
+      initialIdeas = ideasData.ideas || [];
+    } catch (e) {
+      console.error("Error fetching user ideas:", e);
+    }
+    
+    try {
+      const blogsData = await apiClient<{ blogs: any[] }>("/api/blogs/mine", { token });
+      initialBlogs = blogsData.blogs || [];
+    } catch (e) {
+      console.error("Error fetching user blogs:", e);
+    }
+
     return (
       <div className="container">
-        <UserDashboardClient />
+        <UserDashboardClient user={user} initialIdeas={initialIdeas} initialBlogs={initialBlogs} />
       </div>
     );
   }

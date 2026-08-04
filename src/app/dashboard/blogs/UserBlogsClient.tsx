@@ -39,12 +39,11 @@ interface DashboardBlog {
   createdAt: string;
 }
 
-export default function DashboardBlogsPage() {
-  const { data: session } = useSession();
+export default function DashboardBlogsPage({ initialBlogs = [], user }: { initialBlogs?: DashboardBlog[], user?: any }) {
   const queryClient = useQueryClient();
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const userId = session?.user?.id || "";
+  const userId = user?.id || "";
 
   const { data, isPending } = useQuery({
     queryKey: ["my-blogs"],
@@ -53,6 +52,7 @@ export default function DashboardBlogsPage() {
       return apiClient<{ blogs: DashboardBlog[] }>("/api/blogs/mine", { token });
     },
     enabled: !!userId,
+    initialData: { blogs: initialBlogs }
   });
 
   const deleteMutation = useMutation({

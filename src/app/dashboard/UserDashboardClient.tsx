@@ -79,10 +79,17 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function DashboardOverviewPage() {
-  const { data: session, isPending: sessionPending } = useSession();
-  const userId = session?.user?.id || "";
-  const firstName = session?.user?.name?.split(" ")[0] || "User";
+export default function DashboardOverviewPage({ 
+  initialIdeas = [], 
+  initialBlogs = [], 
+  user 
+}: { 
+  initialIdeas?: DashboardIdea[], 
+  initialBlogs?: DashboardBlog[],
+  user?: any 
+}) {
+  const userId = user?.id || "";
+  const firstName = user?.name?.split(" ")[0] || "User";
 
   const { data: ideasData, isPending: ideasPending } = useQuery({
     queryKey: ["my-ideas"],
@@ -91,6 +98,7 @@ export default function DashboardOverviewPage() {
       return apiClient<{ ideas: DashboardIdea[] }>("/api/ideas/mine", { token });
     },
     enabled: !!userId,
+    initialData: { ideas: initialIdeas }
   });
 
   const { data: blogsData, isPending: blogsPending } = useQuery({
@@ -100,11 +108,8 @@ export default function DashboardOverviewPage() {
       return apiClient<{ blogs: DashboardBlog[] }>("/api/blogs/mine", { token });
     },
     enabled: !!userId,
+    initialData: { blogs: initialBlogs }
   });
-
-  if (sessionPending || ideasPending || blogsPending) {
-    return <PageLoading />;
-  }
 
   const ideas = ideasData?.ideas || [];
   const blogs = blogsData?.blogs || [];

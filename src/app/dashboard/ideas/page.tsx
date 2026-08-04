@@ -21,7 +21,16 @@ export default async function DashboardIdeasPage({
   }
 
   if (session.user.role !== "admin") {
-    return <UserIdeasClient />;
+    const token = await getTokenServer();
+    let initialIdeas = [];
+    
+    try {
+      const ideasData = await apiClient<{ ideas: any[] }>("/api/ideas/mine", { token });
+      initialIdeas = ideasData.ideas || [];
+    } catch (e) {
+      console.error("Error fetching user ideas:", e);
+    }
+    return <UserIdeasClient initialIdeas={initialIdeas} user={session.user} />;
   }
 
   const { page } = await searchParams;

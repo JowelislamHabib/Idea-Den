@@ -39,12 +39,11 @@ interface DashboardIdea {
   createdAt: string;
 }
 
-export default function DashboardIdeasPage() {
-  const { data: session } = useSession();
+export default function DashboardIdeasPage({ initialIdeas = [], user }: { initialIdeas?: DashboardIdea[], user?: any }) {
   const queryClient = useQueryClient();
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const userId = session?.user?.id || "";
+  const userId = user?.id || "";
 
   const { data, isPending } = useQuery({
     queryKey: ["my-ideas"],
@@ -53,6 +52,7 @@ export default function DashboardIdeasPage() {
       return apiClient<{ ideas: DashboardIdea[] }>("/api/ideas/mine", { token });
     },
     enabled: !!userId,
+    initialData: { ideas: initialIdeas }
   });
 
   const deleteMutation = useMutation({
