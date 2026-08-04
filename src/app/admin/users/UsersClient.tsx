@@ -93,6 +93,11 @@ export function UsersClient({ users, page, totalPages, total }: { users: any[]; 
 
   return (
     <>
+      <div className="flex items-center justify-between px-6 pt-5 pb-2">
+        <p className="text-sm text-muted-foreground">
+          {total} {total === 1 ? "user" : "users"} total
+        </p>
+      </div>
       <Table>
         <TableHeader className="bg-muted/30">
           <TableRow>
