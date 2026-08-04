@@ -10,14 +10,14 @@ import { apiClient } from "@/lib/api/client";
 export default async function DashboardBlogsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; visibility?: string }>;
 }) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  if (!session) {
-    redirect("/");
+  if (!session || !session.user) {
+    redirect("/login");
   }
 
   if (session.user.role !== "admin") {
@@ -25,22 +25,23 @@ export default async function DashboardBlogsPage({
     let initialBlogs = [];
     
     try {
-      const blogsData = await apiClient<{ blogs: any[] }>("/api/blogs/mine", { token });
-      initialBlogs = blogsData.blogs || [];
-    } catch (e) {
-      console.error("Error fetching user blogs:", e);
+      const res = await apiClient<{ blogs: any[] }>("/api/blogs/mine", { token });
+      initialBlogs = res.blogs || [];
+    } catch (err) {
+      console.error("Failed to fetch initial blogs", err);
     }
     return <UserBlogsClient initialBlogs={initialBlogs} user={session.user} />;
   }
 
-  const { page } = await searchParams;
+  const { page, visibility } = await searchParams;
   const currentPage = Math.max(1, parseInt(page || "1", 10));
+  const currentVisibility = visibility || "all";
   const token = await getTokenServer();
 
   const data = await apiClient<{
     blogs: any[];
     pagination: { page: number; limit: number; total: number; pages: number };
-  }>(`/api/admin/blogs?page=${currentPage}&limit=10`, {
+  }>(`/api/admin/blogs?page=${currentPage}&limit=10&visibility=${currentVisibility}`, {
     token,
   });
 

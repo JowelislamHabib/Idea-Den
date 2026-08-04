@@ -39,8 +39,21 @@ interface DashboardIdea {
   createdAt: string;
 }
 
+import { useSearchParams, usePathname } from "next/navigation";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
 export default function DashboardIdeasPage({ initialIdeas = [], user }: { initialIdeas?: DashboardIdea[], user?: any }) {
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const userId = user?.id || "";
@@ -73,7 +86,19 @@ export default function DashboardIdeasPage({ initialIdeas = [], user }: { initia
     },
   });
 
-  const ideas = data?.ideas || [];
+  const allIdeas = data?.ideas || [];
+  const total = allIdeas.length;
+  const limit = 10;
+  const pageParam = searchParams.get("page");
+  const page = pageParam ? Math.max(1, parseInt(pageParam, 10)) : 1;
+  const totalPages = Math.ceil(total / limit) || 1;
+  const ideas = allIdeas.slice((page - 1) * limit, page * limit);
+
+  const createPageURL = (pageNumber: number | string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", pageNumber.toString());
+    return `${pathname}?${params.toString()}`;
+  };
 
   return (
     <>
@@ -93,7 +118,7 @@ export default function DashboardIdeasPage({ initialIdeas = [], user }: { initia
                   </div>
                 ))}
               </div>
-            ) : ideas.length === 0 ? (
+            ) : allIdeas.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <div className="flex size-12 items-center justify-center rounded-full bg-muted mb-4">
                   <Lightbulb className="size-6 text-muted-foreground" />
@@ -167,6 +192,39 @@ export default function DashboardIdeasPage({ initialIdeas = [], user }: { initia
                     ))}
                   </TableBody>
                 </Table>
+
+                {totalPages > 1 && (
+                  <div className="px-6 py-4">
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious href={page > 1 ? createPageURL(page - 1) : "#"} className={page <= 1 ? "pointer-events-none opacity-50" : ""} />
+                        </PaginationItem>
+                        {[...Array(totalPages)].map((_, i) => {
+                          const p = i + 1;
+                          if (p === 1 || p === totalPages || (p >= page - 1 && p <= page + 1)) {
+                            return (
+                              <PaginationItem key={p}>
+                                <PaginationLink href={createPageURL(p)} isActive={p === page}>{p}</PaginationLink>
+                              </PaginationItem>
+                            );
+                          }
+                          if (p === page - 2 || p === page + 2) {
+                            return (
+                              <PaginationItem key={`ellipsis-${p}`}>
+                                <PaginationEllipsis />
+                              </PaginationItem>
+                            );
+                          }
+                          return null;
+                        })}
+                        <PaginationItem>
+                          <PaginationNext href={page < totalPages ? createPageURL(page + 1) : "#"} className={page >= totalPages ? "pointer-events-none opacity-50" : ""} />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
+                )}
               </div>
             )}
           </CardContent>

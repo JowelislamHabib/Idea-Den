@@ -21,6 +21,15 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+
 export function BlogsClient({ blogs, page, totalPages, total }: { blogs: any[]; page: number; totalPages: number; total: number }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -91,15 +100,38 @@ export function BlogsClient({ blogs, page, totalPages, total }: { blogs: any[]; 
         <p className="text-sm text-muted-foreground">
           {total} {total === 1 ? "blog" : "blogs"} total
         </p>
-        <Button size="sm" onClick={openCreate} className="gap-1.5">
-          <Plus className="size-4" /> Create Blog
-        </Button>
+        <div className="flex items-center gap-3">
+          <Select 
+            value={searchParams.get("visibility") || "all"} 
+            onValueChange={(val: string) => {
+              const params = new URLSearchParams(searchParams.toString());
+              if (val === "all") params.delete("visibility");
+              else params.set("visibility", val);
+              params.set("page", "1");
+              router.push(`${pathname}?${params.toString()}`);
+            }}
+          >
+            <SelectTrigger className="w-[140px] h-9">
+              <SelectValue placeholder="Visibility" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Visibility</SelectItem>
+              <SelectItem value="public">Public</SelectItem>
+              <SelectItem value="private">Private</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button size="sm" onClick={openCreate} className="gap-1.5 h-9">
+            <Plus className="size-4" /> Create Blog
+          </Button>
+        </div>
       </div>
 
       <Table>
         <TableHeader className="bg-muted/30">
           <TableRow>
             <TableHead className="px-6 font-bold uppercase text-xs h-12">Blog Title</TableHead>
+            <TableHead className="px-6 font-bold uppercase text-xs h-12">Author</TableHead>
+            <TableHead className="px-6 font-bold uppercase text-xs h-12">Visibility</TableHead>
             <TableHead className="px-6 font-bold uppercase text-xs text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -108,6 +140,15 @@ export function BlogsClient({ blogs, page, totalPages, total }: { blogs: any[]; 
             <TableRow key={blog._id} className="border-border/50 group hover:bg-muted/20">
               <TableCell className="px-6 py-4">
                 <p className="font-bold text-foreground max-w-[500px] truncate">{blog.title || blog.topic || "Untitled Blog"}</p>
+              </TableCell>
+              <TableCell className="px-6 py-4">
+                <div className="text-sm font-semibold truncate max-w-[150px]">{blog.ownerName || "Anonymous"}</div>
+                <div className="text-xs text-muted-foreground truncate max-w-[150px]">{blog.ownerEmail || ""}</div>
+              </TableCell>
+              <TableCell className="px-6 py-4">
+                <Badge variant={blog.visibility === "private" ? "secondary" : "default"} className="capitalize">
+                  {blog.visibility || "public"}
+                </Badge>
               </TableCell>
               <TableCell className="px-6 py-4 text-right">
                 <div className="flex items-center justify-end gap-2">

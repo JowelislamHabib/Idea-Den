@@ -10,7 +10,7 @@ import { apiClient } from "@/lib/api/client";
 export default async function DashboardIdeasPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; visibility?: string }>;
 }) {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -33,14 +33,15 @@ export default async function DashboardIdeasPage({
     return <UserIdeasClient initialIdeas={initialIdeas} user={session.user} />;
   }
 
-  const { page } = await searchParams;
+  const { page, visibility } = await searchParams;
   const currentPage = Math.max(1, parseInt(page || "1", 10));
+  const currentVisibility = visibility || "all";
   const token = await getTokenServer();
 
   const data = await apiClient<{
     ideas: any[];
     pagination: { page: number; limit: number; total: number; pages: number };
-  }>(`/api/admin/ideas?page=${currentPage}&limit=10`, {
+  }>(`/api/admin/ideas?page=${currentPage}&limit=10&visibility=${currentVisibility}`, {
     token,
   });
 

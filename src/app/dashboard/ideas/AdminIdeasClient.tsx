@@ -23,6 +23,15 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+
 interface IdeaForm {
   title: string;
   description: string;
@@ -103,15 +112,38 @@ export function IdeasClient({ ideas, page, totalPages, total }: { ideas: any[]; 
         <p className="text-sm text-muted-foreground">
           {total} {total === 1 ? "idea" : "ideas"} total
         </p>
-        <Button size="sm" onClick={openCreate} className="gap-1.5">
-          <Plus className="size-4" /> Create Idea
-        </Button>
+        <div className="flex items-center gap-3">
+          <Select 
+            value={searchParams.get("visibility") || "all"} 
+            onValueChange={(val: string) => {
+              const params = new URLSearchParams(searchParams.toString());
+              if (val === "all") params.delete("visibility");
+              else params.set("visibility", val);
+              params.set("page", "1");
+              router.push(`${pathname}?${params.toString()}`);
+            }}
+          >
+            <SelectTrigger className="w-[140px] h-9">
+              <SelectValue placeholder="Visibility" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Visibility</SelectItem>
+              <SelectItem value="public">Public</SelectItem>
+              <SelectItem value="private">Private</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button size="sm" onClick={openCreate} className="gap-1.5 h-9">
+            <Plus className="size-4" /> Create Idea
+          </Button>
+        </div>
       </div>
 
       <Table>
         <TableHeader className="bg-muted/30">
           <TableRow>
             <TableHead className="px-6 font-bold uppercase text-xs h-12">Idea Title</TableHead>
+            <TableHead className="px-6 font-bold uppercase text-xs h-12">Author</TableHead>
+            <TableHead className="px-6 font-bold uppercase text-xs h-12">Visibility</TableHead>
             <TableHead className="px-6 font-bold uppercase text-xs text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -125,6 +157,15 @@ export function IdeasClient({ ideas, page, totalPages, total }: { ideas: any[]; 
                 <p className="truncate text-xs text-muted-foreground max-w-[300px]">
                   {idea.tagline || idea.elevatorPitch || idea.description || "No description"}
                 </p>
+              </TableCell>
+              <TableCell className="px-6 py-4">
+                <div className="text-sm font-semibold truncate max-w-[150px]">{idea.ownerName || "Anonymous"}</div>
+                <div className="text-xs text-muted-foreground truncate max-w-[150px]">{idea.ownerEmail || ""}</div>
+              </TableCell>
+              <TableCell className="px-6 py-4">
+                <Badge variant={idea.visibility === "private" ? "secondary" : "default"} className="capitalize">
+                  {idea.visibility || "public"}
+                </Badge>
               </TableCell>
               <TableCell className="px-6 py-4 text-right">
                 <div className="flex items-center justify-end gap-2">
