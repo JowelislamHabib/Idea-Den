@@ -176,7 +176,6 @@ export default function BlogGeneratePage() {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
-      setLoadingStep(0);
       return;
     }
     const interval = setInterval(() => {

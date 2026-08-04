@@ -1,5 +1,5 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion-wrapper";
-import { Users, Code2, Lightbulb, Building2, PenTool, GraduationCap, Megaphone, Briefcase } from "lucide-react";
+import { Users, Code2, PenTool } from "lucide-react";
 
 const personas = [
   {

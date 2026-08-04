@@ -34,7 +34,7 @@ export function HeroSection() {
 
           <FadeIn delay={0.2}>
             <p className="mt-8 max-w-2xl text-lg sm:text-xl text-muted-foreground leading-relaxed font-medium">
-              Whether you're a <span className="font-semibold text-foreground">Developer</span> needing a project idea and robust PRD, or a <span className="font-semibold text-foreground">Content Writer</span> drafting an SEO-optimized blog — IdeaDen accelerates your workflow.
+              Whether you&apos;re a <span className="font-semibold text-foreground">Developer</span> needing a project idea and robust PRD, or a <span className="font-semibold text-foreground">Content Writer</span> drafting an SEO-optimized blog — IdeaDen accelerates your workflow.
             </p>
           </FadeIn>
 

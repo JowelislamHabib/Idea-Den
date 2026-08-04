@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { ArrowRight, Type, BookOpen } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface BlogCardProps {
@@ -21,7 +21,6 @@ export function BlogCard({
   title,
   topic,
   seoMetaDescription,
-  keywords,
   template,
   tone,
   createdAt,

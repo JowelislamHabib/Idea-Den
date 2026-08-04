@@ -166,7 +166,6 @@ export default function GeneratePage() {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
-      setLoadingStep(0);
       return;
     }
     const interval = setInterval(() => {

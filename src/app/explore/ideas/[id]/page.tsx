@@ -74,6 +74,8 @@ interface Idea {
     engineeringPlan?: string;
     status?: string;
     generatedAt?: string;
+    generatedBy?: string;
+    generatedById?: string;
   };
 }
 
@@ -185,10 +187,11 @@ export default function IdeaDetailPage({
   const { idea, related } = data;
 
   const isAdmin = session?.user?.role === "admin";
-  const isOwner =
-    isAdmin || (!!session?.user?.id && !!idea.ownerId && session.user.id === idea.ownerId);
   const isPro = session?.user?.role === "pro" || isAdmin;
+  const isOwner = !!session?.user?.id && !!idea.ownerId && session.user.id === idea.ownerId;
+  const canGenerateDocs = isOwner || isPro;
   const docs = idea.docs;
+  const isCourtesy = !!(docs?.generatedBy && docs?.generatedById !== idea.ownerId);
 
   const generatedDocs = (
     ["technicalDesign", "appFlow", "designBrief", "schema", "engineeringPlan"] as const
@@ -223,7 +226,7 @@ export default function IdeaDetailPage({
   const selectedEntry =
     docEntries.find((entry) => entry.key === selectedDoc);
 
-  const viewerDocEntries = isOwner
+  const viewerDocEntries = canGenerateDocs
     ? docEntries.filter((entry) => entry.content)
     : docEntries;
 
@@ -367,7 +370,7 @@ export default function IdeaDetailPage({
                     align="start"
                     alignItemWithTrigger={false}
                   >
-                    {isOwner && missingDocs.length > 0 && (
+                    {canGenerateDocs && missingDocs.length > 0 && (
                       <>
                         <SelectGroup>
                           <SelectLabel>
@@ -394,9 +397,9 @@ export default function IdeaDetailPage({
                         </SelectGroup>
                       </>
                     )}
-                    {!(isOwner && !isPro) && (
+                    {!(canGenerateDocs && !isPro) && (
                       <>
-                        {isOwner && missingDocs.length > 0 && <SelectSeparator />}
+                        {canGenerateDocs && missingDocs.length > 0 && <SelectSeparator />}
                         <SelectGroup>
                           <SelectLabel>View Docs</SelectLabel>
                           {viewerDocEntries.map((entry) => (
@@ -428,8 +431,19 @@ export default function IdeaDetailPage({
           </SlideUp>
 
         {selectedDoc === "" || selectedDoc === "prd" ? (
-        <Tabs defaultValue="overview" className="w-full">
-          <SlideUp delay={0.1}>
+        <div className="w-full">
+          {isCourtesy && (
+            <SlideUp delay={0.05}>
+              <div className="mb-4 flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
+                <Crown className="size-4 shrink-0 text-amber-600 dark:text-amber-500" />
+                <p>
+                  <strong className="font-semibold text-amber-900 dark:text-amber-100">Community Gift: </strong> A Pro member (<span className="font-semibold">{idea.docs?.generatedBy}</span>) used their premium access to generate these project documents for everyone to view.
+                </p>
+              </div>
+            </SlideUp>
+          )}
+          <Tabs defaultValue="overview" className="w-full">
+            <SlideUp delay={0.1}>
             <div className="w-full mb-6 overflow-x-auto pb-2 scrollbar-hide">
               <TabsList className="inline-flex h-auto w-auto min-w-full sm:min-w-0 justify-start bg-muted/50 p-1">
                 <TabsTrigger value="overview" className="text-sm whitespace-nowrap px-4 py-2">Strategy & Context</TabsTrigger>
@@ -550,9 +564,21 @@ export default function IdeaDetailPage({
             </SlideUp>
           </TabsContent>
         </Tabs>
+        </div>
         ) : isPro && selectedEntry?.content ? (
-          <SlideUp delay={0.1}>
-            <Card className="border bg-card shadow-sm">
+          <div className="w-full">
+            {isCourtesy && (
+              <SlideUp delay={0.05}>
+                <div className="mb-4 flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
+                  <Crown className="size-4 shrink-0 text-amber-600 dark:text-amber-500" />
+                  <p>
+                  <strong className="font-semibold text-amber-900 dark:text-amber-100">Community Gift: </strong> A Pro member (<span className="font-semibold">{idea.docs?.generatedBy}</span>) used their premium access to generate these project documents for everyone to view.
+                </p>
+                </div>
+              </SlideUp>
+            )}
+            <SlideUp delay={0.1}>
+              <Card className="border bg-card shadow-sm">
               <CardHeader className="pb-4 border-b">
                 <CardTitle className="text-xl font-heading font-bold tracking-tight flex items-center gap-2.5 text-amber-600 dark:text-amber-500">
                   <FileText className="size-5" /> {selectedEntry?.title}
@@ -564,7 +590,8 @@ export default function IdeaDetailPage({
                 </div>
               </CardContent>
             </Card>
-          </SlideUp>
+            </SlideUp>
+          </div>
         ) : isPro ? (
           <SlideUp delay={0.1}>
             <Card className="border bg-card shadow-sm">
