@@ -184,9 +184,10 @@ export default function IdeaDetailPage({
 
   const { idea, related } = data;
 
+  const isAdmin = session?.user?.role === "admin";
   const isOwner =
-    !!session?.user?.id && !!idea.ownerId && session.user.id === idea.ownerId;
-  const isPro = session?.user?.role === "pro";
+    isAdmin || (!!session?.user?.id && !!idea.ownerId && session.user.id === idea.ownerId);
+  const isPro = session?.user?.role === "pro" || isAdmin;
   const docs = idea.docs;
 
   const generatedDocs = (
