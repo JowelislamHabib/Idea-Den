@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +12,15 @@ import { banUser, unbanUser, setUserRole, deleteUser } from "../actions";
 import { useSession } from "@/lib/auth-client";
 import { Ban, ShieldBan, Trash2, Crown, UserX, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 type ConfirmAction = "ban" | "unban" | "upgrade" | "downgrade" | "delete";
 
@@ -20,13 +29,21 @@ type ConfirmState = {
   user: any;
 } | null;
 
-export function UsersClient({ users }: { users: any[] }) {
+export function UsersClient({ users, page, totalPages, total }: { users: any[]; page: number; totalPages: number; total: number }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const { data: session } = useSession();
 
   const [confirm, setConfirm] = useState<ConfirmState>(null);
   const [banReason, setBanReason] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const createPageURL = (pageNumber: number | string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", pageNumber.toString());
+    return `${pathname}?${params.toString()}`;
+  };
 
   const isSelf = (user: any) =>
     user.id === session?.user?.id || user._id === session?.user?.id;
@@ -170,6 +187,39 @@ export function UsersClient({ users }: { users: any[] }) {
           })}
         </TableBody>
       </Table>
+
+      {totalPages > 1 && (
+        <div className="px-6 py-4">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious href={page > 1 ? createPageURL(page - 1) : "#"} className={page <= 1 ? "pointer-events-none opacity-50" : ""} />
+              </PaginationItem>
+              {[...Array(totalPages)].map((_, i) => {
+                const p = i + 1;
+                if (p === 1 || p === totalPages || (p >= page - 1 && p <= page + 1)) {
+                  return (
+                    <PaginationItem key={p}>
+                      <PaginationLink href={createPageURL(p)} isActive={p === page}>{p}</PaginationLink>
+                    </PaginationItem>
+                  );
+                }
+                if (p === page - 2 || p === page + 2) {
+                  return (
+                    <PaginationItem key={`ellipsis-${p}`}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  );
+                }
+                return null;
+              })}
+              <PaginationItem>
+                <PaginationNext href={page < totalPages ? createPageURL(page + 1) : "#"} className={page >= totalPages ? "pointer-events-none opacity-50" : ""} />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
 
       <Dialog open={confirm?.type === "ban"} onOpenChange={(o) => !o && setConfirm(null)}>
         <DialogContent className="sm:max-w-md">

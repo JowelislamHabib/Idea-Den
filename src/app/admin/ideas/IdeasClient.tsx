@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,15 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { createIdea, updateIdea, deleteIdea } from "../actions";
 import { Plus, Trash2, ExternalLink, Pencil, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface IdeaForm {
   title: string;
@@ -21,14 +30,22 @@ interface IdeaForm {
 
 const emptyForm: IdeaForm = { title: "", description: "" };
 
-export function IdeasClient({ ideas }: { ideas: any[] }) {
+export function IdeasClient({ ideas, page, totalPages, total }: { ideas: any[]; page: number; totalPages: number; total: number }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<any | null>(null);
   const [form, setForm] = useState<IdeaForm>(emptyForm);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<any | null>(null);
   const [deletingLoading, setDeletingLoading] = useState(false);
+
+  const createPageURL = (pageNumber: number | string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", pageNumber.toString());
+    return `${pathname}?${params.toString()}`;
+  };
 
   const openCreate = () => {
     setEditing(null);
@@ -84,7 +101,7 @@ export function IdeasClient({ ideas }: { ideas: any[] }) {
     <>
       <div className="flex items-center justify-between px-6 pt-5 pb-2">
         <p className="text-sm text-muted-foreground">
-          {ideas.length} {ideas.length === 1 ? "idea" : "ideas"} total
+          {total} {total === 1 ? "idea" : "ideas"} total
         </p>
         <Button size="sm" onClick={openCreate} className="gap-1.5">
           <Plus className="size-4" /> Create Idea
@@ -136,6 +153,39 @@ export function IdeasClient({ ideas }: { ideas: any[] }) {
           ))}
         </TableBody>
       </Table>
+
+      {totalPages > 1 && (
+        <div className="px-6 py-4">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious href={page > 1 ? createPageURL(page - 1) : "#"} className={page <= 1 ? "pointer-events-none opacity-50" : ""} />
+              </PaginationItem>
+              {[...Array(totalPages)].map((_, i) => {
+                const p = i + 1;
+                if (p === 1 || p === totalPages || (p >= page - 1 && p <= page + 1)) {
+                  return (
+                    <PaginationItem key={p}>
+                      <PaginationLink href={createPageURL(p)} isActive={p === page}>{p}</PaginationLink>
+                    </PaginationItem>
+                  );
+                }
+                if (p === page - 2 || p === page + 2) {
+                  return (
+                    <PaginationItem key={`ellipsis-${p}`}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  );
+                }
+                return null;
+              })}
+              <PaginationItem>
+                <PaginationNext href={page < totalPages ? createPageURL(page + 1) : "#"} className={page >= totalPages ? "pointer-events-none opacity-50" : ""} />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
 
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
         <DialogContent className="sm:max-w-lg">
