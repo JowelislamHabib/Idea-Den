@@ -214,9 +214,9 @@ export default function DashboardOverviewPage({
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-          <Badge variant="outline" className="text-xs font-medium">
-            <User className="size-3 mr-1" />
-            User
+          <Badge variant="outline" className={`text-xs font-medium ${user?.role === "pro" ? "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400" : ""}`}>
+            {user?.role === "pro" ? <Crown className="size-3 mr-1" /> : <User className="size-3 mr-1" />}
+            {user?.role === "pro" ? "Pro Member" : "User"}
           </Badge>
         </div>
         <p className="text-muted-foreground text-sm">

@@ -178,9 +178,22 @@ export function DashboardShell({ user, children }: { user: any; children: React.
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex min-w-0 flex-col leading-tight">
-                    <span className="truncate text-sm font-semibold">{user.name}</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="truncate text-sm font-semibold">{user.name}</span>
+                      {user.role === "pro" && (
+                        <span className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold uppercase text-amber-600 dark:text-amber-400">
+                          <Crown className="size-2.5" />
+                          Pro
+                        </span>
+                      )}
+                      {user.role === "admin" && (
+                        <span className="inline-flex shrink-0 items-center rounded-full bg-red-500/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-red-600 dark:text-red-400">
+                          Admin
+                        </span>
+                      )}
+                    </div>
                     <span className="truncate text-xs text-muted-foreground">
-                      {isAdmin ? "Administrator" : user.email}
+                      {user.email}
                     </span>
                   </div>
                 </SidebarMenuButton>

@@ -90,7 +90,7 @@ export default function AdminDashboardClient({
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-          <Badge variant="outline" className="text-xs font-medium">
+          <Badge variant="outline" className="text-xs font-medium border-red-500/50 bg-red-500/10 text-red-600 dark:text-red-400">
             <ShieldCheck className="size-3 mr-1" />
             Admin
           </Badge>
