@@ -35,7 +35,7 @@ export default async function SuccessPage(props: { searchParams: Promise<{ sessi
     );
   }
 
-  let status: string | undefined;
+  let status: string | null | undefined;
 
   try {
     const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);

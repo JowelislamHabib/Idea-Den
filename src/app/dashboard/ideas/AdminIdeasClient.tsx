@@ -115,7 +115,8 @@ export function IdeasClient({ ideas, page, totalPages, total }: { ideas: any[]; 
         <div className="flex items-center gap-3">
           <Select 
             value={searchParams.get("visibility") || "all"} 
-            onValueChange={(val: string) => {
+            onValueChange={(val: string | null) => {
+              if (!val) return;
               const params = new URLSearchParams(searchParams.toString());
               if (val === "all") params.delete("visibility");
               else params.set("visibility", val);
