@@ -59,7 +59,7 @@ export default function Navbar() {
     window.location.href = "/";
   };
 
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/dashboard")) {
     return null;
   }
 

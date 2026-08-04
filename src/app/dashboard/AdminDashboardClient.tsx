@@ -47,7 +47,7 @@ export default function AdminDashboardClient({
       description: "Registered members",
       icon: Users,
       trend: { value: 12, direction: "up" as const },
-      href: "/admin/users",
+      href: "/dashboard/users",
       actionLabel: "Manage",
     },
     {
@@ -56,7 +56,7 @@ export default function AdminDashboardClient({
       description: "Project blueprints",
       icon: Lightbulb,
       trend: { value: 8, direction: "up" as const },
-      href: "/admin/ideas",
+      href: "/dashboard/ideas",
       actionLabel: "View",
     },
     {
@@ -65,7 +65,7 @@ export default function AdminDashboardClient({
       description: "SEO articles",
       icon: PenTool,
       trend: { value: 15, direction: "up" as const },
-      href: "/admin/blogs",
+      href: "/dashboard/blogs",
       actionLabel: "Manage",
     },
     {
@@ -74,7 +74,7 @@ export default function AdminDashboardClient({
       description: "Active subscribers",
       icon: Crown,
       trend: { value: 5, direction: "up" as const },
-      href: "/admin/users",
+      href: "/dashboard/users",
       actionLabel: "View",
     },
   ];
@@ -102,17 +102,17 @@ export default function AdminDashboardClient({
 
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-2">
-        <Link href="/admin/ideas">
+        <Link href="/dashboard/ideas">
           <Button size="sm" className="gap-1.5">
             <PlusCircle className="size-4" /> New Idea
           </Button>
         </Link>
-        <Link href="/admin/blogs">
+        <Link href="/dashboard/blogs">
           <Button size="sm" variant="outline" className="gap-1.5">
             <FileText className="size-4" /> New Blog
           </Button>
         </Link>
-        <Link href="/admin/users">
+        <Link href="/dashboard/users">
           <Button size="sm" variant="outline" className="gap-1.5">
             <Users className="size-4" /> Manage Users
           </Button>
@@ -239,7 +239,7 @@ export default function AdminDashboardClient({
               <CardTitle>Recent Ideas</CardTitle>
               <CardDescription>Latest project blueprints</CardDescription>
             </div>
-            <Link href="/admin/ideas">
+            <Link href="/dashboard/ideas">
               <Button variant="outline" size="sm">
                 View All
               </Button>
@@ -294,7 +294,7 @@ export default function AdminDashboardClient({
               <CardTitle>Recent Blogs</CardTitle>
               <CardDescription>Latest articles published</CardDescription>
             </div>
-            <Link href="/admin/blogs">
+            <Link href="/dashboard/blogs">
               <Button variant="outline" size="sm">
                 View All
               </Button>

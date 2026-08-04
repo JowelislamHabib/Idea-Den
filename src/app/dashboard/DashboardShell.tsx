@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Lightbulb, PenTool, LogOut, ExternalLink, Compass } from "lucide-react";
+import { LayoutDashboard, Users, Lightbulb, PenTool, LogOut, ExternalLink, Compass, Crown } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -27,15 +27,26 @@ import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { authClient } from "@/lib/auth-client";
 
-const navItems = [
-  { name: "Overview", href: "/admin", icon: LayoutDashboard, exact: true },
-  { name: "Users", href: "/admin/users", icon: Users },
-  { name: "Ideas", href: "/admin/ideas", icon: Lightbulb },
-  { name: "Blogs", href: "/admin/blogs", icon: PenTool },
-];
-
-export function AdminShell({ user, children }: { user: any; children: React.ReactNode }) {
+export function DashboardShell({ user, children }: { user: any; children: React.ReactNode }) {
   const pathname = usePathname();
+
+  const isAdmin = user.role === "admin";
+
+  const adminNavItems = [
+    { name: "Overview", href: "/dashboard", icon: LayoutDashboard, exact: true },
+    { name: "Users", href: "/dashboard/users", icon: Users },
+    { name: "Ideas", href: "/dashboard/ideas", icon: Lightbulb },
+    { name: "Blogs", href: "/dashboard/blogs", icon: PenTool },
+  ];
+
+  const userNavItems = [
+    { name: "Overview", href: "/dashboard", icon: LayoutDashboard, exact: true },
+    { name: "My Ideas", href: "/dashboard/ideas", icon: Lightbulb },
+    { name: "My Blogs", href: "/dashboard/blogs", icon: PenTool },
+    { name: "Subscription", href: "/dashboard/subscription", icon: Crown },
+  ];
+
+  const navItems = isAdmin ? adminNavItems : userNavItems;
 
   const current = navItems.find((item) =>
     item.exact ? pathname === item.href : pathname.startsWith(item.href)
@@ -46,7 +57,7 @@ export function AdminShell({ user, children }: { user: any; children: React.Reac
     window.location.href = "/";
   };
 
-  const initials = (user.name || "A")
+  const initials = (user.name || "U")
     .split(" ")
     .map((n: string) => n[0])
     .slice(0, 2)
@@ -63,7 +74,7 @@ export function AdminShell({ user, children }: { user: any; children: React.Reac
                 <SidebarMenuButton
                   size="lg"
                   render={
-                    <Link href="/admin" className="gap-2.5" />
+                    <Link href="/dashboard" className="gap-2.5" />
                   }
                 >
                   <div className="relative flex aspect-square size-8 shrink-0 items-center justify-center overflow-hidden rounded-xl ring-1 ring-border bg-background">
@@ -80,7 +91,7 @@ export function AdminShell({ user, children }: { user: any; children: React.Reac
                       IdeaDen
                     </span>
                     <span className="text-xs font-medium text-muted-foreground">
-                      Admin Dashboard
+                      {isAdmin ? "Dashboard" : "Dashboard"}
                     </span>
                   </div>
                 </SidebarMenuButton>
@@ -90,7 +101,7 @@ export function AdminShell({ user, children }: { user: any; children: React.Reac
 
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel>Management</SidebarGroupLabel>
+              <SidebarGroupLabel>{isAdmin ? "Management" : "Menu"}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {navItems.map((item) => {
@@ -169,7 +180,7 @@ export function AdminShell({ user, children }: { user: any; children: React.Reac
                   <div className="flex min-w-0 flex-col leading-tight">
                     <span className="truncate text-sm font-semibold">{user.name}</span>
                     <span className="truncate text-xs text-muted-foreground">
-                      {user.role === "admin" ? "Administrator" : user.email}
+                      {isAdmin ? "Administrator" : user.email}
                     </span>
                   </div>
                 </SidebarMenuButton>
@@ -187,7 +198,7 @@ export function AdminShell({ user, children }: { user: any; children: React.Reac
             </Tooltip>
             <Separator orientation="vertical" className="mr-2 h-4" />
             <div className="flex items-center gap-1.5 text-sm">
-              <span className="font-medium text-muted-foreground">Admin</span>
+              <span className="font-medium text-muted-foreground">{isAdmin ? "Admin" : "User"}</span>
               <span className="text-muted-foreground">/</span>
               <span className="font-semibold">{current?.name || "Overview"}</span>
             </div>

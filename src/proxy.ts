@@ -27,18 +27,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Admin route protection
-  const isAdminRoute = pathname.startsWith("/admin");
-  if (isAdminRoute) {
-    if (!session) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
-    const role = session.user?.role;
-    if (role !== "admin") {
-      // Redirect non-admins to the home page or a not-authorized page
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
+
 
   return NextResponse.next();
 }
@@ -49,8 +38,7 @@ export const config = {
     "/dashboard",
     "/generate/:path*",
     "/generate",
-    "/admin/:path*",
-    "/admin",
+
     "/login",
     "/register",
   ],

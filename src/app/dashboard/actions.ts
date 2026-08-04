@@ -34,7 +34,7 @@ export async function deleteUser(id: string) {
   if (!doc) throw new Error("User not found");
   if (isSelf(doc, session)) throw new Error("You cannot delete your own account");
   await db.collection("user").deleteOne({ _id: new ObjectId(id) });
-  revalidatePath("/admin/users");
+  revalidatePath("/dashboard/users");
 }
 
 export async function banUser(id: string, banReason?: string) {
@@ -50,7 +50,7 @@ export async function banUser(id: string, banReason?: string) {
     },
     headers: await headers(),
   });
-  revalidatePath("/admin/users");
+  revalidatePath("/dashboard/users");
 }
 
 export async function unbanUser(id: string) {
@@ -62,7 +62,7 @@ export async function unbanUser(id: string) {
     body: { userId: doc.id || doc._id.toString() },
     headers: await headers(),
   });
-  revalidatePath("/admin/users");
+  revalidatePath("/dashboard/users");
 }
 
 export async function setUserRole(id: string, role: "admin" | "pro" | "free") {
@@ -74,7 +74,7 @@ export async function setUserRole(id: string, role: "admin" | "pro" | "free") {
   if (doc.role === "admin" && role !== "admin")
     throw new Error("You cannot demote another admin");
   await db.collection("user").updateOne({ _id: new ObjectId(id) }, { $set: { role } });
-  revalidatePath("/admin/users");
+  revalidatePath("/dashboard/users");
 }
 
 /* ---------------------------------- Ideas ---------------------------------- */
@@ -90,8 +90,8 @@ export async function createIdea(input: { title: string; description: string }) 
     createdAt: new Date(),
     updatedAt: new Date(),
   });
-  revalidatePath("/admin/ideas");
-  revalidatePath("/admin");
+  revalidatePath("/dashboard/ideas");
+  revalidatePath("/dashboard");
 }
 
 export async function updateIdea(
@@ -110,16 +110,16 @@ export async function updateIdea(
       },
     }
   );
-  revalidatePath("/admin/ideas");
-  revalidatePath("/admin");
+  revalidatePath("/dashboard/ideas");
+  revalidatePath("/dashboard");
 }
 
 export async function deleteIdea(id: string) {
   await verifyAdmin();
   const db = await getDb();
   await db.collection("ideas").deleteOne({ _id: new ObjectId(id) });
-  revalidatePath("/admin/ideas");
-  revalidatePath("/admin");
+  revalidatePath("/dashboard/ideas");
+  revalidatePath("/dashboard");
 }
 
 /* ---------------------------------- Blogs ---------------------------------- */
@@ -136,8 +136,8 @@ export async function createBlog(input: { title: string }) {
     createdAt: new Date(),
     updatedAt: new Date(),
   });
-  revalidatePath("/admin/blogs");
-  revalidatePath("/admin");
+  revalidatePath("/dashboard/blogs");
+  revalidatePath("/dashboard");
 }
 
 export async function updateBlog(id: string, input: { title: string }) {
@@ -153,14 +153,14 @@ export async function updateBlog(id: string, input: { title: string }) {
       },
     }
   );
-  revalidatePath("/admin/blogs");
-  revalidatePath("/admin");
+  revalidatePath("/dashboard/blogs");
+  revalidatePath("/dashboard");
 }
 
 export async function deleteBlog(id: string) {
   await verifyAdmin();
   const db = await getDb();
   await db.collection("blogs").deleteOne({ _id: new ObjectId(id) });
-  revalidatePath("/admin/blogs");
-  revalidatePath("/admin");
+  revalidatePath("/dashboard/blogs");
+  revalidatePath("/dashboard");
 }

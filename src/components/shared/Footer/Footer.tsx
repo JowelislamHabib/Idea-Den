@@ -61,7 +61,7 @@ const socialLinks = [
 export default function Footer() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/dashboard")) {
     return null;
   }
 

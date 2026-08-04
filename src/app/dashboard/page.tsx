@@ -1,412 +1,102 @@
-"use client";
+import { headers } from "next/headers";
+import AdminDashboardClient from "./AdminDashboardClient";
+import UserDashboardClient from "./UserDashboardClient";
+import { auth } from "@/lib/auth";
+import { MongoClient } from "mongodb";
+import { redirect } from "next/navigation";
 
-import { useSession } from "@/lib/auth-client";
-import { apiClient } from "@/lib/api/client";
-import { getToken } from "@/lib/api/get-token";
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SlideUp } from "@/components/ui/motion-wrapper";
-import { PageLoading } from "@/components/shared/PageLoading";
-import { Loader2, Lightbulb, Layers, TrendingUp, PenTool } from "lucide-react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
+export default async function AdminDashboardPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  
+  if (!session) {
+    redirect("/");
+  }
+  
+  const user = session?.user;
 
-const COLORS = [
-  "var(--color-chart-1)",
-  "var(--color-chart-2)",
-  "var(--color-chart-3)",
-  "var(--color-chart-4)",
-  "var(--color-chart-5)",
-];
-
-interface DashboardIdea {
-  _id: string;
-  projectTitle?: string;
-  title?: string;
-  elevatorPitch?: string;
-  domain?: string;
-  techStack: string[];
-  createdAt: string;
-}
-
-interface DashboardBlog {
-  _id: string;
-  topic?: string;
-  title?: string;
-  template?: string;
-  tone?: string;
-  createdAt: string;
-}
-
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
+  if (user.role !== "admin") {
     return (
-      <div className="rounded-xl border border-white/20 bg-background/60 backdrop-blur-md p-4 shadow-xl">
-        <p className="mb-2 text-sm font-semibold">{label}</p>
-        {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-3 text-sm">
-            <div className="size-3 rounded-full" style={{ backgroundColor: entry.color || entry.fill || entry.stroke }} />
-            <span className="text-muted-foreground capitalize">{entry.name}:</span>
-            <span className="font-bold">{entry.value}</span>
-          </div>
-        ))}
+      <div className="container">
+        <UserDashboardClient />
       </div>
     );
   }
-  return null;
-};
 
-export default function DashboardOverviewPage() {
-  const { data: session, isPending: sessionPending } = useSession();
-  const userId = session?.user?.id || "";
+  const firstName = user?.name?.split(" ")[0] || "Admin";
 
-  const { data: ideasData, isPending: ideasPending } = useQuery({
-    queryKey: ["my-ideas"],
-    queryFn: async () => {
-      const token = await getToken();
-      return apiClient<{ ideas: DashboardIdea[] }>("/api/ideas/mine", { token });
-    },
-    enabled: !!userId,
-  });
+  const client = new MongoClient(process.env.MONGODB_URI as string);
+  await client.connect();
+  const db = client.db("IdeaDen");
 
-  const { data: blogsData, isPending: blogsPending } = useQuery({
-    queryKey: ["my-blogs"],
-    queryFn: async () => {
-      const token = await getToken();
-      return apiClient<{ blogs: DashboardBlog[] }>("/api/blogs/mine", { token });
-    },
-    enabled: !!userId,
-  });
+  const [users, ideas, blogs] = await Promise.all([
+    db.collection("user").find().sort({ createdAt: -1 }).toArray(),
+    db.collection("ideas").find().sort({ createdAt: -1 }).toArray(),
+    db.collection("blogs").find().sort({ createdAt: -1 }).toArray(),
+  ]);
 
-  if (sessionPending || ideasPending || blogsPending) {
-    return <PageLoading />;
-  }
-
-  const ideas = ideasData?.ideas || [];
-  const blogs = blogsData?.blogs || [];
-
+  const totalUsers = users.length;
   const totalIdeas = ideas.length;
   const totalBlogs = blogs.length;
+  const totalSubscriptions = users.filter((u) => u.role === "pro").length;
 
-  const stackCount: Record<string, number> = {};
-  ideas.forEach((idea) => {
-    (idea.techStack || []).forEach((tech) => {
-      stackCount[tech] = (stackCount[tech] || 0) + 1;
-    });
-  });
-  const stackData = Object.entries(stackCount)
-    .map(([name, value]) => ({ name, value }))
-    .sort((a, b) => b.value - a.value)
-    .slice(0, 8);
-
-  const topicCount: Record<string, number> = {};
-  blogs.forEach((blog) => {
-    const topic = blog.topic || "General";
-    topicCount[topic] = (topicCount[topic] || 0) + 1;
-  });
-  const topicData = Object.entries(topicCount)
-    .map(([name, value]) => ({ name, value }))
-    .sort((a, b) => b.value - a.value)
-    .slice(0, 8);
-
-  const dayCount: Record<string, { ideas: number; blogs: number }> = {};
-  const allItems = [...ideas.map(i => ({...i, type: 'ideas'})), ...blogs.map(b => ({...b, type: 'blogs'}))];
-  
-  allItems.forEach((item) => {
-    const date = new Date(item.createdAt).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-    if (!dayCount[date]) {
-      dayCount[date] = { ideas: 0, blogs: 0 };
-    }
-    if (item.type === 'ideas') dayCount[date].ideas++;
-    if (item.type === 'blogs') dayCount[date].blogs++;
-  });
-  
-  // Create last 14 days array ensuring missing days are 0
-  const timelineData = [];
-  for (let i = 13; i >= 0; i--) {
+  // Process registrations for the last 7 days
+  const last7Days = Array.from({ length: 7 }).map((_, i) => {
     const d = new Date();
-    d.setDate(d.getDate() - i);
-    const dateStr = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    timelineData.push({
-      date: dateStr,
-      ideas: dayCount[dateStr]?.ideas || 0,
-      blogs: dayCount[dateStr]?.blogs || 0,
-    });
-  }
+    d.setDate(d.getDate() - (6 - i));
+    d.setHours(0, 0, 0, 0);
+    return d;
+  });
 
-  const glassCardClass = "bg-background/40 backdrop-blur-xl border-white/10 shadow-lg relative overflow-hidden";
+  const registrationActivity = last7Days.map((date) => {
+    const nextDay = new Date(date);
+    nextDay.setDate(nextDay.getDate() + 1);
+
+    const count = users.filter((u) => {
+      if (!u.createdAt) return false;
+      const createdAt = new Date(u.createdAt);
+      return createdAt >= date && createdAt < nextDay;
+    }).length;
+
+    return {
+      day: date.toLocaleDateString("en-US", { weekday: "short" }),
+      count,
+    };
+  });
+
+  // Convert ObjectIds to strings for serialization
+  const serializedIdeas = ideas.map(idea => ({
+    ...idea,
+    _id: idea._id.toString(),
+    createdAt: idea.createdAt?.toISOString() || null,
+  })).slice(0, 5);
+
+  const serializedBlogs = blogs.map(blog => ({
+    ...blog,
+    _id: blog._id.toString(),
+    createdAt: blog.createdAt?.toISOString() || null,
+  })).slice(0, 5);
+
+  const recentUsers = users.slice(0, 5).map(u => ({
+    ...u,
+    _id: u._id.toString(),
+    createdAt: u.createdAt?.toISOString() || null,
+  }));
 
   return (
-    <>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-        <SlideUp delay={0.1}>
-          <Card className={glassCardClass}>
-            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-              <Lightbulb className="size-24" />
-            </div>
-            <CardContent className="p-6 relative z-10">
-              <div className="flex items-center gap-4">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-primary/20 text-primary border border-primary/20 backdrop-blur-md">
-                  <Lightbulb className="size-6" />
-                </div>
-                <div>
-                  <div className="text-3xl font-extrabold tracking-tight">{totalIdeas}</div>
-                  <div className="text-sm font-medium text-muted-foreground">
-                    Total Ideas
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </SlideUp>
-
-        <SlideUp delay={0.15}>
-          <Card className={glassCardClass}>
-            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-              <PenTool className="size-24" />
-            </div>
-            <CardContent className="p-6 relative z-10">
-              <div className="flex items-center gap-4">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-chart-1/20 text-chart-1 border border-chart-1/20 backdrop-blur-md">
-                  <PenTool className="size-6" />
-                </div>
-                <div>
-                  <div className="text-3xl font-extrabold tracking-tight">{totalBlogs}</div>
-                  <div className="text-sm font-medium text-muted-foreground">
-                    Total Blogs
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </SlideUp>
-
-        <SlideUp delay={0.2}>
-          <Card className={glassCardClass}>
-            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-              <Layers className="size-24" />
-            </div>
-            <CardContent className="p-6 relative z-10">
-              <div className="flex items-center gap-4">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-chart-2/20 text-chart-2 border border-chart-2/20 backdrop-blur-md">
-                  <Layers className="size-6" />
-                </div>
-                <div>
-                  <div className="text-3xl font-extrabold tracking-tight">{stackData.length}</div>
-                  <div className="text-sm font-medium text-muted-foreground">
-                    Unique Tech
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </SlideUp>
-
-        <SlideUp delay={0.25}>
-          <Card className={glassCardClass}>
-            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-              <TrendingUp className="size-24" />
-            </div>
-            <CardContent className="p-6 relative z-10">
-              <div className="flex items-center gap-4">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-chart-3/20 text-chart-3 border border-chart-3/20 backdrop-blur-md">
-                  <TrendingUp className="size-6" />
-                </div>
-                <div>
-                  <div className="text-3xl font-extrabold tracking-tight">
-                    {topicData.length}
-                  </div>
-                  <div className="text-sm font-medium text-muted-foreground">
-                    Blog Topics
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </SlideUp>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2 mb-8">
-        <SlideUp delay={0.3}>
-          <Card className={glassCardClass}>
-            <CardHeader>
-              <CardTitle>Tech Stack Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {stackData.length === 0 ? (
-                <div className="flex items-center justify-center h-64 text-muted-foreground text-sm bg-muted/30 rounded-lg">
-                  No data yet. Generate some project ideas!
-                </div>
-              ) : (
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <defs>
-                      {COLORS.map((color, index) => (
-                        <linearGradient key={`pie1-${index}`} id={`pie1-gradient-${index}`} x1="0" y1="0" x2="1" y2="1">
-                          <stop offset="0%" stopColor={color} stopOpacity={1} />
-                          <stop offset="100%" stopColor={color} stopOpacity={0.6} />
-                        </linearGradient>
-                      ))}
-                    </defs>
-                    <Pie
-                      data={stackData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={65}
-                      outerRadius={105}
-                      paddingAngle={5}
-                      dataKey="value"
-                      stroke="var(--background)"
-                      strokeWidth={3}
-                      label={({ name, percent }) =>
-                        `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
-                      }
-                    >
-                      {stackData.map((_entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={`url(#pie1-gradient-${index % COLORS.length})`}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip content={<CustomTooltip />} />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
-            </CardContent>
-          </Card>
-        </SlideUp>
-
-        <SlideUp delay={0.35}>
-          <Card className={glassCardClass}>
-            <CardHeader>
-              <CardTitle>Blog Topic Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {topicData.length === 0 ? (
-                <div className="flex items-center justify-center h-64 text-muted-foreground text-sm bg-muted/30 rounded-lg">
-                  No data yet. Generate some blogs!
-                </div>
-              ) : (
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <defs>
-                      {COLORS.map((color, index) => (
-                        <linearGradient key={`pie2-${index}`} id={`pie2-gradient-${index}`} x1="0" y1="0" x2="1" y2="1">
-                          <stop offset="0%" stopColor={color} stopOpacity={1} />
-                          <stop offset="100%" stopColor={color} stopOpacity={0.6} />
-                        </linearGradient>
-                      ))}
-                    </defs>
-                    <Pie
-                      data={topicData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={65}
-                      outerRadius={105}
-                      paddingAngle={5}
-                      dataKey="value"
-                      stroke="var(--background)"
-                      strokeWidth={3}
-                      label={({ name, percent }) =>
-                        `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
-                      }
-                    >
-                      {topicData.map((_entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={`url(#pie2-gradient-${(index + 5) % COLORS.length})`}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip content={<CustomTooltip />} />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
-            </CardContent>
-          </Card>
-        </SlideUp>
-      </div>
-
-      <SlideUp delay={0.4}>
-        <Card className={glassCardClass}>
-          <CardHeader>
-            <CardTitle>Generation Timeline (Last 14 Days)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {timelineData.every(d => d.ideas === 0 && d.blogs === 0) ? (
-              <div className="flex items-center justify-center h-64 text-muted-foreground text-sm bg-muted/30 rounded-lg">
-                No data in the last 14 days. Get building!
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={350}>
-                <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorIdeas" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={1} />
-                      <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0.1} />
-                    </linearGradient>
-                    <linearGradient id="colorBlogs" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--color-chart-1)" stopOpacity={1} />
-                      <stop offset="95%" stopColor="var(--color-chart-1)" stopOpacity={0.1} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-                  <XAxis 
-                    dataKey="date" 
-                    fontSize={12} 
-                    stroke="var(--color-muted-foreground)" 
-                    tickMargin={10} 
-                    axisLine={false} 
-                    tickLine={false} 
-                  />
-                  <YAxis 
-                    fontSize={12} 
-                    stroke="var(--color-muted-foreground)" 
-                    axisLine={false} 
-                    tickLine={false}
-                    tickFormatter={(val) => Math.floor(val) === val ? val : ""}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area
-                    type="monotone"
-                    dataKey="ideas"
-                    name="Ideas Generated"
-                    stroke="var(--color-primary)"
-                    strokeWidth={3}
-                    fillOpacity={1}
-                    fill="url(#colorIdeas)"
-                    activeDot={{ r: 6, strokeWidth: 0, fill: "var(--color-primary)" }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="blogs"
-                    name="Blogs Generated"
-                    stroke="var(--color-chart-1)"
-                    strokeWidth={3}
-                    fillOpacity={1}
-                    fill="url(#colorBlogs)"
-                    activeDot={{ r: 6, strokeWidth: 0, fill: "var(--color-chart-1)" }}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            )}
-          </CardContent>
-        </Card>
-      </SlideUp>
-    </>
+    <div className="container">
+      <AdminDashboardClient
+        firstName={firstName}
+        totalUsers={totalUsers}
+        totalIdeas={totalIdeas}
+        totalBlogs={totalBlogs}
+        totalSubscriptions={totalSubscriptions}
+        registrationActivity={registrationActivity}
+        recentIdeas={serializedIdeas}
+        recentBlogs={serializedBlogs}
+        recentUsers={recentUsers}
+      />
+    </div>
   );
 }
