@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Lightbulb, PenTool, LogOut, ExternalLink, Compass, Crown } from "lucide-react";
+import { LayoutDashboard, Users, Lightbulb, PenTool, LogOut, ExternalLink, Compass, Crown, Sparkles } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -121,6 +121,37 @@ export function DashboardShell({ user, children }: { user: any; children: React.
                       </SidebarMenuItem>
                     );
                   })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            <SidebarSeparator />
+
+            <SidebarGroup>
+              <SidebarGroupLabel className="flex items-center gap-1.5 text-violet-500 dark:text-violet-400">
+                <Sparkles size={14} />
+                Generate
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      tooltip="Generate Project Idea"
+                      render={<Link href="/generate/ideas" />}
+                    >
+                      <Lightbulb />
+                      <span>Project Idea</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      tooltip="Generate Blog Article"
+                      render={<Link href="/generate/blogs" />}
+                    >
+                      <PenTool />
+                      <span>Blog Article</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
