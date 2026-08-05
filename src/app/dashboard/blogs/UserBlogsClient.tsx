@@ -6,12 +6,13 @@ import { getToken } from "@/lib/api/get-token";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { Loader2, PenTool, Eye, Trash2, Plus } from "lucide-react";
-import { useState } from "react";
+import { Loader2, PenTool, Eye, Trash2, Plus, Globe, Lock } from "lucide-react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { VisibilitySelect } from "@/components/shared/VisibilitySelect";
 import {
   Table,
   TableBody,
@@ -37,6 +38,7 @@ interface DashboardBlog {
   template?: string;
   tone?: string;
   createdAt: string;
+  visibility?: "public" | "private";
 }
 
 import { useSearchParams, usePathname } from "next/navigation";
@@ -56,16 +58,20 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
   const pathname = usePathname();
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
+  const filterVisibility = searchParams.get("visibility") || "all";
+
   const userId = user?.id || "";
 
   const { data, isPending } = useQuery({
-    queryKey: ["my-blogs"],
+    queryKey: ["my-blogs", filterVisibility],
     queryFn: async () => {
       const token = await getToken();
-      return apiClient<{ blogs: DashboardBlog[] }>("/api/blogs/mine", { token });
+      const queryParams = new URLSearchParams();
+      if (filterVisibility !== "all") queryParams.set("visibility", filterVisibility);
+      return apiClient<{ blogs: DashboardBlog[] }>(`/api/blogs/mine?${queryParams.toString()}`, { token });
     },
     enabled: !!userId,
-    initialData: { blogs: initialBlogs }
+    initialData: filterVisibility === "all" ? { blogs: initialBlogs } : undefined
   });
 
   const deleteMutation = useMutation({
@@ -87,6 +93,7 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
   });
 
   const allBlogs = data?.blogs || [];
+
   const total = allBlogs.length;
   const limit = 10;
   const pageParam = searchParams.get("page");
@@ -104,8 +111,9 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
     <>
       <SlideUp delay={0.1}>
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <CardTitle>My AI Blogs</CardTitle>
+            <VisibilitySelect />
           </CardHeader>
           <CardContent className="p-0 sm:p-6 sm:pt-0">
             {isPending ? (
@@ -139,6 +147,7 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
                       <TableHead>Blog Title</TableHead>
                       <TableHead>Topic</TableHead>
                       <TableHead>Template / Tone</TableHead>
+                      <TableHead>Visibility</TableHead>
                       <TableHead>Created</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
@@ -161,6 +170,17 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
                               {blog.tone || "Professional"}
                             </Badge>
                           </div>
+                        </TableCell>
+                        <TableCell>
+                          {blog.visibility === "private" ? (
+                            <Badge variant="outline" className="gap-1 bg-muted/50 text-muted-foreground whitespace-nowrap">
+                              <Lock className="size-3" /> Private
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="gap-1 border-primary/20 bg-primary/10 text-primary whitespace-nowrap">
+                              <Globe className="size-3" /> Public
+                            </Badge>
+                          )}
                         </TableCell>
                         <TableCell className="text-muted-foreground text-sm">
                           {new Date(blog.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}

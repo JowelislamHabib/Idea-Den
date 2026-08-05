@@ -21,14 +21,8 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { VisibilitySelect } from "@/components/shared/VisibilitySelect";
 
 export function BlogsClient({ blogs, page, totalPages, total }: { blogs: any[]; page: number; totalPages: number; total: number }) {
   const router = useRouter();
@@ -101,26 +95,7 @@ export function BlogsClient({ blogs, page, totalPages, total }: { blogs: any[]; 
           {total} {total === 1 ? "blog" : "blogs"} total
         </p>
         <div className="flex items-center gap-3">
-          <Select 
-            value={searchParams.get("visibility") || "all"} 
-            onValueChange={(val: string | null) => {
-              if (!val) return;
-              const params = new URLSearchParams(searchParams.toString());
-              if (val === "all") params.delete("visibility");
-              else params.set("visibility", val);
-              params.set("page", "1");
-              router.push(`${pathname}?${params.toString()}`);
-            }}
-          >
-            <SelectTrigger className="w-[140px] h-9">
-              <SelectValue placeholder="Visibility" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Visibility</SelectItem>
-              <SelectItem value="public">Public</SelectItem>
-              <SelectItem value="private">Private</SelectItem>
-            </SelectContent>
-          </Select>
+          <VisibilitySelect />
           <Button size="sm" onClick={openCreate} className="gap-1.5 h-9">
             <Plus className="size-4" /> Create Blog
           </Button>

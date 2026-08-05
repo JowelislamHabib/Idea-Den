@@ -20,12 +20,17 @@ export default async function DashboardBlogsPage({
     redirect("/login");
   }
 
+  const { page, visibility } = await searchParams;
+  const currentVisibility = visibility || "all";
+
   if (session.user.role !== "admin") {
     const token = await getTokenServer();
     let initialBlogs = [];
     
     try {
-      const res = await apiClient<{ blogs: any[] }>("/api/blogs/mine", { token });
+      const queryParams = new URLSearchParams();
+      if (currentVisibility !== "all") queryParams.set("visibility", currentVisibility);
+      const res = await apiClient<{ blogs: any[] }>(`/api/blogs/mine?${queryParams.toString()}`, { token });
       initialBlogs = res.blogs || [];
     } catch (err) {
       console.error("Failed to fetch initial blogs", err);
@@ -33,9 +38,7 @@ export default async function DashboardBlogsPage({
     return <UserBlogsClient initialBlogs={initialBlogs} user={session.user} />;
   }
 
-  const { page, visibility } = await searchParams;
   const currentPage = Math.max(1, parseInt(page || "1", 10));
-  const currentVisibility = visibility || "all";
   const token = await getTokenServer();
 
   const data = await apiClient<{

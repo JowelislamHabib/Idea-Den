@@ -20,12 +20,17 @@ export default async function DashboardIdeasPage({
     redirect("/");
   }
 
+  const { page, visibility } = await searchParams;
+  const currentVisibility = visibility || "all";
+
   if (session.user.role !== "admin") {
     const token = await getTokenServer();
     let initialIdeas = [];
     
     try {
-      const ideasData = await apiClient<{ ideas: any[] }>("/api/ideas/mine", { token });
+      const queryParams = new URLSearchParams();
+      if (currentVisibility !== "all") queryParams.set("visibility", currentVisibility);
+      const ideasData = await apiClient<{ ideas: any[] }>(`/api/ideas/mine?${queryParams.toString()}`, { token });
       initialIdeas = ideasData.ideas || [];
     } catch (e) {
       console.error("Error fetching user ideas:", e);
@@ -33,9 +38,7 @@ export default async function DashboardIdeasPage({
     return <UserIdeasClient initialIdeas={initialIdeas} user={session.user} />;
   }
 
-  const { page, visibility } = await searchParams;
   const currentPage = Math.max(1, parseInt(page || "1", 10));
-  const currentVisibility = visibility || "all";
   const token = await getTokenServer();
 
   const data = await apiClient<{

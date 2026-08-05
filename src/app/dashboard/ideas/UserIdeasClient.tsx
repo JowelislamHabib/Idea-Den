@@ -6,12 +6,13 @@ import { getToken } from "@/lib/api/get-token";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { Loader2, Lightbulb, Eye, Trash2, Plus } from "lucide-react";
-import { useState } from "react";
+import { Loader2, Lightbulb, Eye, Trash2, Plus, Globe, Lock } from "lucide-react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { VisibilitySelect } from "@/components/shared/VisibilitySelect";
 import {
   Table,
   TableBody,
@@ -37,6 +38,7 @@ interface DashboardIdea {
   elevatorPitch?: string;
   techStack: string[];
   createdAt: string;
+  visibility?: "public" | "private";
 }
 
 import { useSearchParams, usePathname } from "next/navigation";
@@ -56,16 +58,20 @@ export default function DashboardIdeasPage({ initialIdeas = [], user }: { initia
   const pathname = usePathname();
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
+  const filterVisibility = searchParams.get("visibility") || "all";
+
   const userId = user?.id || "";
 
   const { data, isPending } = useQuery({
-    queryKey: ["my-ideas"],
+    queryKey: ["my-ideas", filterVisibility],
     queryFn: async () => {
       const token = await getToken();
-      return apiClient<{ ideas: DashboardIdea[] }>("/api/ideas/mine", { token });
+      const queryParams = new URLSearchParams();
+      if (filterVisibility !== "all") queryParams.set("visibility", filterVisibility);
+      return apiClient<{ ideas: DashboardIdea[] }>(`/api/ideas/mine?${queryParams.toString()}`, { token });
     },
     enabled: !!userId,
-    initialData: { ideas: initialIdeas }
+    initialData: filterVisibility === "all" ? { ideas: initialIdeas } : undefined
   });
 
   const deleteMutation = useMutation({
@@ -87,6 +93,7 @@ export default function DashboardIdeasPage({ initialIdeas = [], user }: { initia
   });
 
   const allIdeas = data?.ideas || [];
+  
   const total = allIdeas.length;
   const limit = 10;
   const pageParam = searchParams.get("page");
@@ -104,8 +111,9 @@ export default function DashboardIdeasPage({ initialIdeas = [], user }: { initia
     <>
       <SlideUp delay={0.1}>
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <CardTitle>My Project Ideas</CardTitle>
+            <VisibilitySelect />
           </CardHeader>
           <CardContent className="p-0 sm:p-6 sm:pt-0">
             {isPending ? (
@@ -139,6 +147,7 @@ export default function DashboardIdeasPage({ initialIdeas = [], user }: { initia
                       <TableHead>Project Title</TableHead>
                       <TableHead>Pitch</TableHead>
                       <TableHead>Stack</TableHead>
+                      <TableHead>Visibility</TableHead>
                       <TableHead>Created</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
@@ -169,6 +178,17 @@ export default function DashboardIdeasPage({ initialIdeas = [], user }: { initia
                               </Badge>
                             )}
                           </div>
+                        </TableCell>
+                        <TableCell>
+                          {idea.visibility === "private" ? (
+                            <Badge variant="outline" className="gap-1 bg-muted/50 text-muted-foreground whitespace-nowrap">
+                              <Lock className="size-3" /> Private
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="gap-1 border-primary/20 bg-primary/10 text-primary whitespace-nowrap">
+                              <Globe className="size-3" /> Public
+                            </Badge>
+                          )}
                         </TableCell>
                         <TableCell className="text-muted-foreground text-sm">
                           {new Date(idea.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
