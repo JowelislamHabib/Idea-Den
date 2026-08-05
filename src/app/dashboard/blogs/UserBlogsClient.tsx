@@ -1,13 +1,11 @@
 "use client";
-
-import { useSession } from "@/lib/auth-client";
 import { apiClient } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlideUp } from "@/components/ui/motion-wrapper";
-import { Loader2, PenTool, Eye, Trash2, Plus, Globe, Lock } from "lucide-react";
-import { useState, useMemo } from "react";
+import { PenTool, Eye, Trash2, Plus, Globe, Lock } from "lucide-react";
+import { useState } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -52,7 +50,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-export default function DashboardBlogsPage({ initialBlogs = [], user }: { initialBlogs?: DashboardBlog[], user?: any }) {
+export default function DashboardBlogsPage({
+  initialBlogs = [],
+  user,
+}: {
+  initialBlogs?: DashboardBlog[];
+  user?: any;
+}) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -67,11 +71,16 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
     queryFn: async () => {
       const token = await getToken();
       const queryParams = new URLSearchParams();
-      if (filterVisibility !== "all") queryParams.set("visibility", filterVisibility);
-      return apiClient<{ blogs: DashboardBlog[] }>(`/api/blogs/mine?${queryParams.toString()}`, { token });
+      if (filterVisibility !== "all")
+        queryParams.set("visibility", filterVisibility);
+      return apiClient<{ blogs: DashboardBlog[] }>(
+        `/api/blogs/mine?${queryParams.toString()}`,
+        { token },
+      );
     },
     enabled: !!userId,
-    initialData: filterVisibility === "all" ? { blogs: initialBlogs } : undefined
+    initialData:
+      filterVisibility === "all" ? { blogs: initialBlogs } : undefined,
   });
 
   const deleteMutation = useMutation({
@@ -131,12 +140,17 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
                 <div className="flex size-12 items-center justify-center rounded-full bg-muted mb-4">
                   <PenTool className="size-6 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold">No blogs generated yet</h3>
+                <h3 className="text-lg font-semibold">
+                  No blogs generated yet
+                </h3>
                 <p className="text-sm text-muted-foreground mt-1 mb-4">
                   Generate your first AI blog to get started.
                 </p>
-                <Link href="/generate/blogs" className={buttonVariants({ className: "flex items-center" })}>
-                    <Plus className="mr-1.5 size-4" /> Generate Blog
+                <Link
+                  href="/generate/blogs"
+                  className={buttonVariants({ className: "flex items-center" })}
+                >
+                  <Plus className="mr-1.5 size-4" /> Generate Blog
                 </Link>
               </div>
             ) : (
@@ -173,22 +187,37 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
                         </TableCell>
                         <TableCell>
                           {blog.visibility === "private" ? (
-                            <Badge variant="outline" className="gap-1 bg-muted/50 text-muted-foreground whitespace-nowrap">
+                            <Badge
+                              variant="outline"
+                              className="gap-1 bg-muted/50 text-muted-foreground whitespace-nowrap"
+                            >
                               <Lock className="size-3" /> Private
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="gap-1 border-primary/20 bg-primary/10 text-primary whitespace-nowrap">
+                            <Badge
+                              variant="outline"
+                              className="gap-1 border-primary/20 bg-primary/10 text-primary whitespace-nowrap"
+                            >
                               <Globe className="size-3" /> Public
                             </Badge>
                           )}
                         </TableCell>
                         <TableCell className="text-muted-foreground text-sm">
-                          {new Date(blog.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                          {new Date(blog.createdAt).toLocaleDateString(
+                            "en-US",
+                            { year: "numeric", month: "long", day: "numeric" },
+                          )}
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-2">
-                            <Link href={`/explore/blogs/${blog._id}`} className={buttonVariants({ variant: "ghost", size: "icon" })}>
-                                <Eye className="size-4" />
+                            <Link
+                              href={`/explore/blogs/${blog._id}`}
+                              className={buttonVariants({
+                                variant: "ghost",
+                                size: "icon",
+                              })}
+                            >
+                              <Eye className="size-4" />
                             </Link>
                             <Button
                               variant="ghost"
@@ -210,14 +239,28 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
                     <Pagination>
                       <PaginationContent>
                         <PaginationItem>
-                          <PaginationPrevious href={page > 1 ? createPageURL(page - 1) : "#"} className={page <= 1 ? "pointer-events-none opacity-50" : ""} />
+                          <PaginationPrevious
+                            href={page > 1 ? createPageURL(page - 1) : "#"}
+                            className={
+                              page <= 1 ? "pointer-events-none opacity-50" : ""
+                            }
+                          />
                         </PaginationItem>
                         {[...Array(totalPages)].map((_, i) => {
                           const p = i + 1;
-                          if (p === 1 || p === totalPages || (p >= page - 1 && p <= page + 1)) {
+                          if (
+                            p === 1 ||
+                            p === totalPages ||
+                            (p >= page - 1 && p <= page + 1)
+                          ) {
                             return (
                               <PaginationItem key={p}>
-                                <PaginationLink href={createPageURL(p)} isActive={p === page}>{p}</PaginationLink>
+                                <PaginationLink
+                                  href={createPageURL(p)}
+                                  isActive={p === page}
+                                >
+                                  {p}
+                                </PaginationLink>
                               </PaginationItem>
                             );
                           }
@@ -231,7 +274,16 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
                           return null;
                         })}
                         <PaginationItem>
-                          <PaginationNext href={page < totalPages ? createPageURL(page + 1) : "#"} className={page >= totalPages ? "pointer-events-none opacity-50" : ""} />
+                          <PaginationNext
+                            href={
+                              page < totalPages ? createPageURL(page + 1) : "#"
+                            }
+                            className={
+                              page >= totalPages
+                                ? "pointer-events-none opacity-50"
+                                : ""
+                            }
+                          />
                         </PaginationItem>
                       </PaginationContent>
                     </Pagination>
@@ -248,8 +300,8 @@ export default function DashboardBlogsPage({ initialBlogs = [], user }: { initia
           <DialogHeader>
             <DialogTitle>Delete Blog</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this blog? This action cannot
-              be undone.
+              Are you sure you want to delete this blog? This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

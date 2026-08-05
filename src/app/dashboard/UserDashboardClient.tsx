@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useSession } from "@/lib/auth-client";
 import { apiClient } from "@/lib/api/client";
 import { getToken } from "@/lib/api/get-token";
 import { useQuery } from "@tanstack/react-query";
@@ -28,7 +27,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { PageLoading } from "@/components/shared/PageLoading";
 import {
   AreaChart,
   Area,
@@ -67,9 +65,13 @@ const CustomTooltip = ({ active, payload, label }: any) => {
           <div key={index} className="flex items-center gap-3 text-sm">
             <div
               className="size-3 rounded-full"
-              style={{ backgroundColor: entry.color || entry.fill || entry.stroke }}
+              style={{
+                backgroundColor: entry.color || entry.fill || entry.stroke,
+              }}
             />
-            <span className="text-muted-foreground capitalize">{entry.name}:</span>
+            <span className="text-muted-foreground capitalize">
+              {entry.name}:
+            </span>
             <span className="font-bold">{entry.value}</span>
           </div>
         ))}
@@ -79,14 +81,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function DashboardOverviewPage({ 
-  initialIdeas = [], 
-  initialBlogs = [], 
-  user 
-}: { 
-  initialIdeas?: DashboardIdea[], 
-  initialBlogs?: DashboardBlog[],
-  user?: any 
+export default function DashboardOverviewPage({
+  initialIdeas = [],
+  initialBlogs = [],
+  user,
+}: {
+  initialIdeas?: DashboardIdea[];
+  initialBlogs?: DashboardBlog[];
+  user?: any;
 }) {
   const userId = user?.id || "";
   const firstName = user?.name?.split(" ")[0] || "User";
@@ -95,20 +97,24 @@ export default function DashboardOverviewPage({
     queryKey: ["my-ideas"],
     queryFn: async () => {
       const token = await getToken();
-      return apiClient<{ ideas: DashboardIdea[] }>("/api/ideas/mine", { token });
+      return apiClient<{ ideas: DashboardIdea[] }>("/api/ideas/mine", {
+        token,
+      });
     },
     enabled: !!userId,
-    initialData: { ideas: initialIdeas }
+    initialData: { ideas: initialIdeas },
   });
 
   const { data: blogsData, isPending: blogsPending } = useQuery({
     queryKey: ["my-blogs"],
     queryFn: async () => {
       const token = await getToken();
-      return apiClient<{ blogs: DashboardBlog[] }>("/api/blogs/mine", { token });
+      return apiClient<{ blogs: DashboardBlog[] }>("/api/blogs/mine", {
+        token,
+      });
     },
     enabled: !!userId,
-    initialData: { blogs: initialBlogs }
+    initialData: { blogs: initialBlogs },
   });
 
   const ideas = ideasData?.ideas || [];
@@ -171,8 +177,18 @@ export default function DashboardOverviewPage({
     },
   ];
 
-  const recentIdeas = [...ideas].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
-  const recentBlogs = [...blogs].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
+  const recentIdeas = [...ideas]
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+    .slice(0, 5);
+  const recentBlogs = [...blogs]
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+    .slice(0, 5);
 
   const dayCount: Record<string, { ideas: number; blogs: number }> = {};
   const allItems = [
@@ -196,7 +212,10 @@ export default function DashboardOverviewPage({
   for (let i = 13; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    const dateStr = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const dateStr = d.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
     timelineData.push({
       date: dateStr,
       ideas: dayCount[dateStr]?.ideas || 0,
@@ -214,8 +233,15 @@ export default function DashboardOverviewPage({
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-          <Badge variant="outline" className={`text-xs font-medium ${user?.role === "pro" ? "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400" : ""}`}>
-            {user?.role === "pro" ? <Crown className="size-3 mr-1" /> : <User className="size-3 mr-1" />}
+          <Badge
+            variant="outline"
+            className={`text-xs font-medium ${user?.role === "pro" ? "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400" : ""}`}
+          >
+            {user?.role === "pro" ? (
+              <Crown className="size-3 mr-1" />
+            ) : (
+              <User className="size-3 mr-1" />
+            )}
             {user?.role === "pro" ? "Pro Member" : "User"}
           </Badge>
         </div>
@@ -254,13 +280,17 @@ export default function DashboardOverviewPage({
           >
             <Card className="overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardDescription className="min-w-0 truncate pr-2">{m.title}</CardDescription>
+                <CardDescription className="min-w-0 truncate pr-2">
+                  {m.title}
+                </CardDescription>
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <m.icon className="size-4" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl sm:text-3xl font-bold tabular-nums">{m.value}</div>
+                <div className="text-2xl sm:text-3xl font-bold tabular-nums">
+                  {m.value}
+                </div>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {m.description}
                 </p>
@@ -277,7 +307,8 @@ export default function DashboardOverviewPage({
                   href={m.href}
                   className="text-xs font-semibold text-primary hover:underline"
                 >
-                  {m.actionLabel} <ArrowRight className="size-3 inline ml-0.5" />
+                  {m.actionLabel}{" "}
+                  <ArrowRight className="size-3 inline ml-0.5" />
                 </Link>
               </CardFooter>
             </Card>
@@ -289,7 +320,9 @@ export default function DashboardOverviewPage({
         <Card>
           <CardHeader>
             <CardTitle>Generation Timeline (Last 14 Days)</CardTitle>
-            <CardDescription>Your activity across ideas and blogs</CardDescription>
+            <CardDescription>
+              Your activity across ideas and blogs
+            </CardDescription>
           </CardHeader>
           <CardContent>
             {timelineData.every((d) => d.ideas === 0 && d.blogs === 0) ? (
@@ -304,13 +337,41 @@ export default function DashboardOverviewPage({
                     margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                   >
                     <defs>
-                      <linearGradient id="colorIdeas" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={1} />
-                        <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0.1} />
+                      <linearGradient
+                        id="colorIdeas"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="var(--color-primary)"
+                          stopOpacity={1}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="var(--color-primary)"
+                          stopOpacity={0.1}
+                        />
                       </linearGradient>
-                      <linearGradient id="colorBlogs" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="var(--color-chart-1)" stopOpacity={1} />
-                        <stop offset="95%" stopColor="var(--color-chart-1)" stopOpacity={0.1} />
+                      <linearGradient
+                        id="colorBlogs"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="var(--color-chart-1)"
+                          stopOpacity={1}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="var(--color-chart-1)"
+                          stopOpacity={0.1}
+                        />
                       </linearGradient>
                     </defs>
                     <CartesianGrid
@@ -331,7 +392,9 @@ export default function DashboardOverviewPage({
                       stroke="var(--color-muted-foreground)"
                       axisLine={false}
                       tickLine={false}
-                      tickFormatter={(val) => (Math.floor(val) === val ? val : "")}
+                      tickFormatter={(val) =>
+                        Math.floor(val) === val ? val : ""
+                      }
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Area
@@ -342,7 +405,11 @@ export default function DashboardOverviewPage({
                       strokeWidth={3}
                       fillOpacity={1}
                       fill="url(#colorIdeas)"
-                      activeDot={{ r: 6, strokeWidth: 0, fill: "var(--color-primary)" }}
+                      activeDot={{
+                        r: 6,
+                        strokeWidth: 0,
+                        fill: "var(--color-primary)",
+                      }}
                     />
                     <Area
                       type="monotone"
@@ -352,7 +419,11 @@ export default function DashboardOverviewPage({
                       strokeWidth={3}
                       fillOpacity={1}
                       fill="url(#colorBlogs)"
-                      activeDot={{ r: 6, strokeWidth: 0, fill: "var(--color-chart-1)" }}
+                      activeDot={{
+                        r: 6,
+                        strokeWidth: 0,
+                        fill: "var(--color-chart-1)",
+                      }}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
