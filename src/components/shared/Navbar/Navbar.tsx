@@ -470,6 +470,46 @@ export default function Navbar() {
                       </div>
                     </div>
                   </div>
+
+                  <div className="flex flex-col gap-1 px-2 mb-2">
+                    <Link
+                      href="/dashboard/ideas"
+                      onClick={() => setMobileOpen(false)}
+                      className={`flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
+                        pathname === "/dashboard/ideas"
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      }`}
+                    >
+                      <Lightbulb size={18} className={pathname === "/dashboard/ideas" ? "text-primary" : "text-muted-foreground"} />
+                      My Ideas
+                    </Link>
+                    <Link
+                      href="/dashboard/blogs"
+                      onClick={() => setMobileOpen(false)}
+                      className={`flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
+                        pathname === "/dashboard/blogs"
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      }`}
+                    >
+                      <PenTool size={18} className={pathname === "/dashboard/blogs" ? "text-primary" : "text-muted-foreground"} />
+                      My Blogs
+                    </Link>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setMobileOpen(false)}
+                      className={`flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
+                        pathname === "/dashboard"
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      }`}
+                    >
+                      <BarChart3 size={18} className={pathname === "/dashboard" ? "text-primary" : "text-muted-foreground"} />
+                      Dashboard
+                    </Link>
+                  </div>
+
                   <Button
                     variant="outline"
                     className="rounded-full font-semibold text-destructive hover:text-destructive hover:bg-destructive/10 border-transparent"
