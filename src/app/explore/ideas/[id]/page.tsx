@@ -109,6 +109,15 @@ export default function IdeaDetailPage({
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
+  const { data: profile } = useQuery({
+    queryKey: ["userProfile", session?.user?.id],
+    queryFn: async () => {
+      const token = await getToken();
+      return apiClient<{ user: { role?: string } }>("/api/users/profile", { token });
+    },
+    enabled: !!session?.user?.id,
+  });
+
   const { data, isPending, error } = useQuery({
     queryKey: ["project idea", id],
     queryFn: async () => {
@@ -187,8 +196,8 @@ export default function IdeaDetailPage({
 
   const { idea, related } = data;
 
-  const isAdmin = session?.user?.role === "admin";
-  const isPro = session?.user?.role === "pro" || isAdmin;
+  const isAdmin = profile?.user?.role === "admin" || session?.user?.role === "admin";
+  const isPro = profile?.user?.role === "pro" || isAdmin || session?.user?.role === "pro";
   const isOwner = !!session?.user?.id && !!idea.ownerId && session.user.id === idea.ownerId;
   const canGenerateDocs = isOwner || isPro;
   const docs = idea.docs;
